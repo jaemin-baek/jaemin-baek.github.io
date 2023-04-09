@@ -2,25 +2,25 @@ baseurl: https://jaemin-baek.github.io/
 languageCode: en-us
 theme: hugo-theme-stack
 paginate: 5
-title: Example Site
+title: Jaemin-Baek Dev Blog
 
-languages:
-    en:
-        languageName: English
-        title: Example Site
-        description: Example description
-        weight: 1
-    zh-cn:
-        languageName: 中文
-        title: 演示站点
-        description: 演示说明
-        weight: 2
-    ar:
-        languageName: عربي
-        languagedirection: rtl
-        title: موقع تجريبي
-        description: وصف تجريبي
-        weight: 3
+# languages:
+#     en:
+#         languageName: English
+#         title: Example Site
+#         description: Example description
+#         weight: 1
+#     zh-cn:
+#         languageName: 中文
+#         title: 演示站点
+#         description: 演示说明
+#         weight: 2
+#     ar:
+#         languageName: عربي
+#         languagedirection: rtl
+#         title: موقع تجريبي
+#         description: وصف تجريبي
+#         weight: 3
 
 # Change it to your Disqus shortname before using
 disqusShortname: hugo-theme-stack
@@ -76,7 +76,7 @@ params:
         provider: disqus
 
         disqusjs:
-            shortname:
+            shortname: jaemin-baek-github-io
             apiUrl:
             apiKey:
             admin:
