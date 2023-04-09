@@ -23,7 +23,7 @@ title: Jaemin-Baek Dev Blog
 #         weight: 3
 
 # Change it to your Disqus shortname before using
-disqusShortname: hugo-theme-stack
+disqusShortname: jaemin-baek-github-io
 
 # GA Tracking ID
 googleAnalytics:
@@ -76,7 +76,7 @@ params:
         provider: disqus
 
         disqusjs:
-            shortname: jaemin-baek-github-io
+            shortname: 
             apiUrl:
             apiKey:
             admin:
