@@ -60,8 +60,8 @@ params:
         subtitle: 다시 쓰는 기술 블로그
         avatar:
             enabled: true
-            local: true
-            src: img/avatar.jpeg
+            local: false
+            src: https://avatars.githubusercontent.com/u/6836647?v=4
 
     article:
         math: false
@@ -101,42 +101,42 @@ params:
             autoCreateIssue: false
 
         # Waline client configuration see: https://waline.js.org/en/reference/component.html
-        waline:
-            serverURL:
-            lang:
-            pageview:
-            emoji:
-                - https://unpkg.com/@waline/emojis@1.0.1/weibo
-            requiredMeta:
-                - name
-                - email
-                - url
-            locale:
-                admin: Admin
-                placeholder:
+        # waline:
+        #     serverURL:
+        #     lang:
+        #     pageview:
+        #     emoji:
+        #         - https://unpkg.com/@waline/emojis@1.0.1/weibo
+        #     requiredMeta:
+        #         - name
+        #         - email
+        #         - url
+        #     locale:
+        #         admin: Admin
+        #         placeholder:
 
-        twikoo:
-            envId:
-            region:
-            path:
-            lang:
+        # twikoo:
+        #     envId:
+        #     region:
+        #     path:
+        #     lang:
 
         # See https://cactus.chat/docs/reference/web-client/#configuration for description of the various options
-        cactus:
-            defaultHomeserverUrl: "https://matrix.cactus.chat:8448"
-            serverName: "cactus.chat"
-            siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
+        # cactus:
+        #     defaultHomeserverUrl: "https://matrix.cactus.chat:8448"
+        #     serverName: "cactus.chat"
+        #     siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
-        giscus:
-            repo:
-            repoID:
-            category:
-            categoryID:
-            mapping:
-            lightTheme:
-            darkTheme:
-            reactionsEnabled: 1
-            emitMetadata: 0
+        # giscus:
+        #     repo:
+        #     repoID:
+        #     category:
+        #     categoryID:
+        #     mapping:
+        #     lightTheme:
+        #     darkTheme:
+        #     reactionsEnabled: 1
+        #     emitMetadata: 0
 
         gitalk:
             owner:
@@ -199,15 +199,15 @@ menu:
     social:
         - identifier: github
           name: GitHub
-          url: https://github.com/CaiJimmy/hugo-theme-stack
+          url: https://github.com/jaemin-baek
           params:
               icon: brand-github
 
-        - identifier: twitter
-          name: Twitter
-          url: https://twitter.com
-          params:
-              icon: brand-twitter
+        # - identifier: twitter
+        #   name: Twitter
+        #   url: https://twitter.com
+        #   params:
+        #       icon: brand-twitter
 
 related:
     includeNewer: true
