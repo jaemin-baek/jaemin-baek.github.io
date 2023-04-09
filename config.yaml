@@ -2,7 +2,7 @@ baseurl: https://jaemin-baek.github.io/
 languageCode: en-us
 theme: hugo-theme-stack
 paginate: 5
-title: Jaemin-Baek Dev Blog
+title: Jaemin-Baek Tech Blog
 
 # languages:
 #     en:
@@ -57,11 +57,11 @@ params:
 
     sidebar:
         emoji: 🍥
-        subtitle: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        subtitle: 다시 쓰는 기술 블로그
         avatar:
             enabled: true
             local: true
-            src: img/avatar.png
+            src: img/avatar.jpeg
 
     article:
         math: false
