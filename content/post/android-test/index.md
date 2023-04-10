@@ -1,5 +1,5 @@
 ---
-title: Gradle KTS 사용기
+title: test
 # description: desc
 date: 2020-09-09
 slug: test-android
