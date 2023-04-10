@@ -40,3 +40,7 @@ Gradle 5.0 부터 도입
 now in android 부터는 buildSrc 가 아닌 toml 을 이용한 versionCatalog 기능을 사용하고있다.
 
 ref: https://github.com/android/nowinandroid/blob/main/gradle/libs.versions.toml
+
+groovy 보다는 kts 가 좀 더 편리했고 buildSrc 보다는 versionCatalog 로 관리하는게 더 좋은 것 같다
+
+즉, kts + versionCatalog 조합이 낫다는 결론..
