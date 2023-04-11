@@ -25,9 +25,6 @@ Gradle 5.0 부터 도입
 - Java 8 이상이 필요
 - Newer dependency version inspection 기능 미지원 - 별도 플러그인으로 해결가능하지만 번거롭다
 
-## 추후 포스팅 
-- buildSrd
-- [versionCatalog](https://velog.io/@ams770/Version-Catalog%EB%A5%BC-%ED%86%B5%ED%95%9C-%EB%B2%84%EC%A0%84-%EA%B4%80%EB%A6%AC)
 
 ## 빌드 속도 차이
 
@@ -44,3 +41,9 @@ ref: https://github.com/android/nowinandroid/blob/main/gradle/libs.versions.toml
 groovy 보다는 kts 가 좀 더 편리했고 buildSrc 보다는 versionCatalog 로 관리하는게 더 좋은 것 같다
 
 즉, kts + versionCatalog 조합이 낫다는 결론..
+
+
+## 참고
+- [versionCatalog](https://velog.io/@ams770/Version-Catalog%EB%A5%BC-%ED%86%B5%ED%95%9C-%EB%B2%84%EC%A0%84-%EA%B4%80%EB%A6%AC)
+- https://velog.io/@vov3616/Gradle-2.-Version-Catalog-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0
+- [구글 공식문서](https://developer.android.com/build/migrate-to-catalogs)
