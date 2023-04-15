@@ -26,7 +26,7 @@ Introduced in Gradle 5.0
 - Java 8 or higher is required.
 - Newer dependency version inspection functionality is not supported
 
-## Difference in build speed
+## Build speed issue
 
 [The Kotlin and Groovy DSLs should have similar performance characteristics · Issue #15886 · gradle/gradle](https://github.com/gradle/gradle/issues/15886#issuecomment-1036085182)
 
