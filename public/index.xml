@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>백재민의 기술블로그</title>
+        <link>https://jaemin-baek.github.io/</link>
+        <description>Recent content on 백재민의 기술블로그</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 10 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Gradle KTS 사용기</title>
+        <link>https://jaemin-baek.github.io/p/gradle-kts/</link>
+        <pubDate>Mon, 10 Apr 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/p/gradle-kts/</guid>
+        <description>&lt;h1 id=&#34;kotlin-script-kts&#34;&gt;Kotlin script (KTS)&lt;/h1&gt;
+&lt;p&gt;Gradle 5.0 부터 도입&lt;/p&gt;
+&lt;h2 id=&#34;장점&#34;&gt;장점&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;IDE 의 지원으로 향상된 편집환경 - 컴파일 타임에 에러 확인 / 코드탐색/ 자동완성/ 구문 강조&lt;/li&gt;
+&lt;li&gt;익숙한 코틀린 언어로 작성 가능&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;단점&#34;&gt;단점&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;BuildSrc 같은 경우 버전 변경할때마다 전체 모듈을 다시 컴파일해야함&lt;/li&gt;
+&lt;li&gt;빌드 캐시가 Invalidate 됐거나 클린 빌드시에는 Groovy DSL 보다 느림&lt;/li&gt;
+&lt;li&gt;Java 8 이상이 필요&lt;/li&gt;
+&lt;li&gt;Newer dependency version inspection 기능 미지원 - 별도 플러그인으로 해결가능하지만 번거롭다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;빌드-속도-차이&#34;&gt;빌드 속도 차이&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/gradle/gradle/issues/15886#issuecomment-1036085182&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;The Kotlin and Groovy DSLs should have similar performance characteristics · Issue #15886 · gradle/gradle&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;결론&#34;&gt;결론&lt;/h2&gt;
+&lt;p&gt;구글 I/O 앱, 구글의 now in android 프로젝트도 현재 KTS 를 사용하고&lt;/p&gt;
+&lt;p&gt;now in android 부터는 buildSrc 가 아닌 toml 을 이용한 versionCatalog 기능을 사용하고있다.&lt;/p&gt;
+&lt;p&gt;ref: &lt;a class=&#34;link&#34; href=&#34;https://github.com/android/nowinandroid/blob/main/gradle/libs.versions.toml&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/android/nowinandroid/blob/main/gradle/libs.versions.toml&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;groovy 보다는 kts 가 좀 더 편리했고 buildSrc 보다는 versionCatalog 로 관리하는게 더 좋은 것 같다&lt;/p&gt;
+&lt;p&gt;즉, kts + versionCatalog 조합이 낫다는 결론..&lt;/p&gt;
+&lt;h2 id=&#34;참고&#34;&gt;참고&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://velog.io/@ams770/Version-Catalog%EB%A5%BC-%ED%86%B5%ED%95%9C-%EB%B2%84%EC%A0%84-%EA%B4%80%EB%A6%AC&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;versionCatalog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://velog.io/@vov3616/Gradle-2.-Version-Catalog-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://velog.io/@vov3616/Gradle-2.-Version-Catalog-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://developer.android.com/build/migrate-to-catalogs&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;구글 공식문서&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>test</title>
+        <link>https://jaemin-baek.github.io/p/test-android/</link>
+        <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/p/test-android/</guid>
+        <description>&lt;h2 id=&#34;test1&#34;&gt;test1&lt;/h2&gt;
+&lt;p&gt;test1&lt;/p&gt;
+&lt;h2 id=&#34;test3&#34;&gt;test3&lt;/h2&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+</description>
+        </item>
+        <item>
+        <title>Archives</title>
+        <link>https://jaemin-baek.github.io/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/archives/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Links</title>
+        <link>https://jaemin-baek.github.io/links/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/links/</guid>
+        <description>&lt;p&gt;To use this feature, add &lt;code&gt;links&lt;/code&gt; section to frontmatter.&lt;/p&gt;
+&lt;p&gt;This page&amp;rsquo;s frontmatter:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;links&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;- &lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;GitHub&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;description&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;GitHub is the world&amp;#39;s largest software development platform.&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;website&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;https://github.com&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;- &lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;TypeScript&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;description&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;website&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;https://www.typescriptlang.org&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;ts-logo-128.jpg&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;image&lt;/code&gt; field accepts both local and external images.&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Search</title>
+        <link>https://jaemin-baek.github.io/search/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/search/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>

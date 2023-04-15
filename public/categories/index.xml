@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Categories on 백재민의 기술블로그</title>
+        <link>https://jaemin-baek.github.io/categories/</link>
+        <description>Recent content in Categories on 백재민의 기술블로그</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 10 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>gradle</title>
+        <link>https://jaemin-baek.github.io/categories/gradle/</link>
+        <pubDate>Mon, 10 Apr 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/categories/gradle/</guid>
+        <description>&lt;img src="https://gradle.com/wp-content/themes/fuel/assets/img/branding/gradle-elephant-icon-dark-green.svg" alt="Featured image of post gradle" /&gt;</description>
+        </item>
+        <item>
+        <title>android</title>
+        <link>https://jaemin-baek.github.io/categories/android/</link>
+        <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/categories/android/</guid>
+        <description>&lt;img src="https://www.gstatic.com/devrel-devsite/prod/v8a94f3ea7c065620b95cec6018f1d2c2869422b6a2925fa3ba11417ee489de75/android/images/lockup.svg" alt="Featured image of post android" /&gt;</description>
+        </item>
+        <item>
+        <title>Test</title>
+        <link>https://jaemin-baek.github.io/categories/test/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://jaemin-baek.github.io/categories/test/</guid>
+        <description>&lt;img src="https://jaemin-baek.github.io/categories/test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post Test" /&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

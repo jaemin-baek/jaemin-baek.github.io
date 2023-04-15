@@ -2,25 +2,8 @@ baseurl: https://jaemin-baek.github.io/
 languageCode: en-us
 theme: hugo-theme-stack
 paginate: 5
-title: 백재민의 기술블로그
+title: jaemin-baek
 
-# languages:
-#     en:
-#         languageName: English
-#         title: Example Site
-#         description: Example description
-#         weight: 1
-#     zh-cn:
-#         languageName: 中文
-#         title: 演示站点
-#         description: 演示说明
-#         weight: 2
-#     ar:
-#         languageName: عربي
-#         languagedirection: rtl
-#         title: موقع تجريبي
-#         description: وصف تجريبي
-#         weight: 3
 
 # Change it to your Disqus shortname before using
 disqusShortname: jaemin-baek-github-io
@@ -57,7 +40,7 @@ params:
 
     sidebar:
         emoji: 😄
-        subtitle: Android Developer
+        subtitle: Step by step, one by one, and..let's enjoy the process.
         avatar:
             enabled: true
             local: false
