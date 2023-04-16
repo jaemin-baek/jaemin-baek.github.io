@@ -9,6 +9,12 @@ draft: false
 
 # Building Java Archive(JAR) using Gradle
 
+# Ref.
+
+- https://docs.gradle.org/current/samples/sample_building_java_libraries.html 
+- https://docs.gradle.org/current/userguide/java_library_plugin.html
+
+
 ```
 sun@sunui-MacBookAir ~ % mkdir demo
 sun@sunui-MacBookAir ~ % cd demo 
