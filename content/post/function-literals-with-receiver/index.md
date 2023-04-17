@@ -1,6 +1,6 @@
 ---
 title: Function literals with receiver
-date: 2023-04-18
+date: 2023-04-17
 slug: function-literals-with-receiver
 categories:
     - kotlin
