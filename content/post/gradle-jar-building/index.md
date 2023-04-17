@@ -4,7 +4,7 @@ date: 2023-04-10
 slug: Building-Java-Archive(JAR)-using-Gradle
 categories:
     - gradle
-draft: false
+draft: true
 ---
 
 # Building Java Archive(JAR) using Gradle
