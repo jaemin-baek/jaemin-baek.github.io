@@ -4,7 +4,6 @@ theme: hugo-theme-stack
 paginate: 5
 title: jaemin-baek
 
-
 # Change it to your Disqus shortname before using
 disqusShortname: jaemin-baek-github-io
 
