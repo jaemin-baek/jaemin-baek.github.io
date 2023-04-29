@@ -187,4 +187,4 @@ https://www.youtube.com/watch?v=Zccv8cBzqSw
 ## Ref.
 - https://www.youtube.com/watch?v=c4f4SCEYA5Q
 - [코틀린 컨퍼런스 23 키노트 정리 (KotlinConf’23)](https://jaeyeong951.medium.com/%EC%BD%94%ED%8B%80%EB%A6%B0-%EC%BB%A8%ED%8D%BC%EB%9F%B0%EC%8A%A4-23-%ED%82%A4%EB%85%B8%ED%8A%B8-%EC%A0%95%EB%A6%AC-kotlinconf23-531a930644bf)
-- [그 외 컨퍼런스 내용 링크](https://appmattus.medium.com/kotlinconf23-d03fe60af719)
+- [그 외 컨퍼런스 내용 링크](https://appmattus.medium.com/kotlinconf23-d03fe60af719) 
