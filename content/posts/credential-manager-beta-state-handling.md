@@ -2,6 +2,8 @@
 title: "Credential Manager 흐름을 UI State로 다루기"
 date: "2024-01-20"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["credential-manager","ui-state","auth","android"]
 description: "2023-07-27에 발행된 Android 개발 글을 바탕으로 Credential Manager 흐름을 UI State로 다루기를 정리합니다."
 ---

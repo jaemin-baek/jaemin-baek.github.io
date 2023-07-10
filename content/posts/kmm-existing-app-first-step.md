@@ -2,6 +2,8 @@
 title: "기존 앱에 Kotlin Multiplatform을 처음 넣는 방법"
 date: "2024-01-21"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["kmm","kotlin-multiplatform","existing-app","architecture"]
 description: "2023-07-31에 발행된 Android 개발 글을 바탕으로 기존 앱에 Kotlin Multiplatform을 처음 넣는 방법를 정리합니다."
 ---

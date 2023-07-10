@@ -2,6 +2,9 @@
 title: "안정적인 Compose 화면을 위한 UI State 설계"
 date: "2024-01-01"
 category: "Android"
+group: "Compose State"
+series: "Compose State"
+hub: true
 tags: ["android", "jetpack-compose", "architecture", "ui-state", "stateflow"]
 description: "Android UI Layer 글에서 출발해, Jetpack Compose 화면을 안정적으로 유지하기 위한 UI State 모델링 원칙을 정리합니다."
 ---
@@ -200,10 +203,4 @@ Android UI Layer를 설계할 때 핵심은 복잡한 패턴 이름을 외우는
 참고한 글과 문서:
 
 - [Crash Course on the Android UI Layer | Part 1 - Manuel Vivo](https://manuelvivo.dev/crash-course-ui-layer-part-1)
-- [UI layer - Android Developers](https://developer.android.com/topic/architecture/ui-layer
-
-## 함께 읽기
-
-- [[ui-layer-state-holder-saving-state|State Holder와 저장 가능한 상태를 구분하기]]
-- [[saving-ui-state-android|프로세스 종료까지 고려한 UI State 저장 전략]]
-- [[compose-performance-recomposition-basics|Compose 성능을 볼 때 recomposition부터 확인하기]]
+- [UI layer - Android Developers](https://developer.android.com/topic/architecture/ui-layer)

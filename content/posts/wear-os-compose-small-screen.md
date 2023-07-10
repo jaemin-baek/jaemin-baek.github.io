@@ -2,6 +2,8 @@
 title: "Wear OS에서 Compose를 쓸 때 먼저 생각할 것"
 date: "2024-01-12"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["wear-os","compose","small-screen","android"]
 description: "2023-05-10에 발행된 Android 개발 글을 바탕으로 Wear OS에서 Compose를 쓸 때 먼저 생각할 것를 정리합니다."
 ---

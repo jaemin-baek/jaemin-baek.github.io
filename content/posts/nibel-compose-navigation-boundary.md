@@ -2,6 +2,8 @@
 title: "Compose 전환기의 Navigation 경계 정리하기"
 date: "2024-01-17"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["compose","navigation","fragment","migration"]
 description: "2023-07-20에 발행된 Android 개발 글을 바탕으로 Compose 전환기의 Navigation 경계 정리하기를 정리합니다."
 ---

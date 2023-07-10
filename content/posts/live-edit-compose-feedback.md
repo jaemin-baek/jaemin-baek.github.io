@@ -2,6 +2,8 @@
 title: "Live Edit가 바꾸는 Compose UI 수정 방식"
 date: "2024-01-19"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["compose","live-edit","android-studio","tooling"]
 description: "2023-07-25에 발행된 Android 개발 글을 바탕으로 Live Edit가 바꾸는 Compose UI 수정 방식를 정리합니다."
 ---

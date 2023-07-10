@@ -2,6 +2,8 @@
 title: "KMP에서 Flow를 Swift 친화적으로 노출하기"
 date: "2024-01-24"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["kmp","flow","swift","interop"]
 description: "2023-09-14에 발행된 Android 개발 글을 바탕으로 KMP에서 Flow를 Swift 친화적으로 노출하기를 정리합니다."
 ---

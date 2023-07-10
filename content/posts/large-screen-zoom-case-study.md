@@ -2,6 +2,8 @@
 title: "Zoom 사례로 보는 대화면 Android 앱 설계"
 date: "2024-01-27"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["large-screen","foldable","tablet","case-study"]
 description: "2023-10-19에 발행된 Android 개발 글을 바탕으로 Zoom 사례로 보는 대화면 Android 앱 설계를 정리합니다."
 ---

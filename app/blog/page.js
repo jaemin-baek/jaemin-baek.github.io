@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { getAllPosts, getGraphData } from '@/lib/posts';
 import BlogList from '@/components/BlogList';
 import KnowledgeGraph from '@/components/KnowledgeGraph';
@@ -32,7 +31,7 @@ export default function BlogPage() {
             {graphData.nodes.length > 0 && (
                 <section className="home-graph-preview fade-in">
                     <h2 className="section-title">Knowledge Graph</h2>
-                    <Link href="/graph" style={{ border: 'none' }}>
+                    <a href="/graph/" style={{ border: 'none' }}>
                         <div className="graph-preview-container">
                             <KnowledgeGraph data={graphData} mini={true} />
                             <div className="graph-preview-overlay">
@@ -40,7 +39,7 @@ export default function BlogPage() {
                                 <span className="explore-link">Explore →</span>
                             </div>
                         </div>
-                    </Link>
+                    </a>
                 </section>
             )}
         </div>

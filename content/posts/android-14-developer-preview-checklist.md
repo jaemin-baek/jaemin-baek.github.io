@@ -2,6 +2,8 @@
 title: "Android 14 변경사항을 앱 코드에 반영하는 순서"
 date: "2024-01-04"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["android-14","compatibility","target-sdk","behavior-changes"]
 description: "2023-02-08에 발행된 Android 개발 글을 바탕으로 Android 14 변경사항을 앱 코드에 반영하는 순서를 정리합니다."
 ---

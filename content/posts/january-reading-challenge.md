@@ -2,6 +2,9 @@
 title: "1월 글읽기 도전"
 date: "2024-01-31"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
+hub: true
 tags: ["reading-challenge", "android", "january"]
 description: "2024년 1월 2일부터 1월 31일까지 읽고 정리한 Android 글 목록입니다."
 ---

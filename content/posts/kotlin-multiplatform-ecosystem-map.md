@@ -2,6 +2,8 @@
 title: "Kotlin Multiplatform을 도입하기 전에 볼 생태계 지도"
 date: "2024-01-15"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["kotlin-multiplatform","kmp","architecture","shared-code"]
 description: "2023-06-21에 발행된 Android 개발 글을 바탕으로 Kotlin Multiplatform을 도입하기 전에 볼 생태계 지도를 정리합니다."
 ---

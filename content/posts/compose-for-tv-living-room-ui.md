@@ -2,6 +2,8 @@
 title: "Compose for TV에서 배운 거실 UI의 기준"
 date: "2024-01-11"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["compose-for-tv","android-tv","focus","large-screen"]
 description: "2023-05-10에 발행된 Android 개발 글을 바탕으로 Compose for TV에서 배운 거실 UI의 기준를 정리합니다."
 ---

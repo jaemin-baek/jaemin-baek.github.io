@@ -2,6 +2,8 @@
 title: "패스키를 제품 로그인에 넣을 때의 체크리스트"
 date: "2024-01-28"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["passkeys","credential-manager","authentication","security"]
 description: "2023-10-25에 발행된 Android 개발 글을 바탕으로 패스키를 제품 로그인에 넣을 때의 체크리스트를 정리합니다."
 ---

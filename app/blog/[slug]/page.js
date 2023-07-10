@@ -44,6 +44,7 @@ export default async function PostPage({ params }) {
                     {post.category && <span className="post-category">{post.category}</span>}
                     <h1 className="post-title">{post.title}</h1>
                     {post.date && <time className="post-date">{formatDate(post.date)}</time>}
+                    <FrontmatterSummary post={post} />
                 </header>
 
                 <div
@@ -65,6 +66,32 @@ export default async function PostPage({ params }) {
                 )}
             </article>
         </div>
+    );
+}
+
+function FrontmatterSummary({ post }) {
+    const items = [
+        ['category', post.category],
+        ['group', post.group],
+        ['series', post.series],
+    ].filter(([, value]) => Boolean(value));
+
+    if (post.hub) {
+        items.push(['hub', 'true']);
+    }
+
+    if (items.length === 0) return null;
+
+    return (
+        <dl className="post-frontmatter" aria-label="Post frontmatter">
+            <dt className="post-frontmatter-title">Frontmatter</dt>
+            {items.map(([key, value]) => (
+                <div key={key} className="post-frontmatter-item">
+                    <dt>{key}</dt>
+                    <dd>{value}</dd>
+                </div>
+            ))}
+        </dl>
     );
 }
 

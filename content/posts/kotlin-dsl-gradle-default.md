@@ -2,6 +2,8 @@
 title: "Kotlin DSL이 기본이 된 뒤 Gradle 파일을 읽는 법"
 date: "2024-01-09"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["gradle","kotlin-dsl","build","android"]
 description: "2023-04-13에 발행된 Android 개발 글을 바탕으로 Kotlin DSL이 기본이 된 뒤 Gradle 파일을 읽는 법를 정리합니다."
 ---

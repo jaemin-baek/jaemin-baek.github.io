@@ -2,6 +2,8 @@
 title: "Fragment 기반 앱에서 Compose로 점진 전환하기"
 date: "2024-01-14"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["compose","fragment","migration","architecture"]
 description: "2023-06-05에 발행된 Android 개발 글을 바탕으로 Fragment 기반 앱에서 Compose로 점진 전환하기를 정리합니다."
 ---

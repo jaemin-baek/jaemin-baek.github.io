@@ -2,6 +2,8 @@
 title: "Navigation3 샘플 앱으로 이해한 backStack 화면 이동"
 date: "2025-05-26"
 category: "Android"
+group: "Navigation3"
+series: "Navigation3"
 tags: ["navigation3", "jetpack-compose", "android", "navigation"]
 description: "2025년 5월 20일 Android Developers Blog의 Navigation3 발표 글을 읽고, 작은 Compose 샘플 앱을 만들며 남긴 사용기입니다."
 ---
@@ -160,6 +162,4 @@ Navigation3를 처음 볼 때는 `NavDisplay`, `entryProvider`, `NavKey` 같은 
 
 ## 함께 읽기
 
-- [[nibel-compose-navigation-boundary|Compose 전환기의 Navigation 경계 정리하기]]
 - [[android-ui-state-layer-compose|안정적인 Compose 화면을 위한 UI State 설계]]
-- [[learn-compose-by-building-small-screens|Compose를 익힐 때 작은 화면부터 만들어야 하는 이유]]

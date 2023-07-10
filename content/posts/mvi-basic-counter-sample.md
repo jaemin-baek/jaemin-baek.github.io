@@ -2,6 +2,8 @@
 title: "MVI Counter 샘플로 상태 흐름 이해하기"
 date: "2025-10-07"
 category: "Android"
+group: "Compose State"
+series: "Compose State"
 tags: ["mvi", "jetpack-compose", "android", "ui-state"]
 description: "사내 MVI 스터디를 시작하기 전에 Counter 샘플로 State, Intent, reduce, remember, mutableStateOf, copy를 차근차근 풀어봅니다."
 ---

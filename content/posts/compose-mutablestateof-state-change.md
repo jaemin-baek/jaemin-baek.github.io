@@ -2,6 +2,8 @@
 title: "Compose mutableStateOf, 상태 변경은 어떻게 알려질까"
 date: "2025-05-30"
 category: "Android"
+group: "Compose State"
+series: "Compose State"
 tags: ["jetpack-compose", "mutableStateOf", "state", "recomposition", "android"]
 description: "Jetpack Compose에서 mutableStateOf가 왜 필요한지, MutableState의 value 읽기와 쓰기가 recomposition으로 이어지는 과정을 깊게 정리합니다."
 ---

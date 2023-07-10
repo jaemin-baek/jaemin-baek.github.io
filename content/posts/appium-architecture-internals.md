@@ -2,6 +2,9 @@
 title: "Appium 아키텍처 및 내부 동작 원리 심층 분석"
 date: "2026-05-22"
 category: "Android"
+group: "Android Testing"
+series: "Appium Architecture"
+hub: true
 tags: ["appium", "e2e-test", "android", "uiautomator2", "webdriver", "device-farm"]
 description: "Appium의 클라이언트-서버 구조, W3C WebDriver 프로토콜, UiAutomator2 Driver 내부 동작, Locator 전략과 DeviceFarm 확장성을 정리합니다."
 ---

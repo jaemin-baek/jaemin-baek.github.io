@@ -2,6 +2,8 @@
 title: "Mercari의 Compose 전환 사례에서 배운 점"
 date: "2024-01-07"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["compose","migration","case-study","ui"]
 description: "2023-03-27에 발행된 Android 개발 글을 바탕으로 Mercari의 Compose 전환 사례에서 배운 점를 정리합니다."
 ---

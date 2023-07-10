@@ -2,6 +2,8 @@
 title: "Compose Recomposition, 화면은 왜 다시 그려질까"
 date: "2025-05-24"
 category: "Android"
+group: "Compose State"
+series: "Compose State"
 tags: ["jetpack-compose", "recomposition", "state", "android", "compose-runtime"]
 description: "MVI와 Compose 상태 코드를 이해하기 전에, recomposition이 왜 필요한지와 Compose가 내부적으로 어떤 방식으로 다시 그리는지 차근차근 정리합니다."
 ---
@@ -650,5 +652,4 @@ Recomposition은 Compose가 똑똑해서 생긴 복잡한 최적화 기능이라
 ## 함께 읽기
 
 - [[mvi-basic-counter-sample|MVI Counter 샘플로 상태 흐름 이해하기]]
-- [[compose-performance-recomposition-basics|Compose 성능을 볼 때 recomposition부터 확인하기]]
 - [[android-ui-state-layer-compose|Android UI Layer와 Compose State 정리하기]]

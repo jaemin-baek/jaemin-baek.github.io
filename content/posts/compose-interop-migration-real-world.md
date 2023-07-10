@@ -2,6 +2,8 @@
 title: "Compose와 View가 함께 있는 화면을 다루는 법"
 date: "2024-01-25"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["compose","interop","view-system","migration"]
 description: "2023-09-21에 발행된 Android 개발 글을 바탕으로 Compose와 View가 함께 있는 화면을 다루는 법를 정리합니다."
 ---

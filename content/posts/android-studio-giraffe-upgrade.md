@@ -2,6 +2,8 @@
 title: "Android Studio Giraffe 업데이트에서 챙길 실무 포인트"
 date: "2024-01-18"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["android-studio","giraffe","build","tools"]
 description: "2023-07-25에 발행된 Android 개발 글을 바탕으로 Android Studio Giraffe 업데이트에서 챙길 실무 포인트를 정리합니다."
 ---

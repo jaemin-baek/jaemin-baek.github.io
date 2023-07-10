@@ -2,6 +2,8 @@
 title: "Compose remember, 왜 필요한 걸까"
 date: "2025-05-28"
 category: "Android"
+group: "Compose State"
+series: "Compose State"
 tags: ["jetpack-compose", "remember", "recomposition", "state", "android"]
 description: "Jetpack Compose에서 remember가 왜 필요한지, Composable 재실행과 Composition 기억 공간 관점에서 차근차근 정리합니다."
 ---
@@ -631,4 +633,3 @@ remember는 다시 그려지는 화면 안에서
 
 - [[compose-recomposition-understanding|Compose Recomposition, 화면은 왜 다시 그려질까]]
 - [[mvi-basic-counter-sample|MVI Counter 샘플로 상태 흐름 이해하기]]
-- [[ui-layer-state-holder-saving-state|State Holder와 저장 가능한 상태를 구분하기]]

@@ -666,6 +666,61 @@ hr {
   color: var(--text-tertiary);
 }
 
+.post-frontmatter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem auto 0;
+  max-width: 100%;
+  font-family: var(--font-sans);
+}
+
+.post-frontmatter-title {
+  flex-basis: 100%;
+  margin: 0 0 0.1rem;
+  color: var(--text-tertiary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.post-frontmatter-item {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.post-frontmatter-item dt,
+.post-frontmatter-item dd {
+  min-width: 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.post-frontmatter-item dt {
+  padding: 0.35rem 0.5rem 0.35rem 0.65rem;
+  color: var(--text-tertiary);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.post-frontmatter-item dd {
+  overflow: hidden;
+  padding: 0.35rem 0.65rem 0.35rem 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+}
+
 .post-content {
   padding-bottom: 4rem;
 }
@@ -747,6 +802,40 @@ hr {
 .graph-container svg {
   width: 100%;
   height: 100%;
+}
+
+.graph-legend {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  max-width: min(520px, calc(100% - 2.5rem));
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(250, 249, 245, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.graph-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.graph-legend-swatch {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(26, 26, 25, 0.12);
 }
 
 .graph-tooltip {

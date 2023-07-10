@@ -2,6 +2,8 @@
 title: "Baseline Profiles로 앱 시작 속도를 관리하기"
 date: "2024-01-30"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["baseline-profiles","performance","startup","case-study"]
 description: "2023-11-29에 발행된 Android 개발 글을 바탕으로 Baseline Profiles로 앱 시작 속도를 관리하기를 정리합니다."
 ---

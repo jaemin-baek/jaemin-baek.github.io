@@ -2,6 +2,8 @@
 title: "프로세스 종료까지 고려한 UI State 저장 전략"
 date: "2024-01-13"
 category: "Android"
+group: "January Reading Challenge"
+series: "January Reading Challenge"
 tags: ["ui-state","savedstatehandle","process-death","android"]
 description: "2023-05-10에 발행된 Android 개발 글을 바탕으로 프로세스 종료까지 고려한 UI State 저장 전략를 정리합니다."
 ---
@@ -35,5 +37,4 @@ UI State를 설계할 때 화면 회전만 생각하면 충분하지 않다. And
 ## 함께 읽기
 
 - [[ui-layer-state-holder-saving-state|State Holder와 저장 가능한 상태를 구분하기]]
-- [[android-ui-state-layer-compose|안정적인 Compose 화면을 위한 UI State 설계]]
 - [[credential-manager-beta-state-handling|Credential Manager 흐름을 UI State로 다루기]]

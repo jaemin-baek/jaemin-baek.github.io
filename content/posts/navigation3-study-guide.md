@@ -2,6 +2,9 @@
 title: "Navigation3 공부 가이드"
 date: "2025-12-25"
 category: "Android"
+group: "Navigation3"
+series: "Navigation3"
+hub: true
 tags: ["navigation3", "jetpack-compose", "android", "navigation", "study-guide"]
 description: "사내에 Navigation3를 전파하기 전에 어떤 자료를 어떤 순서로 보면 좋을지 정리한 공부 가이드입니다."
 ---
@@ -336,5 +339,4 @@ Navigation3는 "쉬운 Navigation"이라기보다 "내비게이션 상태를 앱
 ## 함께 읽기
 
 - [[navigation3-basic-sample-notes|Navigation3 샘플 앱으로 이해한 backStack 화면 이동]]
-- [[nibel-compose-navigation-boundary|Compose 전환기의 Navigation 경계 정리하기]]
 - [[android-ui-state-layer-compose|안정적인 Compose 화면을 위한 UI State 설계]]
