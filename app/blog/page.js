@@ -20,7 +20,7 @@ export default function BlogPage() {
             <div className="blog-header fade-in">
                 <h1>Blog</h1>
                 <p className="blog-header-description">
-                    옵시디언으로 작성한 글들을 발행합니다. 각 글은 지식 그래프를 통해 서로 연결되어 있습니다.
+                    옵시디언으로 작성한 글을 발행합니다. 글은 지식 그래프로 서로 연결됩니다.
                 </p>
             </div>
 

@@ -475,7 +475,7 @@ hr {
   font-family: var(--font-sans);
   font-size: 1.05rem;
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 720px;
 }
 
 .category-filters {
