@@ -30,4 +30,10 @@ Credential Manager의 핵심은 로그인 방식을 하나 더 추가하는 데 
 
 ## 정리
 
-로그인 UX는 사용자가 앱을 믿을지 결정하는 첫 장면이다. 기술적으로 안전한 것만큼, 사용자가 덜 헷갈리게 만드는 것도 중요하다.
+로그인 UX는 사용자가 앱을 믿을지 결정하는 첫 장면이다. 기술적으로 안전한 것만큼, 사용자가 덜 헷갈리게 만드는 것도 중요하다
+
+## 함께 읽기
+
+- [[credential-manager-beta-state-handling|Credential Manager 흐름을 UI State로 다루기]]
+- [[passkeys-production-migration|패스키를 제품 로그인에 넣을 때의 체크리스트]]
+- [[google-identity-credential-manager-migration|Google Identity Services에서 Credential Manager로 넘어가기]]

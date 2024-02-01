@@ -30,4 +30,10 @@ Compose 성능 문제를 만나면 먼저 복잡한 최적화부터 떠올리기
 
 ## 정리
 
-Compose 성능을 잘 다루려면 “덜 그리기”보다 “필요한 곳만 다시 그리기”를 목표로 삼는 편이 좋다.
+Compose 성능을 잘 다루려면 “덜 그리기”보다 “필요한 곳만 다시 그리기”를 목표로 삼는 편이 좋다
+
+## 함께 읽기
+
+- [[whats-new-compose-2023-practical-view|2023년 Compose 업데이트를 실무 관점으로 보기]]
+- [[compose-august-2023-release-notes|Compose 2023년 8월 릴리즈에서 챙길 것]]
+- [[live-edit-compose-feedback|Live Edit가 바꾸는 Compose UI 수정 방식]]

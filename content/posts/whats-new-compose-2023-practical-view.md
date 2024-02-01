@@ -30,4 +30,10 @@ description: "2023-05-10에 발행된 Android 개발 글을 바탕으로 2023년
 
 ## 정리
 
-프레임워크의 성숙도는 기능이 많아지는 순간보다, 기본 선택을 해도 불안하지 않아지는 순간에 체감된다.
+프레임워크의 성숙도는 기능이 많아지는 순간보다, 기본 선택을 해도 불안하지 않아지는 순간에 체감된다
+
+## 함께 읽기
+
+- [[compose-august-2023-release-notes|Compose 2023년 8월 릴리즈에서 챙길 것]]
+- [[compose-performance-recomposition-basics|Compose 성능을 볼 때 recomposition부터 확인하기]]
+- [[learn-compose-by-building-small-screens|Compose를 익힐 때 작은 화면부터 만들어야 하는 이유]]

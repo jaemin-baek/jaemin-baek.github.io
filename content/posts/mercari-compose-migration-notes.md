@@ -30,4 +30,10 @@ Mercari의 Compose 전환 사례는 Compose의 장점을 단순히 코드가 짧
 
 ## 정리
 
-마이그레이션은 기술 교체가 아니라 팀이 화면을 다루는 습관을 바꾸는 일이다.
+마이그레이션은 기술 교체가 아니라 팀이 화면을 다루는 습관을 바꾸는 일이다
+
+## 함께 읽기
+
+- [[clue-compose-design-system-case|Clue 사례로 보는 Compose와 디자인 시스템]]
+- [[gradual-compose-transition-turo|Fragment 기반 앱에서 Compose로 점진 전환하기]]
+- [[compose-interop-migration-real-world|Compose와 View가 함께 있는 화면을 다루는 법]]

@@ -30,4 +30,10 @@ description: "2023-06-05에 발행된 Android 개발 글을 바탕으로 Fragmen
 
 ## 정리
 
-점진 전환은 타협이 아니라 운영 중인 제품을 지키는 방식이다. 좋은 경계만 있으면 두 UI 체계는 꽤 오래 공존할 수 있다.
+점진 전환은 타협이 아니라 운영 중인 제품을 지키는 방식이다. 좋은 경계만 있으면 두 UI 체계는 꽤 오래 공존할 수 있다
+
+## 함께 읽기
+
+- [[nibel-compose-navigation-boundary|Compose 전환기의 Navigation 경계 정리하기]]
+- [[compose-interop-migration-real-world|Compose와 View가 함께 있는 화면을 다루는 법]]
+- [[mercari-compose-migration-notes|Mercari의 Compose 전환 사례에서 배운 점]]

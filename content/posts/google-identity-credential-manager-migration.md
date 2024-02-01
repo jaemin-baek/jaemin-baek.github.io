@@ -30,4 +30,10 @@ description: "2023-10-26에 발행된 Android 개발 글을 바탕으로 Google 
 
 ## 정리
 
-인증 코드는 사용자가 매일 보지 않을 수 있지만, 한 번 실패하면 신뢰를 크게 잃는다. 그래서 작은 변경도 넓게 검증해야 한다.
+인증 코드는 사용자가 매일 보지 않을 수 있지만, 한 번 실패하면 신뢰를 크게 잃는다. 그래서 작은 변경도 넓게 검증해야 한다
+
+## 함께 읽기
+
+- [[credential-manager-passkey-entry|Credential Manager로 로그인 흐름을 단순하게 만들기]]
+- [[credential-manager-beta-state-handling|Credential Manager 흐름을 UI State로 다루기]]
+- [[passkeys-production-migration|패스키를 제품 로그인에 넣을 때의 체크리스트]]

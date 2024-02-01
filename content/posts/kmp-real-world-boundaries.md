@@ -30,4 +30,10 @@ description: "2023-10-06에 발행된 Android 개발 글을 바탕으로 실무 
 
 ## 정리
 
-KMP의 목표는 모든 차이를 없애는 것이 아니라, 제품 규칙의 중복을 줄이고 플랫폼 경험은 살리는 것이다.
+KMP의 목표는 모든 차이를 없애는 것이 아니라, 제품 규칙의 중복을 줄이고 플랫폼 경험은 살리는 것이다
+
+## 함께 읽기
+
+- [[kotlin-multiplatform-ecosystem-map|Kotlin Multiplatform을 도입하기 전에 볼 생태계 지도]]
+- [[kmm-existing-app-first-step|기존 앱에 Kotlin Multiplatform을 처음 넣는 방법]]
+- [[kmp-flow-swift-friendly-api|KMP에서 Flow를 Swift 친화적으로 노출하기]]

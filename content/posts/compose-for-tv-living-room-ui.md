@@ -30,4 +30,10 @@ TV UI는 모바일 화면을 크게 늘린 버전이 아니다. 사용자는 터
 
 ## 정리
 
-대화면 대응은 단순한 반응형 레이아웃이 아니다. 사용자의 자세와 입력 방식까지 포함해 다시 설계하는 일이다.
+대화면 대응은 단순한 반응형 레이아웃이 아니다. 사용자의 자세와 입력 방식까지 포함해 다시 설계하는 일이다
+
+## 함께 읽기
+
+- [[large-screen-zoom-case-study|Zoom 사례로 보는 대화면 Android 앱 설계]]
+- [[wear-os-compose-small-screen|Wear OS에서 Compose를 쓸 때 먼저 생각할 것]]
+- [[whats-new-compose-2023-practical-view|2023년 Compose 업데이트를 실무 관점으로 보기]]

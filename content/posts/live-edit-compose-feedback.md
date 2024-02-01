@@ -30,4 +30,10 @@ Live Edit는 단순히 빌드 시간을 줄이는 기능으로 보이지만, 실
 
 ## 정리
 
-Live Edit는 완성된 구조를 대신 만들어주지 않는다. 하지만 좋은 구조를 더 빠르게 다듬을 수 있게 해준다.
+Live Edit는 완성된 구조를 대신 만들어주지 않는다. 하지만 좋은 구조를 더 빠르게 다듬을 수 있게 해준다
+
+## 함께 읽기
+
+- [[android-studio-electric-eel-lessons|Android Studio Electric Eel에서 배운 개발 루프 줄이기]]
+- [[whats-new-compose-2023-practical-view|2023년 Compose 업데이트를 실무 관점으로 보기]]
+- [[compose-performance-recomposition-basics|Compose 성능을 볼 때 recomposition부터 확인하기]]

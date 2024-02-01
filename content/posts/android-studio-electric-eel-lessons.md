@@ -30,4 +30,10 @@ Electric Eel 발표에서 눈에 띄는 지점은 새 기능의 개수보다 개
 
 ## 정리
 
-도구의 업데이트를 단순히 버전 변경으로만 보면 놓치는 것이 많다. 좋은 도구는 코드를 덜 쓰게 해주는 것보다, 확인을 덜 불안하게 해주는 쪽에 가깝다.
+도구의 업데이트를 단순히 버전 변경으로만 보면 놓치는 것이 많다. 좋은 도구는 코드를 덜 쓰게 해주는 것보다, 확인을 덜 불안하게 해주는 쪽에 가깝다
+
+## 함께 읽기
+
+- [[android-studio-giraffe-upgrade|Android Studio Giraffe 업데이트에서 챙길 실무 포인트]]
+- [[live-edit-compose-feedback|Live Edit가 바꾸는 Compose UI 수정 방식]]
+- [[learn-compose-by-building-small-screens|Compose를 익힐 때 작은 화면부터 만들어야 하는 이유]]

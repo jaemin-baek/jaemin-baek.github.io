@@ -30,4 +30,10 @@ description: "2023-11-29에 발행된 Android 개발 글을 바탕으로 Baselin
 
 ## 정리
 
-성능은 한 번 잡고 끝나는 작업이 아니다. 릴리즈마다 다시 확인할 수 있는 체계를 만들어야 유지된다.
+성능은 한 번 잡고 끝나는 작업이 아니다. 릴리즈마다 다시 확인할 수 있는 체계를 만들어야 유지된다
+
+## 함께 읽기
+
+- [[kotlin-dsl-gradle-default|Kotlin DSL이 기본이 된 뒤 Gradle 파일을 읽는 법]]
+- [[android-studio-giraffe-upgrade|Android Studio Giraffe 업데이트에서 챙길 실무 포인트]]
+- [[compose-performance-recomposition-basics|Compose 성능을 볼 때 recomposition부터 확인하기]]

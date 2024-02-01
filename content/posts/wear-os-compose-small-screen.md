@@ -30,4 +30,10 @@ Wear OS 화면은 작다. 그래서 스마트폰 앱처럼 많은 정보를 한 
 
 ## 정리
 
-작은 화면은 기능을 줄이는 제약이 아니라, 중요한 행동이 무엇인지 드러내는 필터다.
+작은 화면은 기능을 줄이는 제약이 아니라, 중요한 행동이 무엇인지 드러내는 필터다
+
+## 함께 읽기
+
+- [[compose-for-tv-living-room-ui|Compose for TV에서 배운 거실 UI의 기준]]
+- [[large-screen-zoom-case-study|Zoom 사례로 보는 대화면 Android 앱 설계]]
+- [[whats-new-compose-2023-practical-view|2023년 Compose 업데이트를 실무 관점으로 보기]]

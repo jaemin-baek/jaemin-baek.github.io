@@ -30,4 +30,10 @@ Compose 릴리즈 노트를 읽을 때는 새 API만 보는 것보다 안정성,
 
 ## 정리
 
-릴리즈 노트는 단순 공지가 아니라 다음 리팩터링 방향을 알려주는 작은 지도다.
+릴리즈 노트는 단순 공지가 아니라 다음 리팩터링 방향을 알려주는 작은 지도다
+
+## 함께 읽기
+
+- [[whats-new-compose-2023-practical-view|2023년 Compose 업데이트를 실무 관점으로 보기]]
+- [[compose-performance-recomposition-basics|Compose 성능을 볼 때 recomposition부터 확인하기]]
+- [[compose-dependency-updates-automation|Compose 프로젝트의 의존성 업데이트를 자동화하는 기준]]

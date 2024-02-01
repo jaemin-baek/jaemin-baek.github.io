@@ -21,7 +21,6 @@
 
   <text x="110" y="105" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="32" fill="#7c3aed" font-weight="800">Android Notes</text>
   <text x="110" y="153" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="43" fill="#22223b" font-weight="800">Compose를 익힐 때 작은 화면부터 만들어...</text>
-  <text x="110" y="194" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="22" fill="#64748b" font-weight="600">2024-01-05 · 2023-02-27 읽고 정리</text>
 
   <g filter="url(#shadow)">
     <rect x="120" y="245" width="285" height="430" rx="38" fill="#111827"/>

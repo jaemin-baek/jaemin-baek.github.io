@@ -30,4 +30,10 @@ Compose 프로젝트는 Kotlin, Compose Compiler, Compose BOM, Android Gradle Pl
 
 ## 정리
 
-의존성 업데이트는 미루면 비용이 커지고, 자동화만 믿으면 위험해진다. 좋은 기준은 작은 업데이트를 자주 검증하게 만드는 것이다.
+의존성 업데이트는 미루면 비용이 커지고, 자동화만 믿으면 위험해진다. 좋은 기준은 작은 업데이트를 자주 검증하게 만드는 것이다
+
+## 함께 읽기
+
+- [[whats-new-compose-2023-practical-view|2023년 Compose 업데이트를 실무 관점으로 보기]]
+- [[compose-august-2023-release-notes|Compose 2023년 8월 릴리즈에서 챙길 것]]
+- [[kotlin-dsl-gradle-default|Kotlin DSL이 기본이 된 뒤 Gradle 파일을 읽는 법]]

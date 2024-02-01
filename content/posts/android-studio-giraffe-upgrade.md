@@ -30,4 +30,10 @@ Android Studio Giraffe 업데이트는 IDE 기능만의 이야기가 아니다. 
 
 ## 정리
 
-도구 업데이트를 잘하는 팀은 새 기능을 빨리 쓰는 팀이 아니라, 모두가 같은 환경에서 같은 문제를 재현할 수 있는 팀이다.
+도구 업데이트를 잘하는 팀은 새 기능을 빨리 쓰는 팀이 아니라, 모두가 같은 환경에서 같은 문제를 재현할 수 있는 팀이다
+
+## 함께 읽기
+
+- [[android-studio-electric-eel-lessons|Android Studio Electric Eel에서 배운 개발 루프 줄이기]]
+- [[live-edit-compose-feedback|Live Edit가 바꾸는 Compose UI 수정 방식]]
+- [[kotlin-dsl-gradle-default|Kotlin DSL이 기본이 된 뒤 Gradle 파일을 읽는 법]]

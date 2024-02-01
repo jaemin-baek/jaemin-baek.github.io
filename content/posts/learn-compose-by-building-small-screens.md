@@ -30,4 +30,10 @@ Compose를 배울 때 처음부터 앱 전체 구조를 옮기려 하면 금방 
 
 ## 정리
 
-Compose를 잘 쓰는 길은 거창한 패턴에서 시작하지 않는다. 작은 UI를 만들고, 상태를 밖으로 빼고, 다시 조립하는 반복에서 시작한다.
+Compose를 잘 쓰는 길은 거창한 패턴에서 시작하지 않는다. 작은 UI를 만들고, 상태를 밖으로 빼고, 다시 조립하는 반복에서 시작한다
+
+## 함께 읽기
+
+- [[whats-new-compose-2023-practical-view|2023년 Compose 업데이트를 실무 관점으로 보기]]
+- [[compose-performance-recomposition-basics|Compose 성능을 볼 때 recomposition부터 확인하기]]
+- [[android-ui-state-layer-compose|안정적인 Compose 화면을 위한 UI State 설계]]

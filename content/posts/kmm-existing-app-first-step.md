@@ -30,4 +30,10 @@ description: "2023-07-31에 발행된 Android 개발 글을 바탕으로 기존 
 
 ## 정리
 
-KMP는 한 번에 크게 도입할수록 설득이 어려워진다. 작게 넣고, 안정적으로 빌드되고, 반복해서 배포되는 경험이 먼저다.
+KMP는 한 번에 크게 도입할수록 설득이 어려워진다. 작게 넣고, 안정적으로 빌드되고, 반복해서 배포되는 경험이 먼저다
+
+## 함께 읽기
+
+- [[kotlin-multiplatform-ecosystem-map|Kotlin Multiplatform을 도입하기 전에 볼 생태계 지도]]
+- [[kmp-flow-swift-friendly-api|KMP에서 Flow를 Swift 친화적으로 노출하기]]
+- [[kmp-real-world-boundaries|실무 KMP에서 공유할 것과 남겨둘 것]]

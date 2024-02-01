@@ -30,4 +30,10 @@ Credential Manager를 도입하면 인증 API 호출만 생각하기 쉽지만, 
 
 ## 정리
 
-인증 흐름이 자연스러우려면 API 성공 여부보다 사용자가 다음에 무엇을 할 수 있는지가 먼저 보여야 한다.
+인증 흐름이 자연스러우려면 API 성공 여부보다 사용자가 다음에 무엇을 할 수 있는지가 먼저 보여야 한다
+
+## 함께 읽기
+
+- [[credential-manager-passkey-entry|Credential Manager로 로그인 흐름을 단순하게 만들기]]
+- [[passkeys-production-migration|패스키를 제품 로그인에 넣을 때의 체크리스트]]
+- [[google-identity-credential-manager-migration|Google Identity Services에서 Credential Manager로 넘어가기]]

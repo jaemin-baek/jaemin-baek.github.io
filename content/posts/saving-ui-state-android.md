@@ -30,4 +30,10 @@ UI State를 설계할 때 화면 회전만 생각하면 충분하지 않다. And
 
 ## 정리
 
-좋은 복원 전략은 모든 것을 기억하는 것이 아니라, 사용자가 “끊겼다”고 느끼지 않을 만큼의 맥락을 보존하는 것이다.
+좋은 복원 전략은 모든 것을 기억하는 것이 아니라, 사용자가 “끊겼다”고 느끼지 않을 만큼의 맥락을 보존하는 것이다
+
+## 함께 읽기
+
+- [[ui-layer-state-holder-saving-state|State Holder와 저장 가능한 상태를 구분하기]]
+- [[android-ui-state-layer-compose|안정적인 Compose 화면을 위한 UI State 설계]]
+- [[credential-manager-beta-state-handling|Credential Manager 흐름을 UI State로 다루기]]
