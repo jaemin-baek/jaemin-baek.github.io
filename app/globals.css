@@ -86,6 +86,66 @@ pre code {
   color: inherit;
 }
 
+.code-block {
+  position: relative;
+  padding-top: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 32px rgba(20, 20, 19, 0.16);
+}
+
+.code-block::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.85rem;
+  right: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(250, 249, 245, 0.48);
+}
+
+.syntax-highlighted {
+  display: block;
+  min-width: max-content;
+  tab-size: 4;
+}
+
+.syntax-keyword {
+  color: #ffb86c;
+  font-weight: 600;
+}
+
+.syntax-type {
+  color: #8be9fd;
+}
+
+.syntax-function {
+  color: #50fa7b;
+}
+
+.syntax-string {
+  color: #f1fa8c;
+}
+
+.syntax-number,
+.syntax-literal {
+  color: #bd93f9;
+}
+
+.syntax-comment {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.syntax-annotation {
+  color: #ff79c6;
+}
+
+.syntax-operator {
+  color: #c9d1d9;
+}
+
 blockquote {
   border-left: 3px solid var(--border);
   padding-left: 1.5rem;
