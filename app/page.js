@@ -23,9 +23,17 @@ export default function HomePage() {
         <ul className="post-list">
           {recentPosts.map((post) => (
             <li key={post.slug}>
-              <Link href={`/blog/${post.slug}`} className="post-list-item post-list-link">
+              <Link
+                href={`/blog/${post.slug}`}
+                className={`post-list-item post-list-link ${post.thumbnail ? '' : 'no-thumbnail'}`}
+              >
                 <span className="post-list-date">{formatDate(post.date)}</span>
                 <span className="post-list-category">{post.category}</span>
+                {post.thumbnail && (
+                  <span className="post-list-thumbnail" aria-hidden="true">
+                    <img src={post.thumbnail} alt="" loading="lazy" />
+                  </span>
+                )}
                 <span className="post-list-title">{post.title}</span>
               </Link>
             </li>

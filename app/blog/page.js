@@ -12,6 +12,7 @@ export default function BlogPage() {
         title: p.title || p.slug,
         date: p.date || '',
         category: p.category || '',
+        thumbnail: p.thumbnail || '',
     }));
 
     return (
