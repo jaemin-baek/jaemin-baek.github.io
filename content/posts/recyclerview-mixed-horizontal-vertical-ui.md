@@ -98,6 +98,128 @@ payload bind
 
 혼합 RecyclerView에서는 "목록을 보여준다"보다 "재활용되는 시점에 무엇을 유지하고 무엇을 다시 만들지"가 더 중요해진다.
 
+## 코드 흐름 먼저 따라가기
+
+이 예제를 설명할 때는 최적화 키워드를 먼저 외우는 것보다, 코드가 어떤 순서로 연결되는지 따라가는 편이 낫다.
+
+전체 흐름은 이렇게 볼 수 있다.
+
+```text
+MainActivity
+-> shared RecycledViewPool 생성
+-> SectionAdapter 생성
+-> 부모 세로 RecyclerView에 SectionAdapter 연결
+-> SectionAdapter가 SectionViewHolder 생성
+-> SectionViewHolder 안에서 자식 가로 RecyclerView 구성
+-> CardAdapter가 NORMAL / FEATURED 카드 ViewHolder 생성
+-> 카드 클릭 시 새 리스트를 만들어 submitList
+-> DiffUtil이 바뀐 카드와 payload를 계산
+-> 필요한 ViewHolder만 bind
+```
+
+`MainActivity`의 시작점은 단순하다.
+
+```kotlin
+val sharedPool = RecyclerView.RecycledViewPool()
+
+sectionAdapter = SectionAdapter(
+    sharedPool = sharedPool,
+    onCardClick = ::toggleSelected,
+)
+
+val recyclerView = RecyclerView(this).apply {
+    layoutManager = LinearLayoutManager(this@MainActivity)
+    adapter = sectionAdapter
+    setHasFixedSize(true)
+}
+
+setContentView(recyclerView)
+sectionAdapter.submitList(sections)
+```
+
+여기서 부모 RecyclerView는 세로 섹션만 책임진다. 실제 가로 카드 목록은 부모 item 안에 들어 있는 `SectionViewHolder`가 만든다.
+
+```kotlin
+private class SectionViewHolder(
+    private val row: SectionRowView,
+    sharedPool: RecyclerView.RecycledViewPool,
+    onCardClick: (DemoCard) -> Unit,
+) : RecyclerView.ViewHolder(row) {
+
+    private val horizontalLayoutManager = LinearLayoutManager(
+        row.context,
+        RecyclerView.HORIZONTAL,
+        false,
+    ).apply {
+        initialPrefetchItemCount = 4
+    }
+
+    private val cardAdapter = CardAdapter(onCardClick)
+
+    init {
+        row.cardsRecyclerView.apply {
+            layoutManager = horizontalLayoutManager
+            adapter = cardAdapter
+            setRecycledViewPool(sharedPool)
+            setHasFixedSize(true)
+            itemAnimator = null
+        }
+    }
+}
+```
+
+이 구조에서 중요한 점은 adapter가 두 층이라는 것이다.
+
+```text
+SectionAdapter
+= 세로 섹션을 관리한다.
+
+CardAdapter
+= 각 섹션 안의 가로 카드를 관리한다.
+```
+
+즉 부모 RecyclerView가 재사용하는 것은 "섹션 row"이고, 자식 RecyclerView가 재사용하는 것은 "카드 item"이다. 가로/세로 혼합 UI를 설명할 때는 이 두 재사용 단위를 구분해야 한다.
+
+`setHasFixedSize(true)`도 같은 맥락에서 보면 된다.
+
+```kotlin
+val recyclerView = RecyclerView(this).apply {
+    setHasFixedSize(true)
+}
+
+row.cardsRecyclerView.apply {
+    setHasFixedSize(true)
+}
+```
+
+이 설정은 "모든 item 크기가 무조건 같다"는 뜻이라기보다, adapter 내용이 바뀌어도 RecyclerView 자체의 크기가 바뀌지 않는다는 힌트에 가깝다.
+
+이 예제에서는 부모 RecyclerView가 화면 전체를 차지하고, 자식 가로 RecyclerView도 `dp(128)` 높이로 고정되어 있다. 카드 선택 상태가 바뀌거나 카드 내용이 갱신되어도 RecyclerView 자체의 width/height가 바뀌는 구조가 아니다.
+
+```text
+선택 상태 변경
+-> 카드 색상 변경
+-> RecyclerView 자체 크기는 그대로
+```
+
+이런 경우에는 RecyclerView가 불필요한 크기 재계산을 덜 하도록 힌트를 줄 수 있다. 반대로 item 내용에 따라 RecyclerView 자체 높이가 달라지는 구조라면 신중해야 한다.
+
+또 하나 생각할 질문은 "왜 하나의 세로 RecyclerView에 여러 viewType을 넣지 않고, 자식 RecyclerView를 중첩했나"이다.
+
+만약 모든 item이 세로로만 쌓인다면 `ConcatAdapter`나 단일 adapter의 여러 viewType으로 충분할 수 있다. 하지만 이 화면은 각 섹션 안에서 독립적인 가로 스크롤이 필요하다.
+
+```text
+세로 스크롤
+= 섹션 사이를 이동한다.
+
+가로 스크롤
+= 한 섹션 안의 카드들을 이동한다.
+```
+
+스크롤 축이 다르기 때문에, 섹션 row 안에 별도의 가로 RecyclerView를 두는 구조가 자연스럽다. 대신 중첩 구조가 된 만큼 pool 공유, prefetch, scroll state 저장 같은 관리 포인트가 생긴다.
+
+이제 아래 포인트들을 하나씩 보면 된다.
+
 ## 1. RecycledViewPool 공유하기
 
 먼저 볼 부분은 `RecycledViewPool`이다.
@@ -138,6 +260,43 @@ row.cardsRecyclerView.apply {
 물론 모든 상황에서 무조건 pool을 공유해야 하는 것은 아니다. 가로 목록마다 item view type이 완전히 다르거나, 섹션마다 카드 크기와 구성이 크게 다르면 효과가 줄어든다.
 
 하지만 같은 형태의 카드가 여러 섹션에 반복되는 홈 화면이라면 먼저 검토할 만하다.
+
+여기서 조금 더 안쪽을 보면, RecyclerView는 사용이 끝난 ViewHolder를 pool에 넣어두었다가 같은 viewType이 필요할 때 다시 꺼내 쓴다.
+
+```text
+화면 밖으로 나간 카드 ViewHolder
+-> RecycledViewPool에 들어감
+-> 같은 viewType 카드가 필요할 때 다시 꺼냄
+-> onCreateViewHolder 비용을 줄임
+-> onBindViewHolder로 새 데이터만 입힘
+```
+
+기본적으로 RecyclerView마다 자기 pool을 갖는다. 가로 RecyclerView가 섹션마다 하나씩 있다면, 아무 설정을 하지 않았을 때는 각 섹션이 자기 pool 안에서만 ViewHolder를 재사용하기 쉽다.
+
+```text
+섹션 A의 가로 RecyclerView pool
+섹션 B의 가로 RecyclerView pool
+섹션 C의 가로 RecyclerView pool
+```
+
+이 예제처럼 카드 UI가 반복된다면 pool을 하나로 묶어 재사용 범위를 넓힌다.
+
+```text
+섹션 A/B/C의 카드 ViewHolder
+-> sharedPool 하나에서 viewType별로 재사용
+```
+
+다만 pool 공유가 모든 비용을 없애지는 않는다. ViewHolder를 새로 만드는 비용은 줄일 수 있지만, 화면에 맞는 데이터는 여전히 bind해야 한다. 그래서 pool 공유는 DiffUtil, payload, prefetch와 함께 봐야 한다.
+
+코드를 설명할 때는 이런 질문에 답할 수 있으면 좋다.
+
+```text
+Q. RecycledViewPool을 공유하면 무엇이 줄어드는가?
+A. 같은 viewType의 ViewHolder를 섹션 간에 재사용할 수 있어 onCreateViewHolder 빈도를 줄인다.
+
+Q. 그래도 onBindViewHolder는 왜 계속 필요한가?
+A. ViewHolder 껍데기는 재사용해도, 그 안에 들어갈 데이터는 현재 position의 item으로 다시 입혀야 하기 때문이다.
+```
 
 ## 2. 다른 카드 UI는 viewType으로 분리하기
 
@@ -220,6 +379,51 @@ private abstract class BaseCardViewHolder(
 
 이렇게 공통 계약을 잡아두면 payload 부분 갱신도 일반 카드와 강조 카드에 같은 방식으로 적용할 수 있다.
 
+여기서 자주 놓치는 부분은 viewType이 "디자인 이름"이 아니라 "재사용 가능한 ViewHolder 구조의 구분값"이라는 점이다.
+
+일반 카드와 강조 카드는 폭, 배경, 뷰 구성, badge 유무가 다르다. 이런 item을 같은 ViewHolder로 처리하려고 하면 bind 안에 조건문이 늘어난다.
+
+```text
+if featured면 badge 보이기
+else badge 숨기기
+
+if featured면 width 바꾸기
+else width 되돌리기
+
+if featured면 색 바꾸기
+else 색 되돌리기
+```
+
+이런 방식은 재사용 버그를 만들기 쉽다. 이전에 강조 카드였던 ViewHolder가 일반 카드로 재사용될 때, 숨겨야 할 뷰나 되돌려야 할 layout 값이 남을 수 있기 때문이다.
+
+그래서 구조가 다른 item은 viewType과 ViewHolder를 분리한다.
+
+```text
+모양이 조금 다른 정도
+-> 같은 ViewHolder에서 상태를 확실히 초기화해도 된다.
+
+뷰 구조나 크기가 다름
+-> viewType을 분리하는 편이 안전하다.
+```
+
+이 예제에서 `style`을 payload 비교에 넣은 이유도 여기에 있다.
+
+```kotlin
+oldItem.style == newItem.style
+```
+
+선택 상태만 바뀐 경우에는 payload로 색만 바꾸면 된다. 하지만 `NORMAL` 카드가 `FEATURED` 카드로 바뀌는 것은 단순한 색 변경이 아니다. ViewHolder 타입 자체가 달라져야 한다. 그래서 `style`이 바뀌면 payload 부분 갱신이 아니라 전체 변경으로 처리되게 둔다.
+
+설명할 때는 이렇게 정리할 수 있다.
+
+```text
+Q. viewType은 언제 나누는가?
+A. 같은 bind 로직으로 안전하게 되돌릴 수 없는 구조 차이가 있을 때 나눈다.
+
+Q. sharedPool을 쓰면 viewType은 왜 더 중요해지는가?
+A. pool이 viewType별로 ViewHolder를 보관하므로, 같은 viewType 값은 같은 ViewHolder 구조를 뜻해야 하기 때문이다.
+```
+
 ## 3. initialPrefetchItemCount로 다음 카드를 미리 준비하기
 
 중첩 RecyclerView에서는 세로 스크롤을 하다가 새 섹션이 화면에 들어오는 순간, 그 섹션 안의 가로 카드들도 같이 준비되어야 한다.
@@ -246,6 +450,37 @@ private val horizontalLayoutManager = LinearLayoutManager(
 예제에서는 `4`로 두었다. 숫자는 정답이 아니다. 화면에 동시에 보이는 카드 개수, 카드 bind 비용, 이미지 로딩 여부에 따라 달라진다.
 
 중요한 건 "많이 미리 만들수록 항상 좋다"가 아니라는 점이다. 너무 크게 잡으면 스크롤 전에 할 일이 늘어난다. 보통은 한 화면에 보이는 카드 개수 근처에서 시작해서 실제 화면을 보며 조정하는 편이 낫다.
+
+내부 원리로 보면 prefetch는 "나중에 필요할 가능성이 높은 ViewHolder 준비 작업을 스크롤 중 빈 시간에 앞당겨 하는 것"에 가깝다.
+
+혼합 구조에서는 부모 세로 RecyclerView가 다음 row를 화면에 붙이려고 할 때, 자식 가로 RecyclerView의 첫 카드들도 곧 필요해진다.
+
+```text
+부모가 다음 섹션 row를 준비한다.
+-> 그 row 안에는 가로 RecyclerView가 있다.
+-> 가로 RecyclerView의 앞쪽 카드들도 곧 보여야 한다.
+-> initialPrefetchItemCount만큼 미리 create/bind 후보가 된다.
+```
+
+이 설정이 특히 의미 있는 경우는 카드 bind가 가볍지 않을 때다. 카드에 이미지, 가격 포맷, 상태 뱃지, 접근성 텍스트 같은 준비 작업이 붙으면 첫 진입 순간에 체감이 생길 수 있다.
+
+하지만 prefetch는 만능이 아니다.
+
+```text
+이미지 네트워크 로딩 자체를 해결하지 않는다.
+너무 큰 값은 오히려 미리 할 일을 늘린다.
+실제 효과는 item 크기, 화면 밀도, bind 비용에 따라 달라진다.
+```
+
+그래서 숫자를 설명할 때는 "4가 정답"이 아니라 "화면에 보이는 카드 수와 bind 비용을 기준으로 조정하는 값"이라고 말하는 편이 정확하다.
+
+```text
+Q. initialPrefetchItemCount는 왜 필요한가?
+A. 부모 세로 스크롤 중 자식 가로 목록의 앞쪽 item을 미리 준비해 새 row 진입 시 버벅임을 줄이기 위해서다.
+
+Q. 값을 크게 잡으면 항상 좋은가?
+A. 아니다. 미리 bind할 item이 늘어나면 현재 스크롤 프레임에서 해야 할 일도 늘 수 있다.
+```
 
 ## 4. ListAdapter와 DiffUtil로 변경된 item만 갱신하기
 
@@ -314,6 +549,49 @@ private fun toggleSelected(clicked: DemoCard) {
 
 이렇게 하면 "어떤 값이 바뀌었는지"를 RecyclerView 쪽에서 추적하기 쉬워진다.
 
+여기서 중요한 전제는 "새 리스트를 만들어 submitList에 넘긴다"는 점이다.
+
+```kotlin
+sections = sections.map { section ->
+    section.copy(
+        cards = section.cards.map { card ->
+            if (card.id == clicked.id) {
+                card.copy(isSelected = !card.isSelected)
+            } else {
+                card
+            }
+        },
+    )
+}
+sectionAdapter.submitList(sections)
+```
+
+기존 리스트나 기존 item 객체를 제자리에서 바꿔버리면 DiffUtil이 이전 상태와 새 상태를 비교하기 어려워진다. 이 예제는 `data class`와 `copy`를 사용해서 바뀐 값이 새 객체로 드러나게 만든다.
+
+DiffUtil의 두 질문도 분리해서 이해해야 한다.
+
+```text
+areItemsTheSame
+= 같은 대상을 가리키는가?
+= 보통 id로 판단한다.
+
+areContentsTheSame
+= 같은 대상의 표시 내용이 같은가?
+= title, subtitle, style, isSelected 같은 화면 값으로 판단한다.
+```
+
+`areItemsTheSame`을 position으로 처리하면 정렬, 삽입, 삭제가 생겼을 때 같은 item을 잘못 판단할 수 있다. 이 예제처럼 `DemoCard.id`를 쓰면 item 위치가 바뀌어도 같은 카드인지 판단할 수 있다.
+
+`ListAdapter`는 내부적으로 리스트 변경을 diff로 계산하고, adapter에는 필요한 변경 이벤트만 전달한다. 그래서 전체를 다시 그리는 `notifyDataSetChanged()`보다 변경 범위가 좁아진다.
+
+```text
+Q. notifyDataSetChanged 대신 DiffUtil을 쓰는 이유는?
+A. 전체 갱신이 아니라 어떤 item이 추가, 삭제, 변경됐는지 계산해 필요한 범위만 갱신하기 위해서다.
+
+Q. DiffUtil에서 id 비교와 내용 비교를 왜 나누는가?
+A. 같은 item인지 판단하는 기준과, 같은 item의 표시 내용이 바뀌었는지 판단하는 기준이 다르기 때문이다.
+```
+
 ## 5. payload로 선택 상태만 부분 갱신하기
 
 DiffUtil을 쓰더라도 기본 bind는 item 전체를 다시 그리는 방향으로 흐르기 쉽다.
@@ -380,6 +658,56 @@ fun bindSelection(isSelected: Boolean) {
 같은 비용으로 처리하지 않는다.
 ```
 
+payload 흐름은 DiffUtil의 `areItemsTheSame`이 true이고, `areContentsTheSame`이 false일 때 의미가 생긴다. 즉 "같은 카드인데 내용 일부가 바뀐 상황"에서 어떤 부분만 바뀌었는지 알려주는 추가 힌트다.
+
+이 예제에서는 title, subtitle, style은 그대로이고 `isSelected`만 바뀐 경우에만 `SelectionChangedPayload`를 돌려준다.
+
+```text
+같은 카드인가?
+-> id가 같으므로 yes
+
+내용이 완전히 같은가?
+-> isSelected가 바뀌었으므로 no
+
+바뀐 내용이 선택 상태뿐인가?
+-> payload로 부분 갱신
+```
+
+payload가 들어오면 adapter는 전체 `bind` 대신 `bindSelection`만 호출한다.
+
+```text
+전체 bind
+-> title 설정
+-> subtitle 설정
+-> click listener 설정
+-> 선택 색상 설정
+
+payload bind
+-> 선택 색상만 설정
+```
+
+하지만 payload만 믿고 전체 bind를 없애면 안 된다. RecyclerView는 상황에 따라 payload 없이 전체 bind를 요청할 수 있다. 예를 들어 ViewHolder가 새로 만들어졌거나, 화면 밖에 있다가 다시 붙는 경우에는 전체 상태를 다시 채워야 한다.
+
+그래서 이 패턴이 중요하다.
+
+```kotlin
+if (SelectionChangedPayload in payloads) {
+    holder.bindSelection(getItem(position).isSelected)
+} else {
+    super.onBindViewHolder(holder, position, payloads)
+}
+```
+
+부분 갱신을 할 수 있을 때만 부분 갱신하고, 나머지는 전체 bind로 돌려보낸다.
+
+```text
+Q. payload는 성능을 어떻게 개선하는가?
+A. 작은 상태 변경에서 전체 bind 대신 필요한 UI만 바꾸게 해 bind 비용과 깜빡임을 줄인다.
+
+Q. payload bind만 구현하면 왜 위험한가?
+A. payload가 비어 있는 전체 bind 상황에서는 모든 UI 상태를 다시 채워야 하기 때문이다.
+```
+
 ## 6. 가로 스크롤 위치 저장하기
 
 혼합 RecyclerView에서 자주 보이는 문제 중 하나는 스크롤 위치다.
@@ -432,6 +760,36 @@ fun bind(section: DemoSection, savedScrollState: Parcelable?) {
 
 여기서 `submitList` 콜백 뒤에 복원하는 점도 중요하다. 자식 adapter에 리스트가 반영되기 전에 스크롤 위치를 복원하려고 하면 기대한 위치로 이동하지 못할 수 있다.
 
+이 예제의 scroll state 저장은 부모 ViewHolder 재사용과 직접 연결된다.
+
+```text
+부모 세로 RecyclerView를 아래로 스크롤한다.
+-> 위쪽 SectionViewHolder가 화면 밖으로 나간다.
+-> RecyclerView가 그 SectionViewHolder를 재활용한다.
+-> onViewRecycled에서 현재 자식 가로 위치를 저장한다.
+-> 나중에 같은 section id가 다시 bind된다.
+-> 저장해 둔 horizontal LayoutManager state를 복원한다.
+```
+
+`boundSectionId`가 필요한 이유도 여기에 있다. ViewHolder는 재사용되므로 현재 holder가 어떤 section을 보여주고 있었는지 알아야 map에 정확한 key로 저장할 수 있다.
+
+```kotlin
+var boundSectionId: Long? = null
+    private set
+```
+
+저장 key를 position이 아니라 section id로 잡은 것도 중요하다. position은 삽입, 삭제, 정렬에 따라 달라질 수 있지만 section id는 같은 섹션을 가리키는 안정적인 값이어야 한다.
+
+다만 이 방식은 화면이 살아 있는 동안의 in-memory 상태 저장이다. 프로세스가 죽었다가 복원되는 수준까지 다루려면 `Bundle`, `SavedStateHandle`, ViewModel 상태 등 더 바깥 계층으로 올려야 한다.
+
+```text
+Q. 왜 가로 스크롤 위치가 초기화되는가?
+A. 부모 SectionViewHolder가 재활용되면서 안에 있던 자식 RecyclerView와 LayoutManager도 다른 섹션 bind에 재사용되기 때문이다.
+
+Q. 왜 position이 아니라 section id로 저장하는가?
+A. position은 데이터 변경에 따라 바뀔 수 있지만 id는 같은 섹션을 안정적으로 식별하기 때문이다.
+```
+
 ## 7. stable id와 stateRestorationPolicy
 
 예제에서는 섹션 adapter와 카드 adapter 모두 stable id를 켠다.
@@ -451,6 +809,34 @@ stable id는 RecyclerView가 item을 위치가 아니라 고유 id 기준으로 
 
 단순한 정적 샘플에서는 티가 덜 나지만, 실제 앱처럼 데이터가 비동기로 들어오는 화면에서는 이런 설정이 꽤 중요해진다.
 
+stable id를 켜면 RecyclerView는 item을 단순 position보다 item id 기준으로 더 안정적으로 추적할 수 있다.
+
+```text
+position 0에 있던 item
+-> 데이터 변경 뒤 position 1로 이동
+-> id가 같으면 같은 item으로 이해할 여지가 생긴다.
+```
+
+하지만 stable id는 약속이 강하다. `getItemId(position)`이 진짜 안정적인 id를 돌려줘야 한다. position을 그대로 id로 쓰면 item 이동이나 삽입이 생겼을 때 오히려 잘못된 상태 복원의 원인이 될 수 있다.
+
+`StateRestorationPolicy.PREVENT_WHEN_EMPTY`는 adapter가 비어 있을 때 RecyclerView가 스크롤 상태를 성급하게 복원하지 않도록 막는다.
+
+```text
+데이터가 아직 없음
+-> 복원할 position이 의미 없음
+-> 리스트가 들어온 뒤 복원해야 함
+```
+
+이 예제는 정적 데이터라 차이가 작지만, 실제 화면에서는 서버 응답이나 로컬 DB 관찰 결과가 늦게 들어올 수 있다. 그때 빈 adapter 상태에서 복원해버리면 원래 보던 위치로 돌아가지 못할 수 있다.
+
+```text
+Q. stable id를 켜면 무엇을 조심해야 하는가?
+A. id가 item의 생명주기 동안 변하지 않아야 한다. position을 id처럼 쓰면 안 된다.
+
+Q. PREVENT_WHEN_EMPTY는 어떤 문제를 막는가?
+A. 데이터가 들어오기 전에 스크롤 상태를 복원해 잘못된 위치가 되는 문제를 막는다.
+```
+
 ## 8. itemAnimator를 끄는 선택
 
 예제에서는 자식 RecyclerView에 `itemAnimator = null`을 둔다.
@@ -466,6 +852,57 @@ row.cardsRecyclerView.apply {
 payload로 부분 갱신을 하고, 선택 배경만 바로 바꾸는 UI라면 애니메이션을 끄는 편이 더 안정적으로 보일 때가 있다.
 
 물론 삭제, 삽입, 이동 애니메이션이 중요한 화면이라면 다르게 판단해야 한다. 여기서는 카드 선택 상태를 빠르게 반영하는 샘플이기 때문에 끄는 쪽이 자연스럽다.
+
+기본 item animator는 item 변경을 애니메이션으로 보여주려고 한다. 선택 상태처럼 배경색과 텍스트 색이 즉시 바뀌어야 하는 UI에서는 이 change animation이 깜빡임이나 잔상처럼 보일 수 있다.
+
+이 예제는 선택 상태 변경을 payload로 직접 처리한다.
+
+```text
+선택됨
+-> 배경색 변경
+-> 텍스트 색 변경
+
+선택 해제
+-> 배경색 원복
+-> 텍스트 색 원복
+```
+
+이런 경우에는 animator보다 명시적인 상태 bind가 더 예측 가능하다. 반대로 삽입, 삭제, 순서 변경을 사용자에게 자연스럽게 보여줘야 하는 목록이라면 animator를 끄는 것이 손해일 수 있다.
+
+```text
+Q. itemAnimator를 끄는 이유는?
+A. 작은 상태 변경에서 기본 change animation이 깜빡임처럼 보일 수 있어, payload bind로 직접 상태를 반영하기 위해서다.
+
+Q. 항상 꺼야 하는가?
+A. 아니다. 삽입/삭제/이동 애니메이션이 중요한 화면이면 유지하는 편이 낫다.
+```
+
+## 이 구조를 설명할 때의 핵심 질문
+
+마지막으로 이 예제를 보고 스스로 답해볼 질문을 정리해보자. 단순히 API 이름을 아는 것보다, 아래 질문에 코드 기준으로 답할 수 있어야 한다.
+
+```text
+Q. 부모 RecyclerView와 자식 RecyclerView의 재사용 단위는 무엇인가?
+A. 부모는 섹션 row를 재사용하고, 자식은 카드 item을 재사용한다.
+
+Q. RecycledViewPool 공유는 어떤 비용을 줄이는가?
+A. 같은 viewType의 카드 ViewHolder 생성 비용을 섹션 간에 줄인다.
+
+Q. viewType은 왜 필요한가?
+A. 서로 다른 ViewHolder 구조를 안전하게 분리하고, pool 재사용 단위를 명확히 하기 위해 필요하다.
+
+Q. DiffUtil과 payload의 역할은 어떻게 다른가?
+A. DiffUtil은 어떤 item이 바뀌었는지 찾고, payload는 같은 item 안에서 무엇만 바뀌었는지 알려준다.
+
+Q. 가로 스크롤 상태는 왜 따로 저장해야 하는가?
+A. 부모 row가 재활용될 때 자식 LayoutManager 상태가 다른 섹션에 섞이거나 초기화될 수 있기 때문이다.
+
+Q. initialPrefetchItemCount는 어떤 체감 문제를 줄이려는가?
+A. 새 섹션이 들어올 때 자식 가로 카드의 첫 bind가 늦어져 생기는 버벅임을 줄이려는 설정이다.
+
+Q. setHasFixedSize(true)는 언제 안전한가?
+A. adapter 내용이 바뀌어도 RecyclerView 자체 크기가 변하지 않는 구조일 때 안전하다.
+```
 
 ## 전체 흐름 다시 보기
 
