@@ -1,5 +1,6 @@
 ---
 title: Markdown Syntax Guide
+draft: true  # <-- 페이지를 숨김
 date: 2023-09-07
 description: Sample article showcasing basic Markdown syntax and formatting for HTML elements.
 tags: 

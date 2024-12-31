@@ -1,5 +1,6 @@
 ---
 title: Math Typesetting
+draft: true  # <-- 페이지를 숨김
 description: Math typesetting using KaTeX
 date: 2023-08-24 00:00:00+0000
 math: true

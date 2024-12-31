@@ -1,5 +1,6 @@
 ---
 title: Image gallery
+draft: true  # <-- 페이지를 숨김
 description: Create beautiful interactive image gallery using Markdown
 date: 2023-08-26 00:00:00+0000
 image: 2.jpg

@@ -1,5 +1,6 @@
 ---
 title: Hello World
+draft: true  # <-- 페이지를 숨김
 description: Welcome to Hugo Theme Stack
 slug: hello-world
 date: 2022-03-06 00:00:00+0000

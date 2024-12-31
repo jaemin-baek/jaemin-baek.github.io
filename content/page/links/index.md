@@ -1,5 +1,6 @@
 ---
 title: Links
+draft: true  # <-- 페이지를 숨김
 links:
   - title: GitHub
     description: GitHub is the world's largest software development platform.
