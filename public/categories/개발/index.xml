@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>개발 on Reboot Blog v2</title>
+        <link>http://localhost:1313/categories/%EA%B0%9C%EB%B0%9C/</link>
+        <description>Recent content in 개발 on Reboot Blog v2</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sun, 16 Feb 2025 12:00:00 +0900</lastBuildDate><atom:link href="http://localhost:1313/categories/%EA%B0%9C%EB%B0%9C/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>첫 번째 블로그 포스트</title>
+        <link>http://localhost:1313/posts/first-post/</link>
+        <pubDate>Sun, 16 Feb 2025 12:00:00 +0900</pubDate>
+        
+        <guid>http://localhost:1313/posts/first-post/</guid>
+        <description>&lt;p&gt;첫 번째 블로그 글입니다! 🎉 Hugo를 사용하여 블로그를 시작해봅시다.&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

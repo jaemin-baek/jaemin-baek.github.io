@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>백재민 기술블로그</title>
-        <link>http://localhost:1313/</link>
-        <description>Recent content on 백재민 기술블로그</description>
+        <title>첫 포스트 on 백재민 기술블로그</title>
+        <link>http://localhost:1313/tags/%EC%B2%AB-%ED%8F%AC%EC%8A%A4%ED%8A%B8/</link>
+        <description>Recent content in 첫 포스트 on 백재민 기술블로그</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 16 Feb 2025 12:00:00 +0900</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 16 Feb 2025 12:00:00 +0900</lastBuildDate><atom:link href="http://localhost:1313/tags/%EC%B2%AB-%ED%8F%AC%EC%8A%A4%ED%8A%B8/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>첫 번째 포스트</title>
         <link>http://localhost:1313/post/first-post/</link>
         <pubDate>Sun, 16 Feb 2025 12:00:00 +0900</pubDate>
@@ -14,14 +14,6 @@
         <guid>http://localhost:1313/post/first-post/</guid>
         <description>&lt;p&gt;첫 번째 블로그 글입니다! 🎉 Hugo를 사용하여 블로그를 시작해봅시다.&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title>Search</title>
-        <link>http://localhost:1313/page/search/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/page/search/</guid>
-        <description></description>
         </item>
         
     </channel>
