@@ -1,6 +1,6 @@
 ---
 title: "블록체인 학습방법 가이드"
-date: "2023-07-11"
+date: "2025-01-08"
 category: "Blockchain"
 group: "Blockchain Basics"
 series: "Blockchain Basics"
