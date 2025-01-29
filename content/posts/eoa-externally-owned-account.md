@@ -1,6 +1,6 @@
 ---
 title: "EOA(Externally Owned Account) 이해하기"
-date: "2023-07-12"
+date: "2025-01-29"
 category: "Blockchain"
 group: "Blockchain Basics"
 series: "Blockchain Basics"
