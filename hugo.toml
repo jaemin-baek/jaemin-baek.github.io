@@ -20,7 +20,7 @@ title = '백재민 기술블로그'
 
   [params.sidebar]
     emoji = "📚"
-    subtitle = "WEMADE"
+    subtitle = "@WEMADE"
     [params.sidebar.avatar]
       enabled = true
       local = true
@@ -36,6 +36,9 @@ title = '백재민 기술블로그'
     # 홈페이지 위젯 설정
     homepage = [
       { type = "search" },
+      { type = "archives" },
+      { type = "categories" },
+      { type = "tag-cloud" },
       # 다른 위젯들...
     ]
 
