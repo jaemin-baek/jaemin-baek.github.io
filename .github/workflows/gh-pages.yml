@@ -28,3 +28,5 @@ jobs:
         with:
           personal_token: ${{ secrets.GH_PAT }}
           publish_dir: ./public
+          publish_branch: gh-pages
+
