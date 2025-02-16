@@ -1,0 +1,4 @@
+baseURL = 'https://jaemin-baek.github.io/'
+languageCode = 'en-us'
+title = 'Reboot Blog v2'
+theme = "stack"
