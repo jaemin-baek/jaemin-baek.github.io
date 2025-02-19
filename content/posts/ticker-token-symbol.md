@@ -1,6 +1,6 @@
 ---
 title: "티커(Ticker) 이해하기"
-date: "2023-07-13"
+date: "2025-02-19"
 category: "Blockchain"
 group: "Blockchain Basics"
 series: "Blockchain Basics"
