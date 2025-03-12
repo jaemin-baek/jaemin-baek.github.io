@@ -1,6 +1,6 @@
 ---
 title: "논커스토디얼(Non-Custodial) 지갑 이해하기"
-date: "2023-07-20"
+date: "2025-03-12"
 category: "Blockchain"
 group: "Blockchain Basics"
 series: "Blockchain Basics"
