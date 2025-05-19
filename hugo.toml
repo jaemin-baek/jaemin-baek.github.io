@@ -19,7 +19,7 @@ title = '기술블로그'
     default = "light" 
 
   [params.sidebar]
-    # emoji = ""
+    emoji = "📚"
     subtitle = "@WEMADE"
     [params.sidebar.avatar]
       enabled = true
