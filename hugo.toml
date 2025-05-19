@@ -23,7 +23,8 @@ title = '백재민 기술블로그'
     subtitle = "@WEMADE"
     [params.sidebar.avatar]
       enabled = true
-      src = "images/profile.jpg"
+      local = true
+      src = "images/avatar.png"
 
   [params.imageProcessing.cover]
     enabled = true
