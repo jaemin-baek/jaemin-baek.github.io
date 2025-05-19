@@ -14,10 +14,6 @@ title = '리부트 기술 블로그v2'
     since = 2020
     customText = ""
 
-  [params.colorScheme]
-    toggle = true
-    default = "light" 
-
   [params.sidebar]
     # emoji = "📚"
     subtitle = "@WEMADE"
@@ -44,8 +40,9 @@ title = '리부트 기술 블로그v2'
 
   [params.colorScheme]
     toggle = true
-    default = "auto"   
-
+    default = "auto" 
+    # "light" 
+    
 [menu]
   [[menu.main]]
 
