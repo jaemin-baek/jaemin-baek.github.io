@@ -42,6 +42,10 @@ title = '리부트 기술 블로그v2'
       # 다른 위젯들...
     ]
 
+  [params.colorScheme]
+    toggle = true
+    default = "auto"   
+
 [menu]
   [[menu.main]]
 
