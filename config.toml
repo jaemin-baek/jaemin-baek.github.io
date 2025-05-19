@@ -1,0 +1,52 @@
+baseURL = 'https://jaemin-baek.github.io/'
+languageCode = 'en-us'
+theme = "stack"
+title = '백재민 기술블로그'
+
+
+[params]
+  mainSections = ["post"]
+  featuredImageField = "image"
+  rssFullContent = true
+  favicon = "" 
+
+  [params.footer]
+    since = 2020
+    customText = ""
+
+  [params.colorScheme]
+    toggle = true
+    default = "light" 
+
+  [params.sidebar]
+    # emoji = "📚"
+    subtitle = "@WEMADE"
+    [params.sidebar.avatar]
+      enabled = true
+      src = "img/profile.png"
+
+  [params.imageProcessing.cover]
+    enabled = true
+
+  [params.imageProcessing.content]
+    enabled = true
+
+  [params.widgets]
+    # 홈페이지 위젯 설정
+    homepage = [
+      { type = "search" },
+      { type = "archives" },
+      { type = "categories" },
+      { type = "tag-cloud" },
+      # 다른 위젯들...
+    ]
+
+[menu]
+  [[menu.main]]
+
+  [[menu.social]]
+    identifier = "github"
+    name = "GitHub"
+    url = "https://github.com/jaemin-baek"
+    [menu.social.params]
+      icon = "brand-github"
