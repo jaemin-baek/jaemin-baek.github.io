@@ -61,8 +61,77 @@ fun main() = runBlocking {
 
 ```kotlin
 Default dispatcher: DefaultDispatcher-worker-1
+IO dispatcher: DefaultDispatcher-worker-1
+Single thread context: MyThread
+```
+
+그런데 Default, IO 가 기대했던 DefaultDispatcher-worker-1 , DefaultDispatcher-worker-2 가 아니다. 
+
+이건 Dispatchers.Default와 Dispatchers.IO가 같은 스레드에서 실행된 것처럼 보이는 현상인데 이유는 아래와 같다.
+
+### 왜 Dispatchers.Default와 IO가 같은 스레드 이름일까?
+
+#### 공유 풀을 사용 중
+1. Dispatchers.Default와 Dispatchers.IO는 모두 스레드 풀(thread pool) 기반이다.
+2. 둘 다 내부적으로 DefaultExecutor와 IOExecutor를 공유하는 구조가 있다.
+3. JVM이 할당한 첫 번째 워커 스레드(worker-1)가 여러 코루틴에 재사용될 수 있다.
+   
+| Dispatcher                  | 설명                                                                 |
+|----------------------------|----------------------------------------------------------------------|
+| `Dispatchers.Default`      | CPU 중심 작업용, **코어 수만큼의 스레드 풀** 사용                         |
+| `Dispatchers.IO`           | I/O 중심 작업용, **무제한 스레드 풀**, 내부적으로 `Default`를 재사용함     |
+| `newSingleThreadContext()` | 오직 **1개의 전용 스레드**만 사용하는 디스패처, 명시적으로 생성한 스레드 사용 |
+
+
+즉, 같은 워커가 같은 순간에 여러 코루틴을 처리하지 않더라도, 스레드 풀 안에서 동적으로 배정되다 보니 같은 이름이 출력될 수 있다.
+
+
+#### 작은 예제라 워커 수가 1개로 충분한 상황
+runBlocking + 3개의 launch를 실행할 뿐이라서, 코어 수가 충분하거나 작업이 짧을 경우 JVM은 worker-1만 사용한다. 내부적으로 DefaultDispatcher-worker-1, -2, -3 등이 필요 시 생성
+
+### 확인 실험
+```kotlin
+fun main() = runBlocking {
+    repeat(10) {
+        launch(Dispatchers.Default) {
+            println("Default dispatcher: ${Thread.currentThread().name}")
+        }
+
+        launch(Dispatchers.IO) {
+            println("IO dispatcher: ${Thread.currentThread().name}")
+        }
+    }
+
+    launch(newSingleThreadContext("MyThread")) {
+        println("Single thread context: ${Thread.currentThread().name}")
+    }
+}
+
+```
+
+### 실행 결과
+```kotlin
+Default dispatcher: DefaultDispatcher-worker-1
+IO dispatcher: DefaultDispatcher-worker-1
+Default dispatcher: DefaultDispatcher-worker-1
 IO dispatcher: DefaultDispatcher-worker-2
-Custom thread: CustomThread
+Default dispatcher: DefaultDispatcher-worker-1
+IO dispatcher: DefaultDispatcher-worker-4
+Default dispatcher: DefaultDispatcher-worker-3
+Default dispatcher: DefaultDispatcher-worker-1
+IO dispatcher: DefaultDispatcher-worker-2
+IO dispatcher: DefaultDispatcher-worker-6
+Default dispatcher: DefaultDispatcher-worker-2
+IO dispatcher: DefaultDispatcher-worker-6
+Default dispatcher: DefaultDispatcher-worker-5
+Default dispatcher: DefaultDispatcher-worker-7
+IO dispatcher: DefaultDispatcher-worker-5
+Default dispatcher: DefaultDispatcher-worker-6
+Default dispatcher: DefaultDispatcher-worker-7
+IO dispatcher: DefaultDispatcher-worker-3
+IO dispatcher: DefaultDispatcher-worker-5
+IO dispatcher: DefaultDispatcher-worker-4
+Single thread context: MyThread
 ```
 
 ### 5. 코루틴의 스레드 전환
