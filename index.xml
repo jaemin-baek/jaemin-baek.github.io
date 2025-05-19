@@ -1,91 +1,36 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/</link><description>Recent content on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 16 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 코루틴의 멀티스레드 동작 방식</title><link>https://jaemin-baek.github.io/post/coroutine/</link><pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine/</guid><description>&lt;h2 id="kotlin-coroutine의-멀티스레드-동작-방식">Kotlin Coroutine의 멀티스레드 동작 방식
-&lt;/h2>&lt;h3 id="1-개요">1. 개요
-&lt;/h3>&lt;p>Kotlin의 코루틴은 경량 스레드(Lightweight Thread) 개념에 기반하여 비동기 작업을 처리하는 구조로 설계되었다. 본 문서에서는 코루틴이 멀티스레드 환경에서 어떤 방식으로 실행되고 스케줄링되는지를 기술하고, 관련 디스패처(&lt;code>CoroutineDispatcher&lt;/code>)의 역할과 실행 흐름에 대해 서술한다.&lt;/p>
-&lt;hr>
-&lt;h3 id="2-코루틴과-스레드의-관계">2. 코루틴과 스레드의 관계
-&lt;/h3>&lt;p>Kotlin 코루틴은 실제 스레드(Thread)와는 구분되는 실행 단위로, 운영체제 수준의 스레드를 직접 생성하거나 관리하지 않는다. 대신, 내부적으로 코루틴 디스패처가 지정된 스레드 풀(Thread Pool) 또는 단일 스레드에서 코루틴을 스케줄링한다. 이러한 구조는 리소스 효율성을 높이고, 대규모 동시 실행 환경에서의 성능을 개선하는 데 기여한다.&lt;/p>
-&lt;hr>
-&lt;h3 id="3-coroutinedispatcher의-역할">3. CoroutineDispatcher의 역할
-&lt;/h3>&lt;p>&lt;code>CoroutineDispatcher&lt;/code>는 코루틴이 실행될 스레드를 결정하는 핵심 컴포넌트이다. 주요 디스패처는 다음과 같다.&lt;/p>
-&lt;ul>
-&lt;li>&lt;code>Dispatchers.Default&lt;/code>: CPU 집약적인 작업을 위한 공유 스레드 풀을 사용한다. 일반적으로 코어 수에 비례한 스레드를 할당한다.&lt;/li>
-&lt;li>&lt;code>Dispatchers.IO&lt;/code>: 블로킹 I/O 작업에 최적화된 디스패처로, 더 많은 수의 스레드를 동적으로 생성하여 처리한다.&lt;/li>
-&lt;li>&lt;code>Dispatchers.Main&lt;/code>: UI 기반 애플리케이션에서 메인 스레드에서 실행되도록 보장한다. 안드로이드 또는 JavaFX 환경에서 사용된다.&lt;/li>
-&lt;li>&lt;code>newSingleThreadContext(name: String)&lt;/code>: 명시적으로 단일 스레드를 생성하여 해당 코루틴만을 위해 사용할 수 있도록 한다.&lt;/li>
-&lt;/ul>
-&lt;p>각 디스패처는 코루틴이 실행되는 스레드의 종류를 정의함으로써, 개발자가 동시성 또는 병렬성을 세밀하게 제어할 수 있도록 한다.&lt;/p>
-&lt;hr>
-&lt;h3 id="4-실행-예시-및-스레드-분산">4. 실행 예시 및 스레드 분산
-&lt;/h3>&lt;p>다음은 다양한 디스패처를 지정하여 코루틴이 각각 다른 스레드에서 실행되는 예시이다.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">import&lt;/span> kotlinx.coroutines.*
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() = runBlocking {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default) {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Default dispatcher: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO) {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;IO dispatcher: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch(newSingleThreadContext(&lt;span style="color:#e6db74">&amp;#34;MyThread&amp;#34;&lt;/span>)) {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Single thread context: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>위 예제는 세 개의 코루틴이 서로 다른 스레드에서 동시에 실행되는 구조를 갖는다. 이로써 코루틴이 단일 스레드에 국한되지 않으며, 디스패처 설정에 따라 명시적으로 병렬 실행이 가능함을 확인할 수 있다.&lt;/p>
-&lt;h3 id="실행-결과">실행 결과:
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>Default dispatcher: DefaultDispatcher-worker-&lt;span style="color:#ae81ff">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>IO dispatcher: DefaultDispatcher-worker-&lt;span style="color:#ae81ff">2&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Custom thread: CustomThread
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="5-코루틴의-스레드-전환">5. 코루틴의 스레드 전환
-&lt;/h3>&lt;p>코루틴은 &lt;code>withContext()&lt;/code> 함수를 통해 실행 중인 스레드를 동적으로 전환할 수 있다. 이는 컨텍스트 전환(Context Switch)을 명시적으로 수행하는 것으로, 특정 블록의 실행을 다른 디스패처가 관리하도록 위임하는 방식이다.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">sample&lt;/span>() {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Start: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> withContext(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO) {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;IO context: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Resume: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 구조는 코루틴의 유연성과 구조적 동시성(Structured Concurrency)을 강화하는 핵심 기제로 작용한다.&lt;/p>
-&lt;h3 id="실행-결과-1">실행 결과:
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>Start: main
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>IO context: DefaultDispatcher-worker-&lt;span style="color:#ae81ff">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Resume: main
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
-&lt;h3 id="6-동시성과-병렬성">6. 동시성과 병렬성
-&lt;/h3>&lt;p>코루틴은 기본적으로 협조적(concurrent) 실행을 지향하나, 다중 디스패처를 활용하면 병렬성(parallelism)도 구현 가능하다. async와 await를 활용하면 서로 독립적인 계산을 동시에 수행하면서 결과를 효율적으로 병합할 수 있다.
-다음은 Kotlin의 &lt;code>async&lt;/code>와 &lt;code>await&lt;/code>를 활용하여 두 작업을 병렬로 실행하고, 그 결과를 합산하는 예제이다.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// await: 결과가 준비될 때까지 suspend
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">val&lt;/span> resultA = async(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default) { computeA() }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> resultB = async(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO) { computeB() }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> combined = resultA.await() + resultB.await()
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="실행-흐름-설명">실행 흐름 설명
-&lt;/h3>&lt;ol>
-&lt;li>&lt;code>computeA()&lt;/code>는 &lt;code>Dispatchers.Default&lt;/code> 디스패처에서 실행되며, 이는 CPU 집약적인 작업을 위한 공용 스레드 풀을 사용한다.&lt;/li>
-&lt;li>&lt;code>computeB()&lt;/code>는 &lt;code>Dispatchers.IO&lt;/code> 디스패처에서 실행되며, I/O 블로킹 작업에 최적화된 스레드 풀에서 처리된다.&lt;/li>
-&lt;li>&lt;code>async&lt;/code>를 통해 두 작업은 &lt;strong>동시에 실행&lt;/strong>되며, 서로 다른 스레드에서 병렬로 수행된다.&lt;/li>
-&lt;li>&lt;code>await()&lt;/code>는 각각의 결과가 준비될 때까지 &lt;strong>suspend 상태로 대기&lt;/strong>하며, 이 동안 다른 코루틴이 실행될 수 있다.&lt;/li>
-&lt;li>두 &lt;code>await()&lt;/code> 호출이 완료되면 &lt;code>resultA&lt;/code>와 &lt;code>resultB&lt;/code>의 값을 더하여 &lt;code>combined&lt;/code>에 결과를 저장한다.&lt;/li>
-&lt;/ol>
-&lt;p>이러한 병렬 실행은 코어 수에 따른 스레드 분산을 통해 실행 성능을 높이는 데 효과적이다.&lt;/p>
-&lt;h3 id="예시-구현">예시 구현
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">computeA&lt;/span>(): Int {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Running computeA on: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">500&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#ae81ff">10&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">computeB&lt;/span>(): Int {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Running computeB on: &lt;/span>&lt;span style="color:#e6db74">${Thread.currentThread().name}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#ae81ff">20&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="실행-결과-2">실행 결과:
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>Running computeA on: DefaultDispatcher-worker-&lt;span style="color:#ae81ff">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Running computeB on: DefaultDispatcher-worker-&lt;span style="color:#ae81ff">2&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>computeA()는 약 500ms 후 10을 반환하고, computeB()는 약 1000ms 후 20을 반환한다. 따라서 combined의 값은 30이다.&lt;/p>
-&lt;hr>
-&lt;h3 id="7-결론">7. 결론
-&lt;/h3>&lt;p>Kotlin의 코루틴은 전통적인 스레드 기반 프로그래밍의 한계를 극복하고, 비동기 처리를 보다 안전하고 구조적으로 구현할 수 있도록 설계되었다. 멀티스레드 환경에서의 코루틴 실행은 디스패처 설정을 통해 세밀히 제어되며, 협조적 실행 모델을 기반으로 하되 병렬 처리를 통해 성능 최적화도 가능하다. 이는 현대 애플리케이션 개발에서 요구되는 고성능 동시 처리 요구를 효과적으로 충족시킨다.&lt;/p></description></item><item><title>Archives</title><link>https://jaemin-baek.github.io/page/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/page/archives/</guid><description/></item><item><title>Search</title><link>https://jaemin-baek.github.io/page/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/page/search/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>테스트 기술블로그</title>
+        <link>http://localhost:1313/</link>
+        <description>Recent content on 테스트 기술블로그</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sun, 16 Feb 2025 12:00:00 +0900</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>첫 번째 포스트</title>
+        <link>http://localhost:1313/post/first-post/</link>
+        <pubDate>Sun, 16 Feb 2025 12:00:00 +0900</pubDate>
+        
+        <guid>http://localhost:1313/post/first-post/</guid>
+        <description>&lt;p&gt;첫 번째 블로그 글입니다! 🎉 Hugo를 사용하여 블로그를 시작해봅시다.&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Archives</title>
+        <link>http://localhost:1313/page/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/page/archives/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Search</title>
+        <link>http://localhost:1313/page/search/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/page/search/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>
