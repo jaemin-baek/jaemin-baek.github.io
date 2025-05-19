@@ -55,9 +55,7 @@
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><h3 id=실행-결과-2>실행 결과:</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-kotlin data-lang=kotlin><span style=display:flex><span>Running computeA on: DefaultDispatcher-worker-<span style=color:#ae81ff>1</span>
 </span></span><span style=display:flex><span>Running computeB on: DefaultDispatcher-worker-<span style=color:#ae81ff>2</span>
-</span></span></code></pre></div><p>computeA()는 약 500ms 후 10을 반환하고, computeB()는 약 1000ms 후 20을 반환한다. 따라서 combined의 값은 30이다.</p><hr><h3 id=7-결론>7. 결론</h3><p>Kotlin의 코루틴은 전통적인 스레드 기반 프로그래밍의 한계를 극복하고, 비동기 처리를 보다 안전하고 구조적으로 구현할 수 있도록 설계되었다. 멀티스레드 환경에서의 코루틴 실행은 디스패처 설정을 통해 세밀히 제어되며, 협조적 실행 모델을 기반으로 하되 병렬 처리를 통해 성능 최적화도 가능하다. 이는 현대 애플리케이션 개발에서 요구되는 고성능 동시 처리 요구를 효과적으로 충족시킨다.</p><p>yaml
-복사
-편집</p></section><footer class=article-footer><section class=article-tags><a href=/tags/kotlin/>Kotlin</a>
+</span></span></code></pre></div><p>computeA()는 약 500ms 후 10을 반환하고, computeB()는 약 1000ms 후 20을 반환한다. 따라서 combined의 값은 30이다.</p><hr><h3 id=7-결론>7. 결론</h3><p>Kotlin의 코루틴은 전통적인 스레드 기반 프로그래밍의 한계를 극복하고, 비동기 처리를 보다 안전하고 구조적으로 구현할 수 있도록 설계되었다. 멀티스레드 환경에서의 코루틴 실행은 디스패처 설정을 통해 세밀히 제어되며, 협조적 실행 모델을 기반으로 하되 병렬 처리를 통해 성능 최적화도 가능하다. 이는 현대 애플리케이션 개발에서 요구되는 고성능 동시 처리 요구를 효과적으로 충족시킨다.</p></section><footer class=article-footer><section class=article-tags><a href=/tags/kotlin/>Kotlin</a>
 <a href=/tags/coroutine/>Coroutine</a>
 <a href=/tags/multithreading/>Multithreading</a>
 <a href=/tags/concurrency/>Concurrency</a></section></footer></article><footer class=site-footer><section class=copyright>&copy;
