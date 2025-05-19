@@ -24,7 +24,7 @@ title = '백재민 기술블로그'
     [params.sidebar.avatar]
       enabled = true
       local = true
-      src = "img/avatar.png"
+      src = "img/avatar.jpg"
 
   [params.imageProcessing.cover]
     enabled = true
