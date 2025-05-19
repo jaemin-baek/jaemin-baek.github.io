@@ -57,7 +57,13 @@ fun main() = runBlocking {
 
 위 예제는 세 개의 코루틴이 서로 다른 스레드에서 동시에 실행되는 구조를 갖는다. 이로써 코루틴이 단일 스레드에 국한되지 않으며, 디스패처 설정에 따라 명시적으로 병렬 실행이 가능함을 확인할 수 있다.
 
----
+### 실행 결과:
+
+```kotlin
+Default dispatcher: DefaultDispatcher-worker-1
+IO dispatcher: DefaultDispatcher-worker-2
+Custom thread: CustomThread
+```
 
 ### 5. 코루틴의 스레드 전환
 
@@ -78,18 +84,66 @@ suspend fun sample() {
 
 이 구조는 코루틴의 유연성과 구조적 동시성(Structured Concurrency)을 강화하는 핵심 기제로 작용한다.
 
+###  실행 결과:
+
+```kotlin
+Start: main
+IO context: DefaultDispatcher-worker-1
+Resume: main
+```
+
 ---
 
 ### 6. 동시성과 병렬성
 코루틴은 기본적으로 협조적(concurrent) 실행을 지향하나, 다중 디스패처를 활용하면 병렬성(parallelism)도 구현 가능하다. async와 await를 활용하면 서로 독립적인 계산을 동시에 수행하면서 결과를 효율적으로 병합할 수 있다.
+다음은 Kotlin의 `async`와 `await`를 활용하여 두 작업을 병렬로 실행하고, 그 결과를 합산하는 예제이다.
 
 ```kotlin
+// await: 결과가 준비될 때까지 suspend
 val resultA = async(Dispatchers.Default) { computeA() }
 val resultB = async(Dispatchers.IO) { computeB() }
 val combined = resultA.await() + resultB.await()
 ```
 
+### 실행 흐름 설명
+
+1. `computeA()`는 `Dispatchers.Default` 디스패처에서 실행되며, 이는 CPU 집약적인 작업을 위한 공용 스레드 풀을 사용한다.
+2. `computeB()`는 `Dispatchers.IO` 디스패처에서 실행되며, I/O 블로킹 작업에 최적화된 스레드 풀에서 처리된다.
+3. `async`를 통해 두 작업은 **동시에 실행**되며, 서로 다른 스레드에서 병렬로 수행된다.
+4. `await()`는 각각의 결과가 준비될 때까지 **suspend 상태로 대기**하며, 이 동안 다른 코루틴이 실행될 수 있다.
+5. 두 `await()` 호출이 완료되면 `resultA`와 `resultB`의 값을 더하여 `combined`에 결과를 저장한다.
+
+
 이러한 병렬 실행은 코어 수에 따른 스레드 분산을 통해 실행 성능을 높이는 데 효과적이다.
+
+
+### 예시 구현
+
+```kotlin
+suspend fun computeA(): Int {
+    println("Running computeA on: ${Thread.currentThread().name}")
+    delay(500)
+    return 10
+}
+
+suspend fun computeB(): Int {
+    println("Running computeB on: ${Thread.currentThread().name}")
+    delay(1000)
+    return 20
+}
+```
+
+
+###  실행 결과:
+
+```kotlin
+Running computeA on: DefaultDispatcher-worker-1
+Running computeB on: DefaultDispatcher-worker-2
+```
+
+computeA()는 약 500ms 후 10을 반환하고, computeB()는 약 1000ms 후 20을 반환한다. 따라서 combined의 값은 30이다.
+
+
 
 ---
 
