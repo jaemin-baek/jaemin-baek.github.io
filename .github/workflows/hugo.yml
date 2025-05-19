@@ -23,12 +23,6 @@ jobs:
           hugo-version: 'latest'
           extended: true  # 주석 해제 권장
 
-      # ✅ Hugo 캐시 초기화
-      - name: Clean Hugo module & image cache
-        run: |
-          rm -rf resources/
-          hugo mod clean
-
       # ✅ 강제 public 디렉토리 정리 포함 빌드
       - name: Build
         run: hugo --minify --cleanDestinationDir
