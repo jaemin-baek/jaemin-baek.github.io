@@ -1,4 +1,110 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coroutinescope on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutinescope/</link><description>Recent content in Coroutinescope on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 25 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutinescope/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조</title><link>https://jaemin-baek.github.io/post/supervisorjob/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/supervisorjob/</guid><description>&lt;h2 id="kotlin-coroutine에서-supervisorjob의-역할과-scopejob-구조">Kotlin Coroutine에서 SupervisorJob의 역할과 &lt;code>scopeJob&lt;/code> 구조
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coroutinescope on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutinescope/</link><description>Recent content in Coroutinescope on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 01 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutinescope/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin Coroutine에서 CoroutineScope와 coroutineScope 빌더의 개념적 차이</title><link>https://jaemin-baek.github.io/post/coroutinescopevsbuilder/</link><pubDate>Sat, 01 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinescopevsbuilder/</guid><description>&lt;h2 id="kotlin-coroutine에서-coroutinescope와-coroutinescope-빌더의-개념적-차이">Kotlin Coroutine에서 CoroutineScope와 coroutineScope 빌더의 개념적 차이
+&lt;/h2>&lt;p>Kotlin 코루틴은 구조적 동시성(Structured Concurrency)을 구현하기 위해 다양한 스코프(scope) 기반의 실행 환경을 제공한다. 그중 &lt;code>CoroutineScope(...)&lt;/code> 생성자와 &lt;code>coroutineScope {}&lt;/code> 빌더는 이름이 유사하지만, &lt;strong>역할과 사용 위치, 생명주기 및 제어 방식에 있어 명확히 구분되는 개념&lt;/strong>이다. 본 문서에서는 이 둘의 본질적인 차이와 각각의 실용적 쓰임에 대해 기술한다.&lt;/p>
+&lt;hr>
+&lt;h3 id="1-개요">1. 개요
+&lt;/h3>&lt;p>코루틴은 자체적인 실행 컨텍스트를 요구하며, 이를 정의하는 단위가 CoroutineScope이다. 코루틴 스코프는 일반적으로 명시적으로 생성하거나, 일시적으로 suspend 함수 내에서 빌더로 선언하여 사용된다. 이 두 방식은 각각 &lt;code>CoroutineScope(...)&lt;/code> 생성자와 &lt;code>coroutineScope {}&lt;/code> 빌더로 구분되며, 코드 구조와 실행 흐름에 결정적인 영향을 미친다.&lt;/p>
+&lt;hr>
+&lt;h3 id="2-coroutinescope-생성자">2. CoroutineScope(&amp;hellip;) 생성자
+&lt;/h3>&lt;p>&lt;code>CoroutineScope(context: CoroutineContext)&lt;/code>는 &lt;strong>클래스나 객체 수준&lt;/strong>에서 코루틴 실행 환경을 명시적으로 구성할 때 사용된다. 생성된 스코프는 별도로 &lt;code>cancel()&lt;/code>하거나 생명주기를 관리해야 하며, 장기 실행되는 컴포넌트(ViewModel, Service 등)에 적합하다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(SupervisorJob() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 장기 실행되는 비동기 작업
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>외부에서 scope.cancel()을 호출하면 해당 스코프 하위의 모든 코루틴이 취소된다.&lt;/li>
+&lt;li>CoroutineScope는 클래스 필드나 전역 컨텍스트로 주입되며, 수동 관리가 필수이다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="3-coroutinescope---빌더">3. coroutineScope { } 빌더
+&lt;/h3>&lt;p>&lt;code>coroutineScope&lt;/code>는 &lt;code>suspend fun&lt;/code> 내부에서 사용 가능한 코루틴 빌더이며, 해당 블록 내에서 생성된 자식 코루틴들이 모두 완료되기 전까지 현재 코루틴을 일시 정지시킨다. 구조적 동시성을 구현하기 위한 핵심 기제로 작동하며, 블록 범위 외부로 생명주기가 확장되지 않는다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchAggregatedData&lt;/span>(): AggregatedData = coroutineScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> a = async { fetchA() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> b = async { fetchB() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> AggregatedData(a.await(), b.await())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>블록이 종료되면 자식 코루틴은 모두 정리되고 스코프도 자동으로 사라진다.&lt;/li>
+&lt;li>coroutineScope 자체를 변수로 저장하거나 외부에서 cancel()하는 것은 불가능하다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="4-비교-표">4. 비교 표
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>항목&lt;/th>
+&lt;th>&lt;code>CoroutineScope(...)&lt;/code>&lt;/th>
+&lt;th>&lt;code>coroutineScope { }&lt;/code>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>타입&lt;/td>
+&lt;td>클래스 생성자&lt;/td>
+&lt;td>&lt;code>suspend&lt;/code> 함수 내 빌더&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>사용 위치&lt;/td>
+&lt;td>전역, 클래스 필드 등&lt;/td>
+&lt;td>&lt;code>suspend&lt;/code> 함수 내부&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>생명주기&lt;/td>
+&lt;td>외부에서 수동으로 관리 (&lt;code>cancel()&lt;/code>)&lt;/td>
+&lt;td>블록 내부에서 자동 관리됨&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>구조적 동시성&lt;/td>
+&lt;td>보장되지 않음 (설계에 따라 가능)&lt;/td>
+&lt;td>기본적으로 보장됨&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>외부에서 종료 가능 여부&lt;/td>
+&lt;td>가능 (&lt;code>cancel()&lt;/code>)&lt;/td>
+&lt;td>불가능&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>자식 예외 전파 방식&lt;/td>
+&lt;td>Job 종류에 따라 다름 (ex. &lt;code>SupervisorJob&lt;/code>)&lt;/td>
+&lt;td>자식 실패 시 전체 블록 취소&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>일반적 사용 용도&lt;/td>
+&lt;td>ViewModel, Repository, Service 등 장기 생존 객체&lt;/td>
+&lt;td>일시적 작업 조합, suspend 함수 내부 동시 실행 처리&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="5-사용-예시-비교">5. 사용 예시 비교
+&lt;/h3>&lt;h4 id="51-coroutinescope-예시">5.1 CoroutineScope 예시
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">DataFetcher&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(SupervisorJob() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">startFetching&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fetchSomething()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">stop&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope.cancel() &lt;span style="color:#75715e">// 명시적으로 종료
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>장기 실행되는 비동기 작업을 관리하는 데 적합하며, cancel()을 통한 명확한 종료가 가능하다.&lt;/li>
+&lt;/ul>
+&lt;h4 id="52-coroutinescope-예시">5.2 coroutineScope 예시
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchAll&lt;/span>(): List&amp;lt;Result&amp;gt; = coroutineScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> a = async { fetchA() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> b = async { fetchB() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> listOf(a.await(), b.await())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>일시적인 데이터 병렬 수집이나 처리 시에 적합하며, 외부 생명주기와 무관하다.&lt;/li>
+&lt;/ul>
+&lt;h3 id="6-결론">6. 결론
+&lt;/h3>&lt;p>&lt;code>CoroutineScope(...)&lt;/code>는 명시적 실행 환경을 구성하고, 생명주기를 외부에서 직접 제어해야 하는 경우에 사용된다. 반면 &lt;code>coroutineScope {}&lt;/code>는 일시적이고 지역적인 suspend 블록으로서, 블록 내부의 자식 코루틴들의 실행을 제어하고, 자동 정리되는 구조적 동시성을 제공한다. 이 둘은 유사한 이름을 가졌으나, 설계 철학과 활용 맥락이 명확히 구분되어야 하며, 적절한 선택이 안정적이고 예측 가능한 코루틴 기반 시스템 설계의 핵심이 된다.&lt;/p></description></item><item><title>Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조</title><link>https://jaemin-baek.github.io/post/supervisorjob/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/supervisorjob/</guid><description>&lt;h2 id="kotlin-coroutine에서-supervisorjob의-역할과-scopejob-구조">Kotlin Coroutine에서 SupervisorJob의 역할과 &lt;code>scopeJob&lt;/code> 구조
 &lt;/h2>&lt;p>Kotlin 코루틴에서는 비동기 작업의 생명주기와 예외 처리를 체계적으로 관리하기 위해 &lt;code>Job&lt;/code> 기반의 구조적 동시성을 제공한다. 본 문서에서는 그 중 &lt;code>SupervisorJob&lt;/code>을 중심으로 하는 &lt;code>scopeJob&lt;/code>의 역할과 필요성, 그리고 일반 &lt;code>Job&lt;/code>과의 차이에 대해 고찰한다.&lt;/p>
 &lt;hr>
 &lt;h3 id="1-개요">1. 개요
