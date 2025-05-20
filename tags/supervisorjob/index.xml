@@ -1,4 +1,120 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Supervisorjob on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/supervisorjob/</link><description>Recent content in Supervisorjob on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 25 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/supervisorjob/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조</title><link>https://jaemin-baek.github.io/post/supervisorjob/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/supervisorjob/</guid><description>&lt;h2 id="kotlin-coroutine에서-supervisorjob의-역할과-scopejob-구조">Kotlin Coroutine에서 SupervisorJob의 역할과 &lt;code>scopeJob&lt;/code> 구조
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Supervisorjob on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/supervisorjob/</link><description>Recent content in Supervisorjob on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 05 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/supervisorjob/index.xml" rel="self" type="application/rss+xml"/><item><title>구조적 동시성과 SupervisorJob의 실제 설계 활용</title><link>https://jaemin-baek.github.io/post/coroutinestructured/</link><pubDate>Wed, 05 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinestructured/</guid><description>&lt;h3 id="1-구조적-동시성이란">1. 구조적 동시성이란?
+&lt;/h3>&lt;blockquote>
+&lt;p>코루틴은 &lt;strong>스코프 기반으로 생성되며&lt;/strong>, 스코프가 종료되면&lt;br>
+하위의 모든 자식 코루틴도 함께 종료된다.&lt;/p>&lt;/blockquote>
+&lt;p>즉, 부모가 죽으면 자식도 죽고, 자식이 죽으면 부모도 영향을 받는다.&lt;br>
+이는 다음과 같은 전통적인 구조를 따른다:&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>scope.launch {
+launch { taskA() }
+launch { taskB() }
+}
+&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>taskA()&lt;/code>에서 예외가 발생하면 → 부모 코루틴도 취소됨&lt;/li>
+&lt;li>따라서 &lt;code>taskB()&lt;/code>도 함께 취소된다&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="2-문제-상황-일부-실패는-무시하고-싶을-때">2. 문제 상황: 일부 실패는 무시하고 싶을 때
+&lt;/h3>&lt;h4 id="예-병렬-api-요청-처리">예: 병렬 API 요청 처리
+&lt;/h4>&lt;!-- raw HTML omitted -->
+&lt;pre>&lt;code>AggregatedData(
+comments = comments.await(),
+suggestions = suggestions.await()
+)
+&lt;/code>&lt;/pre>
+&lt;p>}
+&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>fetchComments()&lt;/code>에서 예외 발생 시 → &lt;code>fetchSuggestions()&lt;/code>도 중단됨&lt;/li>
+&lt;li>전체가 실패로 처리됨 → &lt;strong>너무 강한 연결 구조&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="3-해결책-supervisorjob을-사용한-독립-실행-구조">3. 해결책: &lt;code>SupervisorJob&lt;/code>을 사용한 독립 실행 구조
+&lt;/h3>&lt;p>&lt;code>SupervisorJob&lt;/code>을 사용하면,&lt;br>
+&lt;strong>자식 중 하나가 예외를 던져도 다른 자식에 영향을 주지 않는다.&lt;/strong>&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>scope.launch {
+val comments = async {
+try { fetchComments() }
+catch (e: Exception) {
+emptyList()
+}
+}&lt;/p>
+&lt;pre>&lt;code>val suggestions = async {
+try { fetchSuggestions() }
+catch (e: Exception) {
+emptyList()
+}
+}
+val data = AggregatedData(
+comments = comments.await(),
+suggestions = suggestions.await()
+)
+println(data)
+&lt;/code>&lt;/pre>
+&lt;p>}
+&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>fetchComments()&lt;/code>가 실패해도 &lt;code>fetchSuggestions()&lt;/code>는 정상 실행됨&lt;/li>
+&lt;li>각각 독립적으로 예외 처리하고, 전체 구조는 안정성을 유지함&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="4-내부-구조-요약">4. 내부 구조 요약
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Job 유형&lt;/th>
+&lt;th>예외 전파 방식&lt;/th>
+&lt;th>사용 상황&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>Job&lt;/code>&lt;/td>
+&lt;td>자식 예외 → 부모로 전파 → 형제도 취소됨&lt;/td>
+&lt;td>전체 실패 시 모두 중단해야 할 때&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>SupervisorJob&lt;/code>&lt;/td>
+&lt;td>자식 예외는 부모에게 영향을 주지 않음&lt;/td>
+&lt;td>부분 실패 허용, 독립적 작업 병렬 실행 시&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="5-실무-적용-사례">5. 실무 적용 사례
+&lt;/h3>&lt;h4 id="병렬-데이터-수집">병렬 데이터 수집
+&lt;/h4>&lt;ul>
+&lt;li>API 여러 개 동시에 호출&lt;/li>
+&lt;li>하나 실패해도 가능한 응답만으로 화면 구성&lt;/li>
+&lt;/ul>
+&lt;h4 id="백그라운드-동기화">백그라운드 동기화
+&lt;/h4>&lt;ul>
+&lt;li>다수의 파일 동기화 작업&lt;/li>
+&lt;li>일부 실패는 로그로 남기고 나머지 계속 처리&lt;/li>
+&lt;/ul>
+&lt;h4 id="사용자-입력-처리">사용자 입력 처리
+&lt;/h4>&lt;ul>
+&lt;li>검색어 자동완성, 추천어, 최근 검색어 등 병렬로 가져올 때&lt;/li>
+&lt;li>하나 실패해도 나머지는 계속 보여주고자 할 때&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="6-포트폴리오-활용-방식">6. 포트폴리오 활용 방식
+&lt;/h3>&lt;p>실제 포트폴리오에 다음과 같이 서술할 수 있다:&lt;/p>
+&lt;blockquote>
+&lt;p>&amp;ldquo;SupervisorJob을 활용하여 병렬 코루틴 간 의존성을 분리하고,&lt;br>
+하나의 작업 실패가 전체 흐름에 영향을 주지 않도록 비동기 처리 구조를 설계하였습니다.&lt;br>
+예외는 개별 async 블록 내에서 처리하며, 사용자에게는 가능한 범위 내에서 응답을 제공하는&lt;br>
+&amp;lsquo;부분 실패 허용&amp;rsquo; 구조를 통해 안정성을 확보했습니다.&amp;rdquo;&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="-결론">✅ 결론
+&lt;/h3>&lt;p>&lt;code>SupervisorJob&lt;/code>은 코루틴 기반 시스템에서 &lt;strong>복원력 있는 비동기 구조&lt;/strong>를 만드는 핵심 도구다.&lt;br>
+&lt;strong>자식 간의 실패 전파를 차단&lt;/strong>함으로써, &lt;strong>전체 시스템의 안정성과 사용자 경험을 유지할 수 있다.&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;p>코루틴을 깊이 있게 다루려면 단순한 launch/async를 넘어서&lt;br>
+Job 계층 구조와 예외 전파 모델을 이해하고&lt;br>
+실제 상황에 적합한 구조를 선택할 수 있어야 한다.&lt;/p>&lt;/blockquote></description></item><item><title>Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조</title><link>https://jaemin-baek.github.io/post/supervisorjob/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/supervisorjob/</guid><description>&lt;h2 id="kotlin-coroutine에서-supervisorjob의-역할과-scopejob-구조">Kotlin Coroutine에서 SupervisorJob의 역할과 &lt;code>scopeJob&lt;/code> 구조
 &lt;/h2>&lt;p>Kotlin 코루틴에서는 비동기 작업의 생명주기와 예외 처리를 체계적으로 관리하기 위해 &lt;code>Job&lt;/code> 기반의 구조적 동시성을 제공한다. 본 문서에서는 그 중 &lt;code>SupervisorJob&lt;/code>을 중심으로 하는 &lt;code>scopeJob&lt;/code>의 역할과 필요성, 그리고 일반 &lt;code>Job&lt;/code>과의 차이에 대해 고찰한다.&lt;/p>
 &lt;hr>
 &lt;h3 id="1-개요">1. 개요
