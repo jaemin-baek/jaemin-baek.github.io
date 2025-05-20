@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coroutinecontext on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutinecontext/</link><description>Recent content in Coroutinecontext on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 04 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutinecontext/index.xml" rel="self" type="application/rss+xml"/><item><title>CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해</title><link>https://jaemin-baek.github.io/post/coroutinecontext/</link><pubDate>Tue, 04 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontext/</guid><description>&lt;h2 id="coroutinecontext란-무엇인가-코루틴-실행-환경의-핵심-이해">CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해
+&lt;/h2>&lt;p>Kotlin 코루틴을 사용하다 보면 반드시 등장하는 개념이 있다. 바로 &lt;code>CoroutineContext&lt;/code>.&lt;br>
+이 객체는 코루틴의 실행에 필요한 모든 정보를 담고 있는 &lt;strong>컨텍스트 컨테이너&lt;/strong>이며,&lt;br>
+코루틴의 동작 방식, 위치, 생명주기, 예외 처리 방식 등을 결정하는 &lt;strong>핵심 구성 요소&lt;/strong>이다.&lt;/p>
+&lt;hr>
+&lt;h3 id="1-coroutinecontext란">1. CoroutineContext란?
+&lt;/h3>&lt;blockquote>
+&lt;p>&lt;code>CoroutineContext&lt;/code>는 코루틴이 실행되기 위한 환경 정보들을 담고 있는 키-값 구조의 컨테이너이다.&lt;/p>&lt;/blockquote>
+&lt;p>Kotlin에서 코루틴을 실행하려면 단순히 코드만으로는 부족하다.&lt;br>
+다음과 같은 부가 정보들이 필요하다:&lt;/p>
+&lt;ul>
+&lt;li>어떤 스레드에서 실행할 것인가? (&lt;code>Dispatcher&lt;/code>)&lt;/li>
+&lt;li>코루틴의 생명주기는 어떻게 관리할 것인가? (&lt;code>Job&lt;/code>)&lt;/li>
+&lt;li>디버깅 시 어떤 이름으로 보일 것인가? (&lt;code>CoroutineName&lt;/code>)&lt;/li>
+&lt;li>예외가 발생했을 때 어떻게 처리할 것인가? (&lt;code>CoroutineExceptionHandler&lt;/code>)&lt;/li>
+&lt;/ul>
+&lt;p>이 모든 정보를 하나로 묶은 것이 바로 &lt;code>CoroutineContext&lt;/code>이다.&lt;/p>
+&lt;hr>
+&lt;h3 id="2-주요-구성-요소">2. 주요 구성 요소
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>요소&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;th>예시&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>Job&lt;/code>&lt;/td>
+&lt;td>코루틴의 생명주기 추적 및 취소 관리&lt;/td>
+&lt;td>&lt;code>Job()&lt;/code>, &lt;code>SupervisorJob()&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Dispatcher&lt;/code>&lt;/td>
+&lt;td>코루틴을 실행할 스레드 결정&lt;/td>
+&lt;td>&lt;code>Dispatchers.Default&lt;/code>, &lt;code>Dispatchers.IO&lt;/code>, &lt;code>Dispatchers.Main&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>CoroutineName&lt;/code>&lt;/td>
+&lt;td>디버깅용 이름&lt;/td>
+&lt;td>&lt;code>CoroutineName(&amp;quot;LoginFlow&amp;quot;)&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>CoroutineExceptionHandler&lt;/code>&lt;/td>
+&lt;td>예외 처리 전략&lt;/td>
+&lt;td>&lt;code>CoroutineExceptionHandler { _, e -&amp;gt; log(e) }&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="3-coroutinecontext-조합-방법">3. CoroutineContext 조합 방법
+&lt;/h3>&lt;p>&lt;code>CoroutineContext&lt;/code>는 &lt;code>+&lt;/code> 연산자를 통해 여러 구성 요소를 결합할 수 있다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> context = Job() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default + CoroutineName(&lt;span style="color:#e6db74">&amp;#34;ExampleCoroutine&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>위 코드에서는 Job, Dispatcher, CoroutineName이 하나의 Context로 결합된다.&lt;/li>
+&lt;li>이 Context는 CoroutineScope나 launch 등에서 사용 가능하다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="4-coroutinescope와-coroutinecontext">4. CoroutineScope와 CoroutineContext
+&lt;/h3>&lt;p>CoroutineScope는 내부적으로 반드시 하나의 CoroutineContext를 포함한다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO + Job())
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 Scope에서 launch한 모든 코루틴은 이 Context를 상속받는다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Context: &lt;/span>&lt;span style="color:#e6db74">$coroutineContext&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="출력-예시">출력 예시
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>Context: [JobImpl{Active}&lt;span style="color:#960050;background-color:#1e0010">@&lt;/span>&lt;span style="color:#ae81ff">4&lt;/span>a67cf4c, &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="5-withcontext와-coroutinecontext">5. withContext와 CoroutineContext
+&lt;/h3>&lt;p>코루틴의 Context를 전환하려면 withContext를 사용한다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>withContext(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 이 블록은 IO 스레드에서 실행됨
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>현재 코루틴은 일시 정지되고&lt;/li>
+&lt;li>새로운 Context에서 블록이 실행되며&lt;/li>
+&lt;li>완료 후 원래 Context로 복귀된다&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="6-coroutinecontext-키워드">6. coroutineContext 키워드
+&lt;/h3>&lt;p>코루틴 내부에서는 coroutineContext 키워드를 통해
+자신이 실행 중인 Context를 언제든지 확인할 수 있다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(coroutineContext[Job]) &lt;span style="color:#75715e">// 현재 Job
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> println(coroutineContext[CoroutineName]) &lt;span style="color:#75715e">// 이름 (있다면)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="7-실전-활용-예시">7. 실전 활용 예시
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(Job() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default + CoroutineName(&lt;span style="color:#e6db74">&amp;#34;Worker&amp;#34;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Context: &lt;/span>&lt;span style="color:#e6db74">$coroutineContext&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>출력 예&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>Context: [JobImpl{Active}&lt;span style="color:#960050;background-color:#1e0010">@&lt;/span>&lt;span style="color:#ae81ff">7&lt;/span>e5c3f4, CoroutineName(Worker), &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="8-결론">8. 결론
+&lt;/h3>&lt;p>CoroutineContext는 Kotlin 코루틴의 실행 환경을 구성하는 핵심 구조다.
+Dispatcher, Job, Name, ExceptionHandler 등 다양한 정보가 담겨 있으며,
+CoroutineScope, withContext, launch, async 등 코루틴 관련 도구들은 모두 이 Context를 바탕으로 동작한다.&lt;/p>
+&lt;p>코루틴을 잘 다루려면 단순한 launch나 async뿐 아니라,
+이들을 감싸고 있는 CoroutineContext의 구조와 흐름을 정확히 이해하는 것이 중요하다.&lt;/p></description></item></channel></rss>
