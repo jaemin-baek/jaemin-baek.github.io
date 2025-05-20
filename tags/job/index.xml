@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Job on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/job/</link><description>Recent content in Job on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 25 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/job/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조</title><link>https://jaemin-baek.github.io/post/supervisorjob/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/supervisorjob/</guid><description>&lt;h2 id="kotlin-coroutine에서-supervisorjob의-역할과-scopejob-구조">Kotlin Coroutine에서 SupervisorJob의 역할과 &lt;code>scopeJob&lt;/code> 구조
+&lt;/h2>&lt;p>Kotlin 코루틴에서는 비동기 작업의 생명주기와 예외 처리를 체계적으로 관리하기 위해 &lt;code>Job&lt;/code> 기반의 구조적 동시성을 제공한다. 본 문서에서는 그 중 &lt;code>SupervisorJob&lt;/code>을 중심으로 하는 &lt;code>scopeJob&lt;/code>의 역할과 필요성, 그리고 일반 &lt;code>Job&lt;/code>과의 차이에 대해 고찰한다.&lt;/p>
+&lt;hr>
+&lt;h3 id="1-개요">1. 개요
+&lt;/h3>&lt;p>코루틴은 &lt;code>CoroutineScope&lt;/code> 내에서 생성된 자식 코루틴들과 부모 코루틴 간의 관계를 명확히 하여 예측 가능한 동시 실행을 가능하게 한다. 이때 &lt;code>Job&lt;/code>은 각 코루틴의 생명주기를 추적하고, 취소 여부를 상위 또는 하위로 전파하는 핵심 구성요소로 작동한다. Kotlin에서는 &lt;code>Job&lt;/code> 외에도 &lt;code>SupervisorJob&lt;/code>이라는 특별한 형태의 Job을 제공하여, 자식 간의 실패 전파를 제어할 수 있다.&lt;/p>
+&lt;hr>
+&lt;h3 id="2-구조-예시">2. 구조 예시
+&lt;/h3>&lt;p>아래는 &lt;code>SupervisorJob&lt;/code>을 기반으로 한 &lt;code>scopeJob&lt;/code>을 생성하는 전형적인 코드 예시이다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">val&lt;/span> scopeJob = SupervisorJob()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">private&lt;/span> &lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(scopeJob + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 구조는 scope 내에서 생성되는 모든 자식 코루틴이 SupervisorJob을 공유하도록 구성되며, 하나의 자식이 실패하더라도 다른 자식은 영향을 받지 않고 독립적으로 실행을 계속할 수 있도록 한다.&lt;/p>
+&lt;hr>
+&lt;h3 id="3-supervisorjob의-동작-원리">3. SupervisorJob의 동작 원리
+&lt;/h3>&lt;p>&lt;code>SupervisorJob&lt;/code>은 일반 &lt;code>Job&lt;/code>과 달리, 자식 코루틴이 실패(Exception 발생 등)하더라도 &lt;strong>부모나 다른 자식 코루틴에게 실패를 전파하지 않는다&lt;/strong>. 이를 통해 &lt;strong>고립된 실패 처리&lt;/strong>와 &lt;strong>부분 성공 전략&lt;/strong>을 구현할 수 있다.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>항목&lt;/th>
+&lt;th>Job (기본)&lt;/th>
+&lt;th>SupervisorJob&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>자식 실패 시&lt;/td>
+&lt;td>전체 스코프 취소&lt;/td>
+&lt;td>실패한 자식만 취소&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>형제 간 전파&lt;/td>
+&lt;td>예외 전파됨&lt;/td>
+&lt;td>전파되지 않음&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>사용 목적&lt;/td>
+&lt;td>전체 작업의 일관성 보장&lt;/td>
+&lt;td>부분 실패 허용, 독립 실행 구조&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>&lt;code>SupervisorJob&lt;/code>은 &lt;code>supervisorScope {}&lt;/code> 또는 직접 Scope를 구성할 때 명시적으로 사용되며, &lt;code>CoroutineScope(SupervisorJob())&lt;/code> 형태로 자주 활용된다.&lt;/p>
+&lt;hr>
+&lt;h3 id="4-실용적-사용-맥락">4. 실용적 사용 맥락
+&lt;/h3>&lt;ul>
+&lt;li>병렬로 다수의 외부 API를 호출할 때&lt;/li>
+&lt;li>자식 코루틴 중 하나가 실패하더라도 나머지 결과가 유효한 경우&lt;/li>
+&lt;li>백그라운드 데이터 동기화 작업에서 개별 요청 단위의 실패를 분리하고 싶은 경우&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(SupervisorJob() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 개별 작업 1
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 개별 작업 2 (실패해도 다른 작업에는 영향 없음)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>위 예제는 scope 내부에서 수행되는 코루틴들이 독립적인 실행 환경을 갖도록 보장한다.&lt;/p>
+&lt;hr>
+&lt;h3 id="5-예외-처리와-결합">5. 예외 처리와 결합
+&lt;/h3>&lt;p>실제 응용에서는 SupervisorJob과 함께 CoroutineExceptionHandler를 결합하여 보다 견고한 예외 처리를 구현할 수 있다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> exceptionHandler = CoroutineExceptionHandler { _, throwable &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> logger.error(&lt;span style="color:#e6db74">&amp;#34;Unhandled exception: &lt;/span>&lt;span style="color:#e6db74">$throwable&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(SupervisorJob() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default + exceptionHandler)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 구조는 실패한 자식 코루틴의 예외를 처리하면서도 전체 스코프를 안정적으로 유지할 수 있게 한다.&lt;/p>
+&lt;h3 id="6-결론">6. 결론
+&lt;/h3>&lt;p>SupervisorJob은 Kotlin 코루틴 기반 구조에서 자식 간의 예외 전파를 분리하고, 작업 단위의 독립성과 견고성을 확보하기 위한 중요한 구성요소이다. 일반 Job이 전체 일괄 실패를 선호하는 전략이라면, SupervisorJob은 부분 실패를 수용하며 전체 서비스의 연속성을 유지하는 전략에 적합하다. 이를 통해 복잡한 비동기 시스템에서도 예측 가능한 실행 흐름과 회복 가능한 오류 처리가 가능해진다.&lt;/p>
+&lt;hr></description></item></channel></rss>
