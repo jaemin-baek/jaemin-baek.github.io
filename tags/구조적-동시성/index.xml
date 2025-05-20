@@ -18,10 +18,10 @@
 &lt;hr>
 &lt;h3 id="3-coroutinescope---빌더">3. coroutineScope { } 빌더
 &lt;/h3>&lt;p>&lt;code>coroutineScope&lt;/code>는 &lt;code>suspend fun&lt;/code> 내부에서 사용 가능한 코루틴 빌더이며, 해당 블록 내에서 생성된 자식 코루틴들이 모두 완료되기 전까지 현재 코루틴을 일시 정지시킨다. 구조적 동시성을 구현하기 위한 핵심 기제로 작동하며, 블록 범위 외부로 생명주기가 확장되지 않는다.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchAggregatedData&lt;/span>(): AggregatedData = coroutineScope {
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>(): UserData = coroutineScope {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> a = async { fetchA() }
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> b = async { fetchB() }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> AggregatedData(a.await(), b.await())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> UserData(a.await(), b.await())
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
 &lt;li>블록이 종료되면 자식 코루틴은 모두 정리되고 스코프도 자동으로 사라진다.&lt;/li>
