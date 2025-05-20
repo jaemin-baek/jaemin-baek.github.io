@@ -101,19 +101,4 @@
 &lt;li>검색어 자동완성, 추천어, 최근 검색어 등 병렬로 가져올 때&lt;/li>
 &lt;li>하나 실패해도 나머지는 계속 보여주고자 할 때&lt;/li>
 &lt;/ul>
-&lt;hr>
-&lt;h3 id="6-포트폴리오-활용-방식">6. 포트폴리오 활용 방식
-&lt;/h3>&lt;p>실제 포트폴리오에 다음과 같이 서술할 수 있다:&lt;/p>
-&lt;blockquote>
-&lt;p>&amp;ldquo;SupervisorJob을 활용하여 병렬 코루틴 간 의존성을 분리하고,&lt;br>
-하나의 작업 실패가 전체 흐름에 영향을 주지 않도록 비동기 처리 구조를 설계하였습니다.&lt;br>
-예외는 개별 async 블록 내에서 처리하며, 사용자에게는 가능한 범위 내에서 응답을 제공하는&lt;br>
-&amp;lsquo;부분 실패 허용&amp;rsquo; 구조를 통해 안정성을 확보했습니다.&amp;rdquo;&lt;/p>&lt;/blockquote>
-&lt;hr>
-&lt;h3 id="결론">결론
-&lt;/h3>&lt;p>&lt;code>SupervisorJob&lt;/code>은 코루틴 기반 시스템에서 &lt;strong>복원력 있는 비동기 구조&lt;/strong>를 만드는 핵심 도구다.&lt;br>
-&lt;strong>자식 간의 실패 전파를 차단&lt;/strong>함으로써, &lt;strong>전체 시스템의 안정성과 사용자 경험을 유지할 수 있다.&lt;/strong>&lt;/p>
-&lt;blockquote>
-&lt;p>코루틴을 깊이 있게 다루려면 단순한 launch/async를 넘어서&lt;br>
-Job 계층 구조와 예외 전파 모델을 이해하고&lt;br>
-실제 상황에 적합한 구조를 선택할 수 있어야 한다.&lt;/p>&lt;/blockquote></description></item></channel></rss>
+&lt;hr></description></item></channel></rss>
