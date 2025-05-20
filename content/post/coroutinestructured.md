@@ -8,20 +8,20 @@ categories: ["Kotlin"]
 
 ### 1. 구조적 동시성이란?
 
-> 코루틴은 **스코프 기반으로 생성되며**, 스코프가 종료되면  
-> 하위의 모든 자식 코루틴도 함께 종료된다.
+코루틴은 **스코프 기반으로 생성되며**, 스코프가 종료되면  
+하위의 모든 자식 코루틴도 함께 종료된다.
 
 즉, 부모가 죽으면 자식도 죽고, 자식이 죽으면 부모도 영향을 받는다.  
-이는 다음과 같은 전통적인 구조를 따른다:
+이는 다음과 같은 전통적인 구조를 따른다
 
-<code>
+```kotlin
 val scope = CoroutineScope(Job() + Dispatchers.Default)
 
 scope.launch {
     launch { taskA() }
     launch { taskB() }
 }
-</code>
+```
 
 - `taskA()`에서 예외가 발생하면 → 부모 코루틴도 취소됨
 - 따라서 `taskB()`도 함께 취소된다
@@ -32,7 +32,7 @@ scope.launch {
 
 #### 예: 병렬 API 요청 처리
 
-<code>
+```kotlin
 val result = coroutineScope {
     val comments = async { fetchComments() }
     val suggestions = async { fetchSuggestions() }
@@ -42,7 +42,7 @@ val result = coroutineScope {
         suggestions = suggestions.await()
     )
 }
-</code>
+```
 
 - `fetchComments()`에서 예외 발생 시 → `fetchSuggestions()`도 중단됨
 - 전체가 실패로 처리됨 → **너무 강한 연결 구조**
@@ -54,7 +54,7 @@ val result = coroutineScope {
 `SupervisorJob`을 사용하면,  
 **자식 중 하나가 예외를 던져도 다른 자식에 영향을 주지 않는다.**
 
-<code>
+```kotlin
 val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
 scope.launch {
@@ -79,7 +79,7 @@ scope.launch {
 
     println(data)
 }
-</code>
+```
 
 - `fetchComments()`가 실패해도 `fetchSuggestions()`는 정상 실행됨
 - 각각 독립적으로 예외 처리하고, 전체 구조는 안정성을 유지함
@@ -125,7 +125,7 @@ scope.launch {
 
 ---
 
-### ✅ 결론
+### 결론
 
 `SupervisorJob`은 코루틴 기반 시스템에서 **복원력 있는 비동기 구조**를 만드는 핵심 도구다.  
 **자식 간의 실패 전파를 차단**함으로써, **전체 시스템의 안정성과 사용자 경험을 유지할 수 있다.**
