@@ -46,8 +46,8 @@
 &lt;/tr>
 &lt;tr>
 &lt;td>리소스 점유&lt;/td>
-&lt;td>❌ 없음&lt;/td>
-&lt;td>✅ 있음 (CPU 점유)&lt;/td>
+&lt;td>없음&lt;/td>
+&lt;td>있음 (CPU 점유)&lt;/td>
 &lt;/tr>
 &lt;tr>
 &lt;td>실행 재개 방식&lt;/td>
