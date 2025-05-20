@@ -161,33 +161,33 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> Exception() &lt;span style="color:#960050;background-color:#1e0010">→&lt;/span> 저장됨 &lt;span style="color:#960050;background-color:#1e0010">→&lt;/span> await() 호출 시 &lt;span style="color:#66d9ef">throw&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>구조적 동시성과 SupervisorJob의 실제 설계 활용</title><link>https://jaemin-baek.github.io/post/coroutinestructured/</link><pubDate>Wed, 05 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinestructured/</guid><description>&lt;h3 id="1-구조적-동시성이란">1. 구조적 동시성이란?
-&lt;/h3>&lt;blockquote>
-&lt;p>코루틴은 &lt;strong>스코프 기반으로 생성되며&lt;/strong>, 스코프가 종료되면&lt;br>
-하위의 모든 자식 코루틴도 함께 종료된다.&lt;/p>&lt;/blockquote>
+&lt;/h3>&lt;p>코루틴은 &lt;strong>스코프 기반으로 생성되며&lt;/strong>, 스코프가 종료되면&lt;br>
+하위의 모든 자식 코루틴도 함께 종료된다.&lt;/p>
 &lt;p>즉, 부모가 죽으면 자식도 죽고, 자식이 죽으면 부모도 영향을 받는다.&lt;br>
-이는 다음과 같은 전통적인 구조를 따른다:&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>scope.launch {
-launch { taskA() }
-launch { taskB() }
-}
-&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;ul>
+이는 다음과 같은 전통적인 구조를 따른다&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(Job() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { taskA() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { taskB() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
 &lt;li>&lt;code>taskA()&lt;/code>에서 예외가 발생하면 → 부모 코루틴도 취소됨&lt;/li>
 &lt;li>따라서 &lt;code>taskB()&lt;/code>도 함께 취소된다&lt;/li>
 &lt;/ul>
 &lt;hr>
 &lt;h3 id="2-문제-상황-일부-실패는-무시하고-싶을-때">2. 문제 상황: 일부 실패는 무시하고 싶을 때
 &lt;/h3>&lt;h4 id="예-병렬-api-요청-처리">예: 병렬 API 요청 처리
-&lt;/h4>&lt;!-- raw HTML omitted -->
-&lt;pre>&lt;code>AggregatedData(
-comments = comments.await(),
-suggestions = suggestions.await()
-)
-&lt;/code>&lt;/pre>
-&lt;p>}
-&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;ul>
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> result = coroutineScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> comments = async { fetchComments() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> suggestions = async { fetchSuggestions() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> AggregatedData(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> comments = comments.await(),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> suggestions = suggestions.await()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
 &lt;li>&lt;code>fetchComments()&lt;/code>에서 예외 발생 시 → &lt;code>fetchSuggestions()&lt;/code>도 중단됨&lt;/li>
 &lt;li>전체가 실패로 처리됨 → &lt;strong>너무 강한 연결 구조&lt;/strong>&lt;/li>
 &lt;/ul>
@@ -195,29 +195,31 @@ suggestions = suggestions.await()
 &lt;h3 id="3-해결책-supervisorjob을-사용한-독립-실행-구조">3. 해결책: &lt;code>SupervisorJob&lt;/code>을 사용한 독립 실행 구조
 &lt;/h3>&lt;p>&lt;code>SupervisorJob&lt;/code>을 사용하면,&lt;br>
 &lt;strong>자식 중 하나가 예외를 던져도 다른 자식에 영향을 주지 않는다.&lt;/strong>&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>scope.launch {
-val comments = async {
-try { fetchComments() }
-catch (e: Exception) {
-emptyList()
-}
-}&lt;/p>
-&lt;pre>&lt;code>val suggestions = async {
-try { fetchSuggestions() }
-catch (e: Exception) {
-emptyList()
-}
-}
-val data = AggregatedData(
-comments = comments.await(),
-suggestions = suggestions.await()
-)
-println(data)
-&lt;/code>&lt;/pre>
-&lt;p>}
-&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(SupervisorJob() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> comments = async {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span> { fetchComments() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">catch&lt;/span> (e: Exception) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> emptyList()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> suggestions = async {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span> { fetchSuggestions() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">catch&lt;/span> (e: Exception) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> emptyList()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> data = AggregatedData(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> comments = comments.await(),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> suggestions = suggestions.await()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#66d9ef">data&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
 &lt;li>&lt;code>fetchComments()&lt;/code>가 실패해도 &lt;code>fetchSuggestions()&lt;/code>는 정상 실행됨&lt;/li>
 &lt;li>각각 독립적으로 예외 처리하고, 전체 구조는 안정성을 유지함&lt;/li>
 &lt;/ul>
@@ -270,7 +272,7 @@ println(data)
 예외는 개별 async 블록 내에서 처리하며, 사용자에게는 가능한 범위 내에서 응답을 제공하는&lt;br>
 &amp;lsquo;부분 실패 허용&amp;rsquo; 구조를 통해 안정성을 확보했습니다.&amp;rdquo;&lt;/p>&lt;/blockquote>
 &lt;hr>
-&lt;h3 id="-결론">✅ 결론
+&lt;h3 id="결론">결론
 &lt;/h3>&lt;p>&lt;code>SupervisorJob&lt;/code>은 코루틴 기반 시스템에서 &lt;strong>복원력 있는 비동기 구조&lt;/strong>를 만드는 핵심 도구다.&lt;br>
 &lt;strong>자식 간의 실패 전파를 차단&lt;/strong>함으로써, &lt;strong>전체 시스템의 안정성과 사용자 경험을 유지할 수 있다.&lt;/strong>&lt;/p>
 &lt;blockquote>
