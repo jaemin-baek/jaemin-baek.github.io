@@ -43,63 +43,8 @@
 &lt;li>launch: 새로운 코루틴을 시작하고 Job을 반환&lt;/li>
 &lt;li>async: 결과값을 비동기적으로 계산하며 Deferred&lt;!-- raw HTML omitted -->를 반환&lt;/li>
 &lt;/ul>
-&lt;h3 id="3-실행-및-동작-방식-비교">3. 실행 및 동작 방식 비교
-&lt;/h3>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>항목&lt;/th>
-&lt;th>&lt;code>withContext&lt;/code>&lt;/th>
-&lt;th>&lt;code>launch&lt;/code>&lt;/th>
-&lt;th>&lt;code>async&lt;/code>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>코루틴 시작 여부&lt;/td>
-&lt;td>❌ 새 코루틴 아님 (현재 코루틴에서 컨텍스트 전환)&lt;/td>
-&lt;td>✅ 새 코루틴 시작&lt;/td>
-&lt;td>✅ 새 코루틴 시작&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>컨텍스트 전환 가능&lt;/td>
-&lt;td>✅ 가능 (예: IO, Default 등)&lt;/td>
-&lt;td>✅ 가능&lt;/td>
-&lt;td>✅ 가능&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>결과 반환&lt;/td>
-&lt;td>✅ 블록의 반환값을 그대로 반환&lt;/td>
-&lt;td>❌ 없음 (&lt;code>Unit&lt;/code>)&lt;/td>
-&lt;td>✅ &lt;code>Deferred&amp;lt;T&amp;gt;&lt;/code> 반환, &lt;code>await()&lt;/code>로 사용&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>동시 실행 가능성&lt;/td>
-&lt;td>❌ 단일 흐름 (순차 실행)&lt;/td>
-&lt;td>✅ 병렬 실행 가능&lt;/td>
-&lt;td>✅ 병렬 실행 가능&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>예외 처리 방식&lt;/td>
-&lt;td>예외 발생 시 즉시 호출자에게 전파&lt;/td>
-&lt;td>예외는 부모 &lt;code>Job&lt;/code>으로 전파됨&lt;/td>
-&lt;td>&lt;code>await()&lt;/code> 호출 시 예외 전파&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>부모에 의한 취소 전파&lt;/td>
-&lt;td>✅ 됨&lt;/td>
-&lt;td>✅ 됨&lt;/td>
-&lt;td>✅ 됨&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>적합한 사용 목적&lt;/td>
-&lt;td>컨텍스트 전환 + 반환값 처리&lt;/td>
-&lt;td>단순한 비동기 실행&lt;/td>
-&lt;td>병렬 작업 + 반환값 필요할 때&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h3 id="4-사용-예시">4. 사용 예시
-&lt;/h3>&lt;h4 id="41-withcontext">4.1 withContext
+&lt;h3 id="3-사용-예시">3. 사용 예시
+&lt;/h3>&lt;h4 id="31-withcontext">3.1 withContext
 &lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">loadData&lt;/span>(): String {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> withContext(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO) {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 블로킹 IO → 비동기 전환
@@ -110,7 +55,7 @@
 &lt;li>현재 코루틴을 일시 정지하고 Dispatchers.IO로 전환하여 작업을 수행&lt;/li>
 &lt;li>완료 후 이전 컨텍스트로 복귀&lt;/li>
 &lt;/ul>
-&lt;h4 id="42-launch">4.2 launch
+&lt;h4 id="32-launch">3.2 launch
 &lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">startLogging&lt;/span>(scope: CoroutineScope) {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope.launch {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Logging started.&amp;#34;&lt;/span>)
@@ -120,7 +65,7 @@
 &lt;li>독립 실행 → 결과 반환 없이 작업 수행&lt;/li>
 &lt;li>Job을 통해 수명 및 취소 여부 제어 가능&lt;/li>
 &lt;/ul>
-&lt;h4 id="43-async">4.3 async
+&lt;h4 id="33-async">3.3 async
 &lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">aggregate&lt;/span>(): Int = coroutineScope {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> a = async { computeA() }
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> b = async { computeB() }
@@ -130,7 +75,7 @@
 &lt;li>결과가 필요한 두 작업을 병렬로 실행&lt;/li>
 &lt;li>await() 호출 시 각각의 연산 결과를 비동기적으로 수집&lt;/li>
 &lt;/ul>
-&lt;h3 id="5-비교-요약-표">5. 비교 요약 표
+&lt;h3 id="4-비교-요약-표">4. 비교 요약 표
 &lt;/h3>&lt;table>
 &lt;thead>
 &lt;tr>
@@ -186,7 +131,7 @@
 &lt;/tbody>
 &lt;/table>
 &lt;hr>
-&lt;h3 id="6-결론">6. 결론
+&lt;h3 id="5-결론">5. 결론
 &lt;/h3>&lt;p>&lt;code>withContext&lt;/code>, &lt;code>launch&lt;/code>, &lt;code>async&lt;/code>는 Kotlin 코루틴의 비동기 실행 모델을 구성하는 핵심 도구로서, 각기 다른 목적과 특성을 가진다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>withContext&lt;/code>는 &lt;strong>기존 코루틴의 흐름 안에서 Dispatcher나 Job 등 컨텍스트만 전환&lt;/strong>하여 특정 블록을 실행하고 결과를 반환하는 데 사용된다.&lt;/li>

@@ -1,4 +1,49 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin Coroutine에서 withContext, launch, async의 개념 및 실행 방식 비교</title><link>https://jaemin-baek.github.io/post/withcontext/</link><pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/withcontext/</guid><description>&lt;h2 id="kotlin-coroutine에서-withcontext-launch-async의-개념-및-실행-방식-비교">Kotlin Coroutine에서 withContext, launch, async의 개념 및 실행 방식 비교
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>CoroutineScope.cancel()과 Job.cancel()은 같은가?</title><link>https://jaemin-baek.github.io/post/coroutinejobcancel/</link><pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinejobcancel/</guid><description>&lt;h2 id="coroutinescopecancel과-jobcancel은-같은가">CoroutineScope.cancel()과 Job.cancel()은 같은가?
+&lt;/h2>&lt;p>Kotlin 코루틴을 사용하다 보면 &lt;code>CoroutineScope.cancel()&lt;/code>과 &lt;code>Job.cancel()&lt;/code>을 모두 보게 된다. 이 둘은 이름은 비슷하지만, 실제로 동일한 기능일까? 둘의 차이는 어디에 있을까? 본 포스트에서는 이 질문을 중심으로, Kotlin 표준과 &lt;code>kotlinx.coroutines&lt;/code>의 차이를 기반으로 정확한 동작 방식을 설명한다.&lt;/p>
+&lt;hr>
+&lt;h3 id="1-job이란">1. Job이란?
+&lt;/h3>&lt;p>&lt;code>Job&lt;/code>은 Kotlin 코루틴의 생명주기와 상태를 관리하는 객체다.&lt;br>
+각 코루틴에는 하나의 Job이 할당되며, 이를 통해 다음을 제어할 수 있다:&lt;/p>
+&lt;ul>
+&lt;li>코루틴의 실행 상태 추적 (활성, 취소, 완료)&lt;/li>
+&lt;li>&lt;code>cancel()&lt;/code>을 통한 중단 신호 전달&lt;/li>
+&lt;li>&lt;code>join()&lt;/code>을 통한 종료 대기&lt;/li>
+&lt;li>부모-자식 관계 관리&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="2-coroutinescope는-job을-포함한다">2. CoroutineScope는 Job을 포함한다
+&lt;/h3>&lt;p>&lt;code>CoroutineScope&lt;/code>는 코루틴을 실행할 수 있는 컨텍스트이며, 내부적으로 &lt;code>CoroutineContext&lt;/code>를 통해 &lt;strong>Job을 반드시 포함&lt;/strong>한다. 예를 들어 다음과 같은 코드가 있을 때:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>실제로는 다음과 같은 컨텍스트가 구성된다&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>CoroutineScope(Job() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>즉, Job은 자동 생성되며 scope 안에 숨겨져 있다. 하지만 이 Job에 직접 접근할 수는 없다.&lt;/p>
+&lt;hr>
+&lt;h3 id="3-scopecancel은-왜-되는가">3. scope.cancel()은 왜 되는가?
+&lt;/h3>&lt;p>Kotlin 표준의 CoroutineScope 인터페이스는 cancel() 함수를 직접 정의하지 않는다.
+하지만 kotlinx.coroutines 라이브러리는 다음과 같은 확장 함수를 제공한다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">CoroutineScope&lt;/span>.cancel(cause: CancellationException? = &lt;span style="color:#66d9ef">null&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> coroutineContext[Job]&lt;span style="color:#f92672">?.&lt;/span>cancel(cause)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>즉, CoroutineScope.cancel()은 실제로는 자신의 CoroutineContext에서 Job을 꺼내고, 그 Job의 cancel()을 호출하는 확장 함수일 뿐이다.&lt;/p>
+&lt;p>따라서 다음과 같은 코드는 정상적으로 작동한다&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.cancel() &lt;span style="color:#75715e">// kotlinx.coroutines 확장 함수로 동작
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="4-job을-명시적으로-만들면-어떤-이점이-있나">4. Job을 명시적으로 만들면 어떤 이점이 있나?
+&lt;/h3>&lt;p>Job을 직접 변수로 만들어 Scope에 넣으면, Scope 밖에서도 Job을 통해 상태를 제어할 수 있다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> job = Job()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(job + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>job.cancel() &lt;span style="color:#75715e">// scope의 모든 코루틴 취소 가능
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="6-결론">6. 결론
+&lt;/h3>&lt;p>CoroutineScope.cancel()은 Kotlin 표준의 기능이 아니라,
+kotlinx.coroutines에서 제공하는 확장 함수이다.
+내부적으로는 Job.cancel()을 위임 호출하며, 같은 대상이라면 동작 결과는 동일하다.&lt;/p></description></item><item><title>Kotlin Coroutine에서 withContext, launch, async의 개념 및 실행 방식 비교</title><link>https://jaemin-baek.github.io/post/withcontext/</link><pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/withcontext/</guid><description>&lt;h2 id="kotlin-coroutine에서-withcontext-launch-async의-개념-및-실행-방식-비교">Kotlin Coroutine에서 withContext, launch, async의 개념 및 실행 방식 비교
 &lt;/h2>&lt;p>Kotlin 코루틴은 비동기 흐름 제어를 위한 고수준 추상화를 제공하며, 이를 위한 핵심 도구로 &lt;code>withContext&lt;/code>, &lt;code>launch&lt;/code>, &lt;code>async&lt;/code>가 사용된다. 이 세 도구는 각각 목적과 동작 방식이 뚜렷하게 구분되며, 올바른 사용을 위해 그 차이를 명확히 이해하는 것이 중요하다. 본 문서에서는 이 세 가지 코루틴 구성 요소의 구조적 차이, 실행 방식, 반환값, 예외 처리 특성을 중심으로 비교하고 그 활용 맥락을 제시한다.&lt;/p>
 &lt;hr>
 &lt;h3 id="1-개념적-정의">1. 개념적 정의
@@ -43,63 +88,8 @@
 &lt;li>launch: 새로운 코루틴을 시작하고 Job을 반환&lt;/li>
 &lt;li>async: 결과값을 비동기적으로 계산하며 Deferred&lt;!-- raw HTML omitted -->를 반환&lt;/li>
 &lt;/ul>
-&lt;h3 id="3-실행-및-동작-방식-비교">3. 실행 및 동작 방식 비교
-&lt;/h3>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>항목&lt;/th>
-&lt;th>&lt;code>withContext&lt;/code>&lt;/th>
-&lt;th>&lt;code>launch&lt;/code>&lt;/th>
-&lt;th>&lt;code>async&lt;/code>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>코루틴 시작 여부&lt;/td>
-&lt;td>❌ 새 코루틴 아님 (현재 코루틴에서 컨텍스트 전환)&lt;/td>
-&lt;td>✅ 새 코루틴 시작&lt;/td>
-&lt;td>✅ 새 코루틴 시작&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>컨텍스트 전환 가능&lt;/td>
-&lt;td>✅ 가능 (예: IO, Default 등)&lt;/td>
-&lt;td>✅ 가능&lt;/td>
-&lt;td>✅ 가능&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>결과 반환&lt;/td>
-&lt;td>✅ 블록의 반환값을 그대로 반환&lt;/td>
-&lt;td>❌ 없음 (&lt;code>Unit&lt;/code>)&lt;/td>
-&lt;td>✅ &lt;code>Deferred&amp;lt;T&amp;gt;&lt;/code> 반환, &lt;code>await()&lt;/code>로 사용&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>동시 실행 가능성&lt;/td>
-&lt;td>❌ 단일 흐름 (순차 실행)&lt;/td>
-&lt;td>✅ 병렬 실행 가능&lt;/td>
-&lt;td>✅ 병렬 실행 가능&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>예외 처리 방식&lt;/td>
-&lt;td>예외 발생 시 즉시 호출자에게 전파&lt;/td>
-&lt;td>예외는 부모 &lt;code>Job&lt;/code>으로 전파됨&lt;/td>
-&lt;td>&lt;code>await()&lt;/code> 호출 시 예외 전파&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>부모에 의한 취소 전파&lt;/td>
-&lt;td>✅ 됨&lt;/td>
-&lt;td>✅ 됨&lt;/td>
-&lt;td>✅ 됨&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>적합한 사용 목적&lt;/td>
-&lt;td>컨텍스트 전환 + 반환값 처리&lt;/td>
-&lt;td>단순한 비동기 실행&lt;/td>
-&lt;td>병렬 작업 + 반환값 필요할 때&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h3 id="4-사용-예시">4. 사용 예시
-&lt;/h3>&lt;h4 id="41-withcontext">4.1 withContext
+&lt;h3 id="3-사용-예시">3. 사용 예시
+&lt;/h3>&lt;h4 id="31-withcontext">3.1 withContext
 &lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">loadData&lt;/span>(): String {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> withContext(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.IO) {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 블로킹 IO → 비동기 전환
@@ -110,7 +100,7 @@
 &lt;li>현재 코루틴을 일시 정지하고 Dispatchers.IO로 전환하여 작업을 수행&lt;/li>
 &lt;li>완료 후 이전 컨텍스트로 복귀&lt;/li>
 &lt;/ul>
-&lt;h4 id="42-launch">4.2 launch
+&lt;h4 id="32-launch">3.2 launch
 &lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">startLogging&lt;/span>(scope: CoroutineScope) {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scope.launch {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Logging started.&amp;#34;&lt;/span>)
@@ -120,7 +110,7 @@
 &lt;li>독립 실행 → 결과 반환 없이 작업 수행&lt;/li>
 &lt;li>Job을 통해 수명 및 취소 여부 제어 가능&lt;/li>
 &lt;/ul>
-&lt;h4 id="43-async">4.3 async
+&lt;h4 id="33-async">3.3 async
 &lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">aggregate&lt;/span>(): Int = coroutineScope {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> a = async { computeA() }
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> b = async { computeB() }
@@ -130,7 +120,7 @@
 &lt;li>결과가 필요한 두 작업을 병렬로 실행&lt;/li>
 &lt;li>await() 호출 시 각각의 연산 결과를 비동기적으로 수집&lt;/li>
 &lt;/ul>
-&lt;h3 id="5-비교-요약-표">5. 비교 요약 표
+&lt;h3 id="4-비교-요약-표">4. 비교 요약 표
 &lt;/h3>&lt;table>
 &lt;thead>
 &lt;tr>
@@ -186,7 +176,7 @@
 &lt;/tbody>
 &lt;/table>
 &lt;hr>
-&lt;h3 id="6-결론">6. 결론
+&lt;h3 id="5-결론">5. 결론
 &lt;/h3>&lt;p>&lt;code>withContext&lt;/code>, &lt;code>launch&lt;/code>, &lt;code>async&lt;/code>는 Kotlin 코루틴의 비동기 실행 모델을 구성하는 핵심 도구로서, 각기 다른 목적과 특성을 가진다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>withContext&lt;/code>는 &lt;strong>기존 코루틴의 흐름 안에서 Dispatcher나 Job 등 컨텍스트만 전환&lt;/strong>하여 특정 블록을 실행하고 결과를 반환하는 데 사용된다.&lt;/li>
