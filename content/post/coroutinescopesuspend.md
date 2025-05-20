@@ -58,7 +58,7 @@ suspend fun outerFunction() {
 | 구분 | suspend | blocking |
 |------|---------|----------|
 | 대상 | 코루틴 | 스레드 |
-| 리소스 점유 | ❌ 없음 | ✅ 있음 (CPU 점유) |
+| 리소스 점유 | 없음 | 있음 (CPU 점유) |
 | 실행 재개 방식 | 코루틴 스케줄러가 재개 | 외부 조건이 충족되어야 해제 |
 | 대표 예시 | `delay()`, `coroutineScope {}` | `Thread.sleep()`, `runBlocking {}` |
 | 병렬성 확보 | 고성능 병렬 처리 가능 | 동시성 제한, 블로킹 자원 증가 |
