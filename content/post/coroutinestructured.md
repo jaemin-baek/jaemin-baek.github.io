@@ -58,30 +58,30 @@ val result = coroutineScope {
 val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
 scope.launch {
-    val comments = async {
-        try { fetchComments() }
+    val dataA = async {
+        try { fetchA() }
         catch (e: Exception) {
             emptyList()
         }
     }
 
-    val suggestions = async {
-        try { fetchSuggestions() }
+    val dataB = async {
+        try { fetchB() }
         catch (e: Exception) {
             emptyList()
         }
     }
 
-    val data = AggregatedData(
-        comments = comments.await(),
-        suggestions = suggestions.await()
+    val data = ResultData(
+        dataA = dataA.await(),
+        dataB = dataB.await()
     )
 
     println(data)
 }
 ```
 
-- `fetchComments()`가 실패해도 `fetchSuggestions()`는 정상 실행됨
+- `fetchA()`가 실패해도 `fetchB()`는 정상 실행됨
 - 각각 독립적으로 예외 처리하고, 전체 구조는 안정성을 유지함
 
 ---
