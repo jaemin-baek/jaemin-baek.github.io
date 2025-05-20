@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CoroutineScope on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutinescope/</link><description>Recent content in CoroutineScope on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 19 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutinescope/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 코루틴의 runBlocking, coroutineScope, supervisorScope 비교</title><link>https://jaemin-baek.github.io/post/coroutinescope/</link><pubDate>Mon, 19 May 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinescope/</guid><description>&lt;h2 id="kotlin-코루틴의-실행-스코프-비교-runblocking-coroutinescope-supervisorscope">Kotlin 코루틴의 실행 스코프 비교: runBlocking, coroutineScope, supervisorScope
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CoroutineScope on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutinescope/</link><description>Recent content in CoroutineScope on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 19 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutinescope/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 코루틴의 runBlocking, coroutineScope, supervisorScope 비교</title><link>https://jaemin-baek.github.io/post/coroutinescope/</link><pubDate>Wed, 19 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinescope/</guid><description>&lt;h2 id="kotlin-코루틴의-실행-스코프-비교-runblocking-coroutinescope-supervisorscope">Kotlin 코루틴의 실행 스코프 비교: runBlocking, coroutineScope, supervisorScope
 &lt;/h2>&lt;p>Kotlin의 코루틴 시스템은 다양한 실행 스코프 제공을 통해 구조적 동시성과 예외 분리를 가능하게 한다. 본 문서에서는 &lt;code>runBlocking&lt;/code>, &lt;code>coroutineScope&lt;/code>, &lt;code>supervisorScope&lt;/code>의 기능과 목적을 비교하고, 각각의 사용 상황과 실행 흐름 차이에 대해 기술한다.&lt;/p>
 &lt;hr>
 &lt;h3 id="1-개요">1. 개요
@@ -55,4 +55,49 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Done&amp;#34;&lt;/span>)
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>호출한 스레드를 직접 차단하며, UI 스레드에서는 사용을 지양해야 한다.&lt;/li>
+&lt;li>&lt;code>CoroutineScope&lt;/code>를 생성하여 내부에서 &lt;code>launch&lt;/code>, &lt;code>async&lt;/code> 등을 사용할 수 있다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="4-coroutinescope">4. coroutineScope
+&lt;/h3>&lt;p>&lt;code>coroutineScope&lt;/code>는 현재 컨텍스트를 상속하는 &lt;code>CoroutineScope&lt;/code>를 생성하며, 내부의 모든 자식 코루틴이 종료될 때까지 &lt;code>suspend&lt;/code> 상태로 대기한다. 이는 구조적 동시성을 구현하는 핵심 도구로 사용된다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">run&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> coroutineScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">500&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Child 1 done&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Child 2 done&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;All children completed&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>자식 중 하나라도 실패하면 전체 스코프가 취소된다.&lt;/li>
+&lt;li>일반적으로 suspend 함수 내에서 사용된다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="5-supervisorscope">5. supervisorScope
+&lt;/h3>&lt;p>supervisorScope는 자식 코루틴 간 실패 전파를 막고, 하나의 실패가 다른 작업에 영향을 미치지 않도록 하는 예외 격리 기능을 제공한다. 내부적으로 SupervisorJob을 사용하여 고립된 실행 환경을 형성한다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">run&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> supervisorScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> RuntimeException(&lt;span style="color:#e6db74">&amp;#34;Child failed&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Other child still runs&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>하나의 자식이 예외를 발생시켜도 다른 자식은 계속 실행된다.&lt;/li>
+&lt;li>실시간 처리나 부분 실패를 허용하는 작업에 적합하다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="7-결론">7. 결론
+&lt;/h3>&lt;p>코루틴의 실행 컨텍스트 선택은 코드의 동시성 구조와 예외 처리 전략에 직접적인 영향을 미친다. runBlocking은 동기-비동기 경계를 연결하는 데 유용하며, coroutineScope는 구조적 동시성을 제공하고, supervisorScope는 자식 코루틴의 독립 실행을 보장한다. 각 스코프의 특성을 이해하고 상황에 맞게 사용하는 것이 안전하고 예측 가능한 비동기 프로그래밍을 구현하는 데 핵심이 된다.&lt;/p>
+&lt;hr></description></item></channel></rss>
