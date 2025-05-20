@@ -40,10 +40,10 @@ scope.launch {
 `coroutineScope`는 `suspend fun` 내부에서 사용 가능한 코루틴 빌더이며, 해당 블록 내에서 생성된 자식 코루틴들이 모두 완료되기 전까지 현재 코루틴을 일시 정지시킨다. 구조적 동시성을 구현하기 위한 핵심 기제로 작동하며, 블록 범위 외부로 생명주기가 확장되지 않는다.
 
 ```kotlin
-suspend fun fetchAggregatedData(): AggregatedData = coroutineScope {
+suspend fun fetchData(): UserData = coroutineScope {
     val a = async { fetchA() }
     val b = async { fetchB() }
-    AggregatedData(a.await(), b.await())
+    UserData(a.await(), b.await())
 }
 ```
 
