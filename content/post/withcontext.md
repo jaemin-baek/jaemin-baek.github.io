@@ -42,21 +42,8 @@ fun <T> CoroutineScope.async(
 - launch: 새로운 코루틴을 시작하고 Job을 반환
 - async: 결과값을 비동기적으로 계산하며 Deferred<T>를 반환
 
-### 3. 실행 및 동작 방식 비교
-
-| 항목 | `withContext` | `launch` | `async` |
-|------|---------------|----------|---------|
-| 코루틴 시작 여부 | ❌ 새 코루틴 아님 (현재 코루틴에서 컨텍스트 전환) | ✅ 새 코루틴 시작 | ✅ 새 코루틴 시작 |
-| 컨텍스트 전환 가능 | ✅ 가능 (예: IO, Default 등) | ✅ 가능 | ✅ 가능 |
-| 결과 반환 | ✅ 블록의 반환값을 그대로 반환 | ❌ 없음 (`Unit`) | ✅ `Deferred<T>` 반환, `await()`로 사용 |
-| 동시 실행 가능성 | ❌ 단일 흐름 (순차 실행) | ✅ 병렬 실행 가능 | ✅ 병렬 실행 가능 |
-| 예외 처리 방식 | 예외 발생 시 즉시 호출자에게 전파 | 예외는 부모 `Job`으로 전파됨 | `await()` 호출 시 예외 전파 |
-| 부모에 의한 취소 전파 | ✅ 됨 | ✅ 됨 | ✅ 됨 |
-| 적합한 사용 목적 | 컨텍스트 전환 + 반환값 처리 | 단순한 비동기 실행 | 병렬 작업 + 반환값 필요할 때 |
-
-
-### 4. 사용 예시
-#### 4.1 withContext
+### 3. 사용 예시
+#### 3.1 withContext
 
 ```kotlin
 suspend fun loadData(): String {
@@ -70,7 +57,7 @@ suspend fun loadData(): String {
 - 현재 코루틴을 일시 정지하고 Dispatchers.IO로 전환하여 작업을 수행
 - 완료 후 이전 컨텍스트로 복귀
 
-#### 4.2 launch
+#### 3.2 launch
 
 ```kotlin
 fun startLogging(scope: CoroutineScope) {
@@ -83,7 +70,7 @@ fun startLogging(scope: CoroutineScope) {
 - 독립 실행 → 결과 반환 없이 작업 수행
 - Job을 통해 수명 및 취소 여부 제어 가능
 
-#### 4.3 async
+#### 3.3 async
 
 ```kotlin
 suspend fun aggregate(): Int = coroutineScope {
@@ -96,7 +83,7 @@ suspend fun aggregate(): Int = coroutineScope {
 - 결과가 필요한 두 작업을 병렬로 실행
 - await() 호출 시 각각의 연산 결과를 비동기적으로 수집
 
-### 5. 비교 요약 표
+### 4. 비교 요약 표
 
 | 항목 | `withContext` | `launch` | `async` |
 |------|---------------|----------|---------|
@@ -110,7 +97,7 @@ suspend fun aggregate(): Int = coroutineScope {
 
 ---
 
-### 6. 결론
+### 5. 결론
 
 `withContext`, `launch`, `async`는 Kotlin 코루틴의 비동기 실행 모델을 구성하는 핵심 도구로서, 각기 다른 목적과 특성을 가진다.
 
