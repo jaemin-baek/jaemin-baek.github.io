@@ -1,9 +1,9 @@
 ---
 title: "Kotlin 코루틴의 runBlocking, coroutineScope, supervisorScope 비교"
-date: 2025-05-19
+date: 2025-02-19
 draft: false
 tags: ["kotlin", "coroutine", "concurrency", "runBlocking", "coroutineScope", "supervisorScope"]
-categories: ["Programming", "Kotlin"]
+categories: ["Kotlin"]
 ---
 
 ## Kotlin 코루틴의 실행 스코프 비교: runBlocking, coroutineScope, supervisorScope
@@ -40,3 +40,63 @@ fun main() = runBlocking {
     delay(1000)
     println("Done")
 }
+```
+
+- 호출한 스레드를 직접 차단하며, UI 스레드에서는 사용을 지양해야 한다.
+- `CoroutineScope`를 생성하여 내부에서 `launch`, `async` 등을 사용할 수 있다.
+
+---
+
+### 4. coroutineScope 
+
+`coroutineScope`는 현재 컨텍스트를 상속하는 `CoroutineScope`를 생성하며, 내부의 모든 자식 코루틴이 종료될 때까지 `suspend` 상태로 대기한다. 이는 구조적 동시성을 구현하는 핵심 도구로 사용된다.
+
+```kotlin
+suspend fun run() {
+    coroutineScope {
+        launch {
+            delay(500)
+            println("Child 1 done")
+        }
+        launch {
+            delay(1000)
+            println("Child 2 done")
+        }
+    }
+    println("All children completed")
+}
+```
+
+- 자식 중 하나라도 실패하면 전체 스코프가 취소된다.
+- 일반적으로 suspend 함수 내에서 사용된다.
+
+---
+
+### 5. supervisorScope
+
+supervisorScope는 자식 코루틴 간 실패 전파를 막고, 하나의 실패가 다른 작업에 영향을 미치지 않도록 하는 예외 격리 기능을 제공한다. 내부적으로 SupervisorJob을 사용하여 고립된 실행 환경을 형성한다.
+
+```kotlin
+suspend fun run() {
+    supervisorScope {
+        launch {
+            throw RuntimeException("Child failed")
+        }
+        launch {
+            delay(1000)
+            println("Other child still runs")
+        }
+    }
+}
+```
+
+- 하나의 자식이 예외를 발생시켜도 다른 자식은 계속 실행된다.
+- 실시간 처리나 부분 실패를 허용하는 작업에 적합하다.
+
+---
+
+### 7. 결론
+
+코루틴의 실행 컨텍스트 선택은 코드의 동시성 구조와 예외 처리 전략에 직접적인 영향을 미친다. runBlocking은 동기-비동기 경계를 연결하는 데 유용하며, coroutineScope는 구조적 동시성을 제공하고, supervisorScope는 자식 코루틴의 독립 실행을 보장한다. 각 스코프의 특성을 이해하고 상황에 맞게 사용하는 것이 안전하고 예측 가능한 비동기 프로그래밍을 구현하는 데 핵심이 된다.
+
+---
