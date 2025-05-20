@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try-Catch on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/try-catch/</link><description>Recent content in Try-Catch on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 05 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/try-catch/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 코루틴에서 에러 처리 제대로 이해하기</title><link>https://jaemin-baek.github.io/post/coroutineerror/</link><pubDate>Wed, 05 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineerror/</guid><description>&lt;h2 id="kotlin-코루틴에서-에러-처리-제대로-이해하기">Kotlin 코루틴에서 에러 처리 제대로 이해하기
+&lt;/h2>&lt;p>코틀린 코루틴은 비동기 코드의 예외 처리 방식을 명확하게 구조화하고 있다.&lt;br>
+단순한 &lt;code>try-catch&lt;/code>를 넘어서, &lt;code>Job&lt;/code>, &lt;code>SupervisorJob&lt;/code>, &lt;code>CoroutineExceptionHandler&lt;/code> 등 다양한 메커니즘이 존재하며,&lt;br>
+이들은 &lt;strong>구조적 동시성(Structured Concurrency)&lt;/strong> 원칙 하에 작동한다.&lt;br>
+이 글에서는 Kotlin 코루틴의 예외 처리 구조를 단계적으로 설명하고, 실전 예제를 통해 이해를 돕고자 한다.&lt;/p>
+&lt;hr>
+&lt;h3 id="1-코루틴의-예외-처리-기본-try-catch">1. 코루틴의 예외 처리 기본: &lt;code>try-catch&lt;/code>
+&lt;/h3>&lt;p>가장 단순한 예외 처리는 &lt;code>try-catch&lt;/code> 블록을 사용하는 것이다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> riskySuspendFunction()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#66d9ef">catch&lt;/span> (e: Exception) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;에러 발생: &lt;/span>&lt;span style="color:#e6db74">$e&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>위 코드는 launch 내부에서 발생한 예외를 catch로 처리한다.&lt;/li>
+&lt;li>하지만 모든 상황에서 try-catch가 동작하는 것은 아니다.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="2-launch-vs-async의-예외-처리-차이">2. launch vs async의 예외 처리 차이
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>코루틴 빌더&lt;/th>
+&lt;th>예외 발생 시 처리 방식&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>launch&lt;/code>&lt;/td>
+&lt;td>예외가 즉시 전파됨 → 부모 Job에 전달되거나 &lt;code>CoroutineExceptionHandler&lt;/code>에서 처리됨&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>async&lt;/code>&lt;/td>
+&lt;td>예외가 &lt;code>Deferred&lt;/code>에 저장됨 → &lt;code>await()&lt;/code> 호출 시 예외가 발생함&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> job = CoroutineScope(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default).launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> RuntimeException(&lt;span style="color:#e6db74">&amp;#34;launch 내부 예외&amp;#34;&lt;/span>) &lt;span style="color:#75715e">// 즉시 전파됨
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> deferred = CoroutineScope(&lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default).async {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> RuntimeException(&lt;span style="color:#e6db74">&amp;#34;async 내부 예외&amp;#34;&lt;/span>) &lt;span style="color:#75715e">// 바로 안 터짐
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>deferred.await() &lt;span style="color:#75715e">// 여기서 예외가 발생함
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="3-coroutineexceptionhandler-사용">3. CoroutineExceptionHandler 사용
+&lt;/h3>&lt;p>코루틴 전체에 적용되는 전역 예외 처리자 역할을 한다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> handler = CoroutineExceptionHandler { _, exception &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;핸들러에서 처리된 예외: &lt;/span>&lt;span style="color:#e6db74">$exception&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(SupervisorJob() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default + handler)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> IllegalStateException(&lt;span style="color:#e6db74">&amp;#34;예외 발생!&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>CoroutineExceptionHandler는 **launch나 actor와 같은 &amp;lsquo;최상위 코루틴&amp;rsquo;**에서만 작동&lt;/li>
+&lt;li>async에는 작동하지 않음 → 예외는 반드시 await()로 수동 처리해야 함&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="4-부모-자식-관계와-예외-전파">4. 부모-자식 관계와 예외 전파
+&lt;/h3>&lt;p>일반 Job의 경우:&lt;/p>
+&lt;ul>
+&lt;li>자식 코루틴이 예외를 던지면 → 부모 Job도 취소됨&lt;/li>
+&lt;li>형제 코루틴도 모두 함께 취소됨&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> parent = CoroutineScope(Job())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>parent.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> RuntimeException(&lt;span style="color:#e6db74">&amp;#34;자식 예외&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>parent.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;이 코루틴은 취소됨&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>SupervisorJob을 사용할 경우:&lt;/p>
+&lt;ul>
+&lt;li>자식이 예외를 던져도 부모나 다른 형제에 영향 없음&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> scope = CoroutineScope(SupervisorJob() + &lt;span style="color:#a6e22e">Dispatchers&lt;/span>.Default)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> RuntimeException(&lt;span style="color:#e6db74">&amp;#34;에러 발생&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">500&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;이 코루틴은 살아있음&amp;#34;&lt;/span>) &lt;span style="color:#75715e">// 출력됨
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="5-실전-패턴-안전한-동시-처리">5. 실전 패턴: 안전한 동시 처리
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">safeParallelExecution&lt;/span>(): Result = coroutineScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> a = async {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span> { fetchA() } &lt;span style="color:#66d9ef">catch&lt;/span> (e: Exception) { emptyList() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> b = async {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span> { fetchB() } &lt;span style="color:#66d9ef">catch&lt;/span> (e: Exception) { emptyList() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Result(a.await(), b.await())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>각 작업을 별도 async로 실행&lt;/li>
+&lt;li>개별 try-catch로 안전하게 감싸서 전체 실패를 막는다&lt;/li>
+&lt;li>coroutineScope는 모든 async가 완료될 때까지 대기&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="6-정리-요약">6. 정리 요약
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>항목&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>try-catch&lt;/code>&lt;/td>
+&lt;td>&lt;code>launch&lt;/code> 내부에서는 직접 사용 가능. &lt;code>async&lt;/code>는 &lt;code>await()&lt;/code> 호출 시 예외 발생하므로 그 시점에서 catch 필요&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>CoroutineExceptionHandler&lt;/code>&lt;/td>
+&lt;td>&lt;code>launch&lt;/code>, &lt;code>actor&lt;/code> 등 &lt;strong>최상위 코루틴에서 발생한 예외만&lt;/strong> 처리. &lt;code>async&lt;/code>에서는 동작하지 않음&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>launch&lt;/code>&lt;/td>
+&lt;td>예외가 발생하면 즉시 상위로 전파되며, 부모 Job이나 예외 핸들러가 처리&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>async&lt;/code>&lt;/td>
+&lt;td>예외가 &lt;code>Deferred&lt;/code> 내부에 저장되며, &lt;code>await()&lt;/code> 호출 시 예외가 발생&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>SupervisorJob&lt;/code>&lt;/td>
+&lt;td>자식 코루틴 중 하나가 실패해도, 다른 자식 코루틴에 영향을 주지 않음&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>구조적 동시성 (&lt;code>coroutineScope&lt;/code>)&lt;/td>
+&lt;td>모든 자식 코루틴이 성공적으로 완료되어야 블록이 종료됨. 하나라도 실패하면 전체 블록이 예외로 종료됨&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="7-결론">7. 결론
+&lt;/h3>&lt;p>코루틴의 예외 처리는 단순히 try-catch로 끝나지 않는다.
+코루틴 빌더의 종류(launch vs async), Job의 구조(Job vs SupervisorJob), 전역 핸들러의 유무에 따라
+예외의 전파 경로와 처리 방법이 달라진다.&lt;/p>
+&lt;p>비동기 프로그램의 안정성과 복원력을 높이기 위해서는,
+각 코루틴의 실행 범위와 책임, 예외 처리 방식을 명확히 설계해야 한다.&lt;/p>
+&lt;h3 id="참고-예외-발생-흐름도">참고: 예외 발생 흐름도
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> Exception() &lt;span style="color:#960050;background-color:#1e0010">→&lt;/span> 부모 Job &lt;span style="color:#960050;background-color:#1e0010">→&lt;/span> CoroutineExceptionHandler
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>async {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">throw&lt;/span> Exception() &lt;span style="color:#960050;background-color:#1e0010">→&lt;/span> 저장됨 &lt;span style="color:#960050;background-color:#1e0010">→&lt;/span> await() 호출 시 &lt;span style="color:#66d9ef">throw&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
