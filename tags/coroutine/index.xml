@@ -1,114 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coroutine on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutine/</link><description>Recent content in Coroutine on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 19 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutine/index.xml" rel="self" type="application/rss+xml"/><item><title>구조적 동시성이란 무엇인가? 코루틴의 안정성과 예측 가능성을 위한 원칙</title><link>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</link><pubDate>Mon, 19 May 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</guid><description>&lt;h2 id="구조적-동시성이란-무엇인가">구조적 동시성이란 무엇인가?
-&lt;/h2>&lt;p>코루틴의 안정성과 예측 가능성을 위한 원칙&lt;/p>
-&lt;p>Kotlin의 코루틴 철학에서 가장 핵심적인 개념 중 하나가 바로 **구조적 동시성(Structured Concurrency)**이다.&lt;br>
-이 개념은 코루틴이 언제 시작되고 언제 종료되는지를 &lt;strong>코드의 구조(스코프)에 따라 명확하게 보장&lt;/strong>하도록 만든다.&lt;/p>
-&lt;hr>
-&lt;h3 id="한줄-정의">한줄 정의
-&lt;/h3>&lt;blockquote>
-&lt;p>**구조적 동시성(Structured Concurrency)**이란&lt;br>
-&amp;ldquo;&lt;strong>코루틴의 실행 범위와 생명주기를 코드 구조에 따라 명확하게 관리&lt;/strong>하는 방식&amp;quot;이다.&lt;/p>&lt;/blockquote>
-&lt;hr>
-&lt;h3 id="왜-필요한가">왜 필요한가?
-&lt;/h3>&lt;p>전통적인 비동기 코드에서는 다음과 같은 문제가 자주 발생한다:&lt;/p>
-&lt;ul>
-&lt;li>콜백 지옥&lt;/li>
-&lt;li>예외가 무시됨&lt;/li>
-&lt;li>남은 코루틴이 언제 끝날지 알 수 없음&lt;/li>
-&lt;li>메모리 누수&lt;/li>
-&lt;/ul>
-&lt;p>구조적 동시성은 이를 해결한다.&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>항목&lt;/th>
-&lt;th>구조적 동시성에서 보장되는 동작&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>코루틴 생명주기&lt;/td>
-&lt;td>부모 스코프가 닫히면 자식 코루틴도 종료됨&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>예외 처리&lt;/td>
-&lt;td>자식 예외는 부모로 전파됨 (또는 Supervisor로 분리 처리)&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>자원 누수 방지&lt;/td>
-&lt;td>스코프 바깥에 살아남는 코루틴 없음&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>테스트 가능성&lt;/td>
-&lt;td>어느 시점에 어떤 작업이 실행 중인지 추론 가능&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;hr>
-&lt;h3 id="예시-구조적-동시성이-없는-코드">예시: 구조적 동시성이 없는 코드
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>() {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">GlobalScope&lt;/span>.launch {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 이 코루틴은 언제 끝날지 아무도 모름
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>&lt;code>GlobalScope&lt;/code>는 앱 전체 생명주기에 묶여 있으므로 정리 불가&lt;/li>
-&lt;li>호출한 쪽에서는 &lt;strong>코루틴 취소, 예외 추적 불가능&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;h3 id="예시-구조적-동시성이-적용된-코드">예시: 구조적 동시성이 적용된 코드
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>() = coroutineScope {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { getUser() }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { getPosts() }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>&lt;code>coroutineScope&lt;/code> 안에서 실행된 모든 코루틴은 이 블록이 끝날 때까지 완료되어야 한다.&lt;/li>
-&lt;li>이 블록이 끝난다는 것은 &lt;strong>모든 자식 코루틴이 정상 종료되었음을 보장&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;h3 id="구조적-동시성의-핵심-규칙">구조적 동시성의 핵심 규칙
-&lt;/h3>&lt;ol>
-&lt;li>모든 코루틴은 &lt;strong>명확한 부모 스코프&lt;/strong> 내에서 실행된다&lt;/li>
-&lt;li>부모가 종료되면 자식 코루틴도 자동으로 취소된다&lt;/li>
-&lt;li>예외는 위로 전파되어 일관된 방식으로 처리된다&lt;/li>
-&lt;/ol>
-&lt;hr>
-&lt;h3 id="kotlin이-구조적-동시성을-지원하는-방식">Kotlin이 구조적 동시성을 지원하는 방식
-&lt;/h3>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>구성 요소&lt;/th>
-&lt;th>역할&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>&lt;code>CoroutineScope&lt;/code>&lt;/td>
-&lt;td>생명주기 단위 스코프 정의&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;code>coroutineScope {}&lt;/code>&lt;/td>
-&lt;td>suspend 함수 내부 일시적 스코프&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;code>SupervisorJob&lt;/code>&lt;/td>
-&lt;td>자식 간 예외 전파 제어&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;code>withContext&lt;/code>&lt;/td>
-&lt;td>부모-자식 관계를 유지한 채 컨텍스트 전환&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;code>viewModelScope&lt;/code>, &lt;code>lifecycleScope&lt;/code>&lt;/td>
-&lt;td>Android 앱 생명주기에 연동된 구조적 스코프 제공&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;hr>
-&lt;h3 id="요약-정리">요약 정리
-&lt;/h3>&lt;blockquote>
-&lt;p>구조적 동시성은 &lt;strong>코루틴이 언제 시작되고 언제 종료되는지를 명확하게 통제&lt;/strong>할 수 있도록 한다.&lt;br>
-이를 통해 개발자는 &lt;strong>예측 가능한 흐름, 자동 정리, 안정적인 에러 전파&lt;/strong>를 기반으로&lt;br>
-복잡한 비동기 프로그램을 안전하게 설계할 수 있다.&lt;/p>&lt;/blockquote></description></item><item><title>kotlinx-coroutines-core-jvm 의 내부 구조 살펴보기</title><link>https://jaemin-baek.github.io/post/gradlekotlinx/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/gradlekotlinx/</guid><description>&lt;p>&lt;img src="https://private-user-images.githubusercontent.com/6836647/445883629-eb25b970-a573-45eb-ad07-5b9d0436f32e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDc3OTg2OTAsIm5iZiI6MTc0Nzc5ODM5MCwicGF0aCI6Ii82ODM2NjQ3LzQ0NTg4MzYyOS1lYjI1Yjk3MC1hNTczLTQ1ZWItYWQwNy01YjlkMDQzNmYzMmUucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDUyMSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA1MjFUMDMzMzEwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZTY5NzFmNjg3YjBmNWE5MTIyMjllZjQ1NWFjOTVkYzQwODdkOGM1ODkwMjAwZmE3MjY4YmRiMDc3MTg0OWFiYyZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.Ig-5RGTf8nih92_gTxE6f4IzyMLby3IwTL3TXkaOT0E"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coroutine on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutine/</link><description>Recent content in Coroutine on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 09 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutine/index.xml" rel="self" type="application/rss+xml"/><item><title>kotlinx-coroutines-core-jvm 의 내부 구조 살펴보기</title><link>https://jaemin-baek.github.io/post/gradlekotlinx/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/gradlekotlinx/</guid><description>&lt;p>&lt;img src="https://private-user-images.githubusercontent.com/6836647/445883629-eb25b970-a573-45eb-ad07-5b9d0436f32e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDc3OTkxMzIsIm5iZiI6MTc0Nzc5ODgzMiwicGF0aCI6Ii82ODM2NjQ3LzQ0NTg4MzYyOS1lYjI1Yjk3MC1hNTczLTQ1ZWItYWQwNy01YjlkMDQzNmYzMmUucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDUyMSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA1MjFUMDM0MDMyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9NWE5YzZmOWZmYmYyOTk0ZDQ3MzdhMWRiMGZhZTRmMzBiODEyMzkyMjdmMDYzNTFiN2YyMjNiZDkzMTk3YWNiMCZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.wnC87a6ua42WbK-2YaJoFVel92atilYiPBupzd7AQ44"
 loading="lazy"
 alt="kotlinx-coroutines-core-jvm"
 >&lt;/p></description></item><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
@@ -226,7 +116,117 @@ alt="kotlinx-coroutines-core-jvm"
 &lt;blockquote>
 &lt;p>구조적 동시성을 지키기 위해서는&lt;br>
 &lt;strong>코루틴의 생명주기를 관리할 수 있는 스코프&lt;/strong>를 명확히 설계하고,&lt;br>
-필요할 경우 &lt;code>Job&lt;/code>을 반환하거나, &lt;code>coroutineScope&lt;/code> 내에서 suspend 함수를 사용하는 것이 권장된다.&lt;/p>&lt;/blockquote></description></item><item><title>Kotlin 코루틴에서 에러 처리 제대로 이해하기</title><link>https://jaemin-baek.github.io/post/coroutinejob/</link><pubDate>Thu, 06 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinejob/</guid><description>&lt;h2 id="job의-주요-역할">Job의 주요 역할
+필요할 경우 &lt;code>Job&lt;/code>을 반환하거나, &lt;code>coroutineScope&lt;/code> 내에서 suspend 함수를 사용하는 것이 권장된다.&lt;/p>&lt;/blockquote></description></item><item><title>구조적 동시성이란 무엇인가? 코루틴의 안정성과 예측 가능성을 위한 원칙</title><link>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</guid><description>&lt;h2 id="구조적-동시성이란-무엇인가">구조적 동시성이란 무엇인가?
+&lt;/h2>&lt;p>코루틴의 안정성과 예측 가능성을 위한 원칙&lt;/p>
+&lt;p>Kotlin의 코루틴 철학에서 가장 핵심적인 개념 중 하나가 바로 **구조적 동시성(Structured Concurrency)**이다.&lt;br>
+이 개념은 코루틴이 언제 시작되고 언제 종료되는지를 &lt;strong>코드의 구조(스코프)에 따라 명확하게 보장&lt;/strong>하도록 만든다.&lt;/p>
+&lt;hr>
+&lt;h3 id="한줄-정의">한줄 정의
+&lt;/h3>&lt;blockquote>
+&lt;p>**구조적 동시성(Structured Concurrency)**이란&lt;br>
+&amp;ldquo;&lt;strong>코루틴의 실행 범위와 생명주기를 코드 구조에 따라 명확하게 관리&lt;/strong>하는 방식&amp;quot;이다.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="왜-필요한가">왜 필요한가?
+&lt;/h3>&lt;p>전통적인 비동기 코드에서는 다음과 같은 문제가 자주 발생한다:&lt;/p>
+&lt;ul>
+&lt;li>콜백 지옥&lt;/li>
+&lt;li>예외가 무시됨&lt;/li>
+&lt;li>남은 코루틴이 언제 끝날지 알 수 없음&lt;/li>
+&lt;li>메모리 누수&lt;/li>
+&lt;/ul>
+&lt;p>구조적 동시성은 이를 해결한다.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>항목&lt;/th>
+&lt;th>구조적 동시성에서 보장되는 동작&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>코루틴 생명주기&lt;/td>
+&lt;td>부모 스코프가 닫히면 자식 코루틴도 종료됨&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>예외 처리&lt;/td>
+&lt;td>자식 예외는 부모로 전파됨 (또는 Supervisor로 분리 처리)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>자원 누수 방지&lt;/td>
+&lt;td>스코프 바깥에 살아남는 코루틴 없음&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>테스트 가능성&lt;/td>
+&lt;td>어느 시점에 어떤 작업이 실행 중인지 추론 가능&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="예시-구조적-동시성이-없는-코드">예시: 구조적 동시성이 없는 코드
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">GlobalScope&lt;/span>.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 이 코루틴은 언제 끝날지 아무도 모름
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>GlobalScope&lt;/code>는 앱 전체 생명주기에 묶여 있으므로 정리 불가&lt;/li>
+&lt;li>호출한 쪽에서는 &lt;strong>코루틴 취소, 예외 추적 불가능&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="예시-구조적-동시성이-적용된-코드">예시: 구조적 동시성이 적용된 코드
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>() = coroutineScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { getUser() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { getPosts() }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>coroutineScope&lt;/code> 안에서 실행된 모든 코루틴은 이 블록이 끝날 때까지 완료되어야 한다.&lt;/li>
+&lt;li>이 블록이 끝난다는 것은 &lt;strong>모든 자식 코루틴이 정상 종료되었음을 보장&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="구조적-동시성의-핵심-규칙">구조적 동시성의 핵심 규칙
+&lt;/h3>&lt;ol>
+&lt;li>모든 코루틴은 &lt;strong>명확한 부모 스코프&lt;/strong> 내에서 실행된다&lt;/li>
+&lt;li>부모가 종료되면 자식 코루틴도 자동으로 취소된다&lt;/li>
+&lt;li>예외는 위로 전파되어 일관된 방식으로 처리된다&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="kotlin이-구조적-동시성을-지원하는-방식">Kotlin이 구조적 동시성을 지원하는 방식
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>구성 요소&lt;/th>
+&lt;th>역할&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>CoroutineScope&lt;/code>&lt;/td>
+&lt;td>생명주기 단위 스코프 정의&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>coroutineScope {}&lt;/code>&lt;/td>
+&lt;td>suspend 함수 내부 일시적 스코프&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>SupervisorJob&lt;/code>&lt;/td>
+&lt;td>자식 간 예외 전파 제어&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>withContext&lt;/code>&lt;/td>
+&lt;td>부모-자식 관계를 유지한 채 컨텍스트 전환&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>viewModelScope&lt;/code>, &lt;code>lifecycleScope&lt;/code>&lt;/td>
+&lt;td>Android 앱 생명주기에 연동된 구조적 스코프 제공&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="요약-정리">요약 정리
+&lt;/h3>&lt;blockquote>
+&lt;p>구조적 동시성은 &lt;strong>코루틴이 언제 시작되고 언제 종료되는지를 명확하게 통제&lt;/strong>할 수 있도록 한다.&lt;br>
+이를 통해 개발자는 &lt;strong>예측 가능한 흐름, 자동 정리, 안정적인 에러 전파&lt;/strong>를 기반으로&lt;br>
+복잡한 비동기 프로그램을 안전하게 설계할 수 있다.&lt;/p>&lt;/blockquote></description></item><item><title>Kotlin 코루틴에서 에러 처리 제대로 이해하기</title><link>https://jaemin-baek.github.io/post/coroutinejob/</link><pubDate>Thu, 06 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinejob/</guid><description>&lt;h2 id="job의-주요-역할">Job의 주요 역할
 &lt;/h2>&lt;h3 id="1-생명주기-추적">1. 생명주기 추적
 &lt;/h3>&lt;p>Job은 코루틴이 활성(active) 상태인지, 완료(completed) 되었는지, 취소(cancelled) 되었는지 관리합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> job = launch { &lt;span style="color:#f92672">..&lt;/span>. }
