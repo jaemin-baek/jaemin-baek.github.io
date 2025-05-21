@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Globalscope on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/globalscope/</link><description>Recent content in Globalscope on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 08 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/globalscope/index.xml" rel="self" type="application/rss+xml"/><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
+&lt;/h2>&lt;p>구조적 동시성 관점에서의 설명과 대안&lt;/p>
+&lt;p>Kotlin에서는 &lt;code>GlobalScope.launch&lt;/code>를 통해 간단하게 코루틴을 실행할 수 있다.&lt;br>
+하지만 아무 생각 없이 GlobalScope를 사용하는 것은 &lt;strong>구조적 동시성 원칙을 깨뜨리고&lt;/strong>,&lt;br>
+비동기 코드의 안정성과 예측 가능성을 크게 해친다.&lt;/p>
+&lt;hr>
+&lt;h3 id="문제-코드-예시">문제 코드 예시
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">GlobalScope&lt;/span>.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 이 코루틴은 언제 끝날지 아무도 모름
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>fetchData()&lt;/code>는 &lt;code>launch&lt;/code>의 결과(Job)를 반환하지 않음&lt;/li>
+&lt;li>&lt;code>GlobalScope&lt;/code>는 앱 전체 생명주기에 묶임&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="호출한-쪽-입장에서-생기는-문제">호출한 쪽 입장에서 생기는 문제
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>항목&lt;/th>
+&lt;th>문제 내용&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>종료 시점 추적 불가&lt;/td>
+&lt;td>호출한 쪽에서는 이 코루틴이 언제 끝날지 알 수 없음&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>취소 불가&lt;/td>
+&lt;td>&lt;code>Job&lt;/code>을 반환하지 않으므로 &lt;code>cancel()&lt;/code> 호출도 불가능&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>예외 처리 어려움&lt;/td>
+&lt;td>예외가 외부로 전파되지 않음. &lt;code>try-catch&lt;/code>도 못함&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>테스트 어려움&lt;/td>
+&lt;td>완료 시점 제어 불가 → 유닛 테스트 작성 어려움&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>자원 누수 가능성&lt;/td>
+&lt;td>생명주기를 갖지 않으므로 메모리 누수 위험&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;blockquote>
+&lt;p>즉, &lt;strong>&lt;code>fetchData()&lt;/code>를 호출한 입장에서 이 코루틴은 &amp;lsquo;제어 불가능한 유령&amp;rsquo;과 같다.&lt;/strong>&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="왜-구조적-동시성과-충돌하는가">왜 구조적 동시성과 충돌하는가?
+&lt;/h3>&lt;p>&lt;code>GlobalScope&lt;/code>는 부모 스코프가 없기 때문에 &lt;strong>어떤 스코프와도 생명주기를 공유하지 않는다.&lt;/strong>&lt;br>
+이는 구조적 동시성의 핵심 원칙인&lt;/p>
+&lt;blockquote>
+&lt;p>“부모 스코프가 닫히면 자식 코루틴도 함께 정리된다”&lt;br>
+는 규칙을 위반한다.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h3 id="개선-예시-1-스코프-주입-방식">개선 예시 1: 스코프 주입 방식
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>(scope: CoroutineScope): Job {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> scope.launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 안전하게 실행
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>호출하는 쪽에서 &lt;code>scope&lt;/code>를 넘겨주면 생명주기와 연결됨&lt;/li>
+&lt;li>반환된 &lt;code>Job&lt;/code>을 통해 &lt;code>cancel()&lt;/code> 호출도 가능&lt;/li>
+&lt;li>예외도 추적 가능&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="개선-예시-2-구조적-코루틴-사용">개선 예시 2: 구조적 코루틴 사용
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchData&lt;/span>() = coroutineScope {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { &lt;span style="color:#f92672">..&lt;/span>. }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>호출한 쪽에서 &lt;code>suspend&lt;/code> 함수로 사용&lt;/li>
+&lt;li>내부 코루틴들이 종료될 때까지 &lt;code>fetchData()&lt;/code>는 자동으로 대기&lt;/li>
+&lt;li>예외도 위로 전파되어 처리 가능&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="정리-globalscope는-언제-써야-하나">정리: GlobalScope는 언제 써야 하나?
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>상황&lt;/th>
+&lt;th>사용 권장 여부&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>일반적인 앱 비동기 작업&lt;/td>
+&lt;td>❌ 피해야 함&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>백그라운드에서 무기한 감시 (예: 앱 알림, 상태 보고)&lt;/td>
+&lt;td>✅ 가능 (주의 필요)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>테스트 가능한 구조가 필요할 때&lt;/td>
+&lt;td>❌ 불가능&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>코루틴 생명주기를 제어해야 할 때&lt;/td>
+&lt;td>❌ 안 맞음&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h3 id="결론">결론
+&lt;/h3>&lt;p>&lt;code>GlobalScope&lt;/code>는 강력하지만 위험한 도구다.&lt;br>
+단순한 비동기 작업에 GlobalScope를 사용하면,&lt;br>
+예외 추적, 자원 해제, 테스트 모두 어려워진다.&lt;/p>
+&lt;blockquote>
+&lt;p>구조적 동시성을 지키기 위해서는&lt;br>
+&lt;strong>코루틴의 생명주기를 관리할 수 있는 스코프&lt;/strong>를 명확히 설계하고,&lt;br>
+필요할 경우 &lt;code>Job&lt;/code>을 반환하거나, &lt;code>coroutineScope&lt;/code> 내에서 suspend 함수를 사용하는 것이 권장된다.&lt;/p>&lt;/blockquote></description></item></channel></rss>
