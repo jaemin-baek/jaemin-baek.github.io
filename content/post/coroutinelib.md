@@ -124,7 +124,7 @@ Kotlin/Gradle 프로젝트에서 서로 다른 버전의 kotlinx-coroutines-core
 ### 예시 1
 ```gradle
 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // → core:1.7.3
-testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4") // → core:1.6.4
+implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4") // → core:1.6.4
 ```
 
 kotlinx-coroutines-core:1.6.4, 1.7.3이 모두 간접 의존되지만 Gradle은 더 높은 1.7.3을 자동 선택해서 core로 사용합니다.
@@ -135,7 +135,7 @@ kotlinx-coroutines-core:1.6.4, 1.7.3이 모두 간접 의존되지만 Gradle은 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0")       // 👈 명시적 (구버전)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")    // 👉 내부적으로 core:1.7.3 의존
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")   // 👉 내부적으로 core:1.7.3 의존
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")   // 👉 내부적으로 core:1.7.3 의존
 }
 ```
 
@@ -158,8 +158,20 @@ dependencies {
 }
 ```
 
-### 확인 방법
+### 테스트
+
+```gradle
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // → core:1.7.3
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4") // → core:1.6.4
+}
+```
 
 ```
 ./gradlew dependencies --configuration runtimeClasspath
 ```
+### 결과
+
+kotlinx-coroutines-test 가 1.6.4 가 아닌 1.7.3 을 사용하는것으로 나온다.
+
+![Image](https://github.com/user-attachments/assets/469c29bb-f566-453f-aebd-08e813ef21ae)
