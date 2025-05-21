@@ -154,13 +154,13 @@ alt="core-jvm 예시"
 &lt;p>&amp;ldquo;같은 그룹과 이름을 가진 라이브러리 중에서, 가장 높은 버전을 사용한다.&amp;rdquo;&lt;/p>&lt;/blockquote>
 &lt;h3 id="예시-1">예시 1
 &lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// → core:1.7.3
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// → core:1.6.4
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// → core:1.6.4
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>kotlinx-coroutines-core:1.6.4, 1.7.3이 모두 간접 의존되지만 Gradle은 더 높은 1.7.3을 자동 선택해서 core로 사용합니다.&lt;/p>
 &lt;h3 id="예시-2">예시 2
 &lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>dependencies &lt;span style="color:#f92672">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 👈 명시적 (구버전)
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 👉 내부적으로 core:1.7.3 의존
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 👉 내부적으로 core:1.7.3 의존
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 👉 내부적으로 core:1.7.3 의존
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#f92672">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>kotlinx-coroutines-core:1.7.3이 선택됩니다 (🚫 1.0.0 아님)&lt;/p>
 &lt;ul>
@@ -177,9 +177,18 @@ alt="core-jvm 예시"
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="확인-방법">확인 방법
-&lt;/h3>&lt;pre tabindex="0">&lt;code>./gradlew dependencies --configuration runtimeClasspath
-&lt;/code>&lt;/pre></description></item><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="테스트">테스트
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>dependencies &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// → core:1.7.3
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// → core:1.6.4
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;pre tabindex="0">&lt;code>./gradlew dependencies --configuration runtimeClasspath
+&lt;/code>&lt;/pre>&lt;h3 id="결과">결과
+&lt;/h3>&lt;p>kotlinx-coroutines-test 가 1.6.4 가 아닌 1.7.3 을 사용하는것으로 나온다.&lt;/p>
+&lt;p>&lt;img src="https://github.com/user-attachments/assets/469c29bb-f566-453f-aebd-08e813ef21ae"
+loading="lazy"
+alt="Image"
+>&lt;/p></description></item><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
 &lt;/h2>&lt;p>구조적 동시성 관점에서의 설명과 대안&lt;/p>
 &lt;p>Kotlin에서는 &lt;code>GlobalScope.launch&lt;/code>를 통해 간단하게 코루틴을 실행할 수 있다.&lt;br>
 하지만 아무 생각 없이 GlobalScope를 사용하는 것은 &lt;strong>구조적 동시성 원칙을 깨뜨리고&lt;/strong>,&lt;br>
