@@ -1,7 +1,185 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 09 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>kotlinx-coroutines-core-jvm 의 내부 구조 살펴보기</title><link>https://jaemin-baek.github.io/post/gradlekotlinx/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/gradlekotlinx/</guid><description>&lt;p>&lt;img src="https://github.com/user-attachments/assets/eb25b970-a573-45eb-ad07-5b9d0436f32e"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 09 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>주요 코루틴 라이브러리 모듈 종류</title><link>https://jaemin-baek.github.io/post/coroutinelib/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinelib/</guid><description>&lt;h2 id="주요-코루틴-라이브러리-모듈-종류">주요 코루틴 라이브러리 모듈 종류
+&lt;/h2>&lt;h3 id="1-공통core">1. 공통(Core)
+&lt;/h3>&lt;p>&lt;img src="https://github.com/user-attachments/assets/eb25b970-a573-45eb-ad07-5b9d0436f32e"
 loading="lazy"
-alt="kotlinx-coroutines-core-jvm"
->&lt;/p></description></item><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
+alt="core-jvm 예시"
+>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>모듈 이름&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-core&lt;/code>&lt;/td>
+&lt;td>코루틴의 핵심 기능 (공통 플랫폼)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-core-jvm&lt;/code>&lt;/td>
+&lt;td>JVM 플랫폼 전용 코어 기능&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-core-js&lt;/code>&lt;/td>
+&lt;td>JavaScript 플랫폼 전용&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-core-native&lt;/code>&lt;/td>
+&lt;td>Kotlin/Native용 (iOS, macOS, Linux 등)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>kotlinx-coroutines-core는 멀티플랫폼 프로젝트에서 expect/actual 구문 기반으로 각 플랫폼별로 구현됩니다.&lt;/p>
+&lt;h3 id="2-추가-플랫폼별-지원-모듈">2. 추가 플랫폼별 지원 모듈
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>모듈 이름&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-android&lt;/code>&lt;/td>
+&lt;td>Android에 최적화된 Dispatcher (&lt;code>Dispatchers.Main&lt;/code>) 등 포함&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-javafx&lt;/code>&lt;/td>
+&lt;td>JavaFX에서 UI 업데이트를 위한 Dispatcher 지원&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-swing&lt;/code>&lt;/td>
+&lt;td>Swing 앱을 위한 Dispatcher&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-test&lt;/code>&lt;/td>
+&lt;td>테스트 환경에서의 코루틴 제어 (가상 시간, 테스트 디스패처 등)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-debug&lt;/code>&lt;/td>
+&lt;td>코루틴 디버깅을 위한 도구 (&lt;code>DebugProbes&lt;/code>, Stack trace 확장 등)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="3-지원부가기능-모듈">3. 지원/부가기능 모듈
+&lt;/h3>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>모듈 이름&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-reactive&lt;/code>&lt;/td>
+&lt;td>Reactive Streams (&lt;code>Publisher&lt;/code>, &lt;code>Subscriber&lt;/code>) 호환 지원&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-rx2&lt;/code> / &lt;code>rx3&lt;/code>&lt;/td>
+&lt;td>RxJava2, RxJava3 연동용&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-guava&lt;/code>&lt;/td>
+&lt;td>Google Guava의 &lt;code>ListenableFuture&lt;/code> 지원&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-jdk8&lt;/code>&lt;/td>
+&lt;td>&lt;code>CompletableFuture&lt;/code>, &lt;code>java.time&lt;/code> 지원&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>kotlinx-coroutines-jdk9&lt;/code>&lt;/td>
+&lt;td>&lt;code>Flow.Publisher&lt;/code> 등 Java 9 API 통합용&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="gradle-예시">Gradle 예시
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>dependencies &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 공통
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// Android UI용
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 테스트용
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>거의 모든 Kotlin 코루틴 기반 프로젝트에서 kotlinx-coroutines-core 모듈은 필수입니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="왜-항상-core가-필요할까">왜 항상 core가 필요할까?
+&lt;/h2>&lt;p>kotlinx-coroutines-core는 다음을 포함합니다:&lt;/p>
+&lt;ul>
+&lt;li>launch, async, runBlocking, withContext 같은 핵심 함수&lt;/li>
+&lt;li>Job, Deferred, Dispatcher 같은 기본 타입&lt;/li>
+&lt;li>flow {} 등 Flow API의 기반&lt;/li>
+&lt;/ul>
+&lt;p>CoroutineScope, suspend 기반의 구조적 동시성 도구&lt;/p>
+&lt;p>이 모든 것들이 코루틴 기능의 중심축(core) 역할을 하므로, 다른 모듈(android, test, rx, guava 등)은 전부 core에 의존하거나 core 위에 얹혀 있습니다.&lt;/p>
+&lt;h3 id="모듈-간-관계-예시">모듈 간 관계 예시
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>kotlinx&lt;span style="color:#f92672">-&lt;/span>coroutines&lt;span style="color:#f92672">-&lt;/span>android
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#960050;background-color:#1e0010">└─&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span> kotlinx&lt;span style="color:#f92672">-&lt;/span>coroutines&lt;span style="color:#f92672">-&lt;/span>core
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kotlinx&lt;span style="color:#f92672">-&lt;/span>coroutines&lt;span style="color:#f92672">-&lt;/span>test
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#960050;background-color:#1e0010">└─&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span> kotlinx&lt;span style="color:#f92672">-&lt;/span>coroutines&lt;span style="color:#f92672">-&lt;/span>core
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>즉, android나 test만 추가해도 내부적으로는 core가 함께 로딩됩니다.
+하지만 직접 core를 명시하는 것이 버전 충돌 방지나 멀티플랫폼 세팅 시 더 안정적입니다.&lt;/p>
+&lt;h3 id="예외적으로-core를-직접-추가하지-않아도-되는-경우">예외적으로 core를 직접 추가하지 않아도 되는 경우?
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>kotlinx-coroutines-android만 사용하고 있고, 그 모듈이 core를 이미 의존하고 있는 경우
+→ 빌드는 되지만 명시적으로 core 추가하는 걸 권장합니다.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Ktor, Retrofit 등 외부 라이브러리가 내부적으로 코루틴을 쓰고 있음
+→ 이 경우에도 core가 이미 transitively 포함되긴 하지만 명확성을 위해 명시하는 게 좋습니다.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>kotlinx-coroutines-android나 kotlinx-coroutines-test만 추가하고, core를 명시하지 않으면&lt;/p>
+&lt;p>Gradle이 각 모듈이 자체적으로 의존하고 있는 core 버전을 가져와서 버전 충돌이 발생하거나, 프로젝트 전체에 다른 버전이 적용될 수 있습니다.&lt;/p>
+&lt;p>예를 들어, build.gradle이 다음과 같다면&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Gradle은 &lt;strong>두 가지 다른 버전의 core&lt;/strong>를 프로젝트에 끌어오게 되며,
+이는 다음 문제를 유발할 수 있습니다:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>클래스 중복 (duplicate class)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>버전 mismatch로 인한 런타임 크래시&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Flow, Dispatcher 등이 버전별로 다른 동작&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="서로-core-버전이-다르면-어떤-규칙으로-선택될까">서로 core 버전이 다르면 어떤 규칙으로 선택될까?
+&lt;/h3>&lt;p>Kotlin/Gradle 프로젝트에서 서로 다른 버전의 kotlinx-coroutines-core가 의존되는 경우, Gradle은 &amp;ldquo;의존성 해석(dependency resolution)&amp;rdquo; 규칙에 따라 하나의 버전만을 선택하게 됩니다.&lt;/p>
+&lt;h2 id="gradle의-기본-규칙-최신-버전-우선">Gradle의 기본 규칙: 최신 버전 우선
+&lt;/h2>&lt;blockquote>
+&lt;p>&amp;ldquo;같은 그룹과 이름을 가진 라이브러리 중에서, 가장 높은 버전을 사용한다.&amp;rdquo;&lt;/p>&lt;/blockquote>
+&lt;h3 id="예시-1">예시 1
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// → core:1.7.3
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// → core:1.6.4
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>kotlinx-coroutines-core:1.6.4, 1.7.3이 모두 간접 의존되지만 Gradle은 더 높은 1.7.3을 자동 선택해서 core로 사용합니다.&lt;/p>
+&lt;h3 id="예시-2">예시 2
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>dependencies &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 👈 명시적 (구버전)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 👉 내부적으로 core:1.7.3 의존
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span> &lt;span style="color:#75715e">// 👉 내부적으로 core:1.7.3 의존
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>kotlinx-coroutines-core:1.7.3이 선택됩니다 (🚫 1.0.0 아님)&lt;/p>
+&lt;ul>
+&lt;li>kotlinx-coroutines-android:1.7.3는 내부적으로 kotlinx-coroutines-core:1.7.3에 의존&lt;/li>
+&lt;li>kotlinx-coroutines-test:1.7.3도 마찬가지로 core:1.7.3 의존&lt;/li>
+&lt;li>core:1.0.0을 명시적으로 선언했지만, Gradle은 모든 버전 후보를 수집한 뒤 가장 높은 버전(1.7.3)을 선택&lt;/li>
+&lt;/ul>
+&lt;h3 id="해결-방법-버전-통일">해결 방법: 버전 통일
+&lt;/h3>&lt;p>항상 kotlinx-coroutines-core를 명시적으로 추가하고, 다른 모듈도 동일한 버전을 사용&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-gradle" data-lang="gradle">&lt;span style="display:flex;">&lt;span>val coroutinesVersion &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;1.7.3&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>dependencies &lt;span style="color:#f92672">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> testImplementation&lt;span style="color:#f92672">(&lt;/span>&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion&amp;#34;&lt;/span>&lt;span style="color:#f92672">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="확인-방법">확인 방법
+&lt;/h3>&lt;pre tabindex="0">&lt;code>./gradlew dependencies --configuration runtimeClasspath
+&lt;/code>&lt;/pre></description></item><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
 &lt;/h2>&lt;p>구조적 동시성 관점에서의 설명과 대안&lt;/p>
 &lt;p>Kotlin에서는 &lt;code>GlobalScope.launch&lt;/code>를 통해 간단하게 코루틴을 실행할 수 있다.&lt;br>
 하지만 아무 생각 없이 GlobalScope를 사용하는 것은 &lt;strong>구조적 동시성 원칙을 깨뜨리고&lt;/strong>,&lt;br>
