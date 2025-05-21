@@ -6,5 +6,4 @@ tags: ["kotlin", "coroutine", "structured concurrency", "job", "스코프", "비
 categories: ["Kotlin"]
 ---
 
-![kotlinx-coroutines-core-jvm](
-https://private-user-images.githubusercontent.com/6836647/445883629-eb25b970-a573-45eb-ad07-5b9d0436f32e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDc3OTkxMzIsIm5iZiI6MTc0Nzc5ODgzMiwicGF0aCI6Ii82ODM2NjQ3LzQ0NTg4MzYyOS1lYjI1Yjk3MC1hNTczLTQ1ZWItYWQwNy01YjlkMDQzNmYzMmUucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDUyMSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA1MjFUMDM0MDMyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9NWE5YzZmOWZmYmYyOTk0ZDQ3MzdhMWRiMGZhZTRmMzBiODEyMzkyMjdmMDYzNTFiN2YyMjNiZDkzMTk3YWNiMCZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.wnC87a6ua42WbK-2YaJoFVel92atilYiPBupzd7AQ44)
+![kotlinx-coroutines-core-jvm](https://github.com/user-attachments/assets/eb25b970-a573-45eb-ad07-5b9d0436f32e)
