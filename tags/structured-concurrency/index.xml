@@ -108,7 +108,10 @@
 &lt;/h3>&lt;blockquote>
 &lt;p>구조적 동시성은 &lt;strong>코루틴이 언제 시작되고 언제 종료되는지를 명확하게 통제&lt;/strong>할 수 있도록 한다.&lt;br>
 이를 통해 개발자는 &lt;strong>예측 가능한 흐름, 자동 정리, 안정적인 에러 전파&lt;/strong>를 기반으로&lt;br>
-복잡한 비동기 프로그램을 안전하게 설계할 수 있다.&lt;/p>&lt;/blockquote></description></item><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
+복잡한 비동기 프로그램을 안전하게 설계할 수 있다.&lt;/p>&lt;/blockquote></description></item><item><title>kotlinx-coroutines-core-jvm 의 내부 구조 살펴보기</title><link>https://jaemin-baek.github.io/post/gradlekotlinx/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/gradlekotlinx/</guid><description>&lt;p>&lt;img src="https://private-user-images.githubusercontent.com/6836647/445883629-eb25b970-a573-45eb-ad07-5b9d0436f32e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDc3OTg2OTAsIm5iZiI6MTc0Nzc5ODM5MCwicGF0aCI6Ii82ODM2NjQ3LzQ0NTg4MzYyOS1lYjI1Yjk3MC1hNTczLTQ1ZWItYWQwNy01YjlkMDQzNmYzMmUucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDUyMSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA1MjFUMDMzMzEwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZTY5NzFmNjg3YjBmNWE5MTIyMjllZjQ1NWFjOTVkYzQwODdkOGM1ODkwMjAwZmE3MjY4YmRiMDc3MTg0OWFiYyZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.Ig-5RGTf8nih92_gTxE6f4IzyMLby3IwTL3TXkaOT0E"
+loading="lazy"
+alt="kotlinx-coroutines-core-jvm"
+>&lt;/p></description></item><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
 &lt;/h2>&lt;p>구조적 동시성 관점에서의 설명과 대안&lt;/p>
 &lt;p>Kotlin에서는 &lt;code>GlobalScope.launch&lt;/code>를 통해 간단하게 코루틴을 실행할 수 있다.&lt;br>
 하지만 아무 생각 없이 GlobalScope를 사용하는 것은 &lt;strong>구조적 동시성 원칙을 깨뜨리고&lt;/strong>,&lt;br>
