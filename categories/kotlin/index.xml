@@ -83,10 +83,10 @@
 &lt;h2 id="결론">결론:
 &lt;/h2>&lt;p>코루틴은 일시 중단(suspend)과 재개(resume)가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다&lt;/p></description></item><item><title>코루틴 장점2: 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다</title><link>https://jaemin-baek.github.io/post/coroutine2/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine2/</guid><description>&lt;h2 id="비동기-코드를-동기-코드처럼-쉽게-작성하게-해준다">비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다
 &lt;/h2>&lt;p>먼저 &amp;ldquo;비동기 코드를 동기처럼&amp;quot;이란 무슨 뜻인가?
-비동기 코드는 원래 **콜백(callback)**이나 &lt;strong>이벤트 리스너&lt;/strong>로 작성되기 때문에,
+비동기 코드는 원래 콜백(callback)이나 이벤트 리스너로 작성되기 때문에,
 코드 흐름이 분리되고 복잡해지기 쉬워요.&lt;/p>
 &lt;p>하지만 코루틴을 사용하면, 그런 복잡한 구조를 &amp;ldquo;한 줄씩 순차적으로&amp;rdquo; 작성할 수 있어서
-**마치 일반 함수(=동기 함수)**처럼 코드를 짤 수 있다는 뜻이에요.&lt;/p>
+마치 일반 함수(=동기 함수)처럼 코드를 짤 수 있다는 뜻이에요.&lt;/p>
 &lt;h3 id="예시-1-비동기-코드-콜백-지옥">예시 1: 비동기 코드 (콜백 지옥)
 &lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>getUser { user &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getProfile(user.id) { profile &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
@@ -116,6 +116,25 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>마치 동기 함수처럼 보이죠?&lt;/p>
 &lt;p>하지만 실제로는 getUser, getProfile, getPosts는 각각 suspend 함수이고&lt;/p>
 &lt;p>내부적으로는 중단과 재개가 발생하지만, 작성 방식은 순차적이고 간단&lt;/p>
+&lt;h3 id="그런데-suspend-fun-fetchall이-아니라-그냥-일반-함수라면">그런데, suspend fun fetchAll()이 아니라, 그냥 일반 함수라면?
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchAll&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> user = getUser()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> profile = getProfile(user.id)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> posts = getPosts(profile.id)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;완료: &lt;/span>&lt;span style="color:#e6db74">$posts&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이럴 경우 어떤 문제가 생기냐?
+getUser(), getProfile(), getPosts()가 느린 작업이면?&lt;/p>
+&lt;h4 id="예">예:
+&lt;/h4>&lt;ul>
+&lt;li>서버에서 사용자 정보를 가져옴 (HTTP 요청)&lt;/li>
+&lt;li>디스크에서 파일을 읽음&lt;/li>
+&lt;li>DB에서 조회&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>일반 함수에서는 이런 느린 작업을 하면 스레드를 막게 됨&lt;/p>&lt;/blockquote>
+&lt;p>getUser()에서 네트워크 응답을 기다리는 동안 스레드 전체가 블로킹(blocking) 됨&lt;/p>
+&lt;p>다른 일을 못 하게되므로 비효율적, 앱 멈춘 것처럼 보임&lt;/p>
 &lt;h3 id="다시-말해-한-줄-요약하면">다시 말해 한 줄 요약하면..!
 &lt;/h3>&lt;blockquote>
 &lt;p>&amp;ldquo;비동기 코드를 동기 코드처럼 쓴다&amp;rdquo; = 비동기의 복잡함을 숨기고, 자연스러운 코드 흐름을 만든다.&lt;/p>&lt;/blockquote></description></item><item><title>주요 코루틴 라이브러리 모듈 종류</title><link>https://jaemin-baek.github.io/post/coroutinelib/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinelib/</guid><description>&lt;h2 id="주요-코루틴-라이브러리-모듈-종류">주요 코루틴 라이브러리 모듈 종류
