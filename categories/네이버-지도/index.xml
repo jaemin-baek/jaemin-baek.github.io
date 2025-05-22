@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>네이버 지도 on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/%EB%84%A4%EC%9D%B4%EB%B2%84-%EC%A7%80%EB%8F%84/</link><description>Recent content in 네이버 지도 on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 11 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/%EB%84%A4%EC%9D%B4%EB%B2%84-%EC%A7%80%EB%8F%84/index.xml" rel="self" type="application/rss+xml"/><item><title>Gradle에서 Naver Map SDK SSL 오류 해결 (macOS 기준)</title><link>https://jaemin-baek.github.io/post/gradlesslissue/</link><pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/gradlesslissue/</guid><description>&lt;h1 id="gradle에서-naver-map-sdk-ssl-오류-해결-macos-기준">Gradle에서 Naver Map SDK SSL 오류 해결 (macOS 기준)
+&lt;/h1>&lt;p>네이버 지도 SDK를 사용하는 Android 프로젝트에서 다음과 같은 Gradle 에러를 겪었다면, 이 글이 도움이 될 수 있습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>unable to find valid certification path to requested target
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>브라우저로는 잘 열리는데, Gradle에서는 계속 실패하는… 바로 그 상황입니다.&lt;/p>
+&lt;h2 id="-상황-정리">✅ 상황 정리
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// build.gradle.kts 또는 build.gradle
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>implementation(&lt;span style="color:#e6db74">&amp;#34;com.naver.maps:map-sdk:3.21.0&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>을 추가했더니 Gradle에서 아래와 같은 SSL 오류가 발생합니다&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>Could not GET &lt;span style="color:#960050;background-color:#1e0010">&amp;#39;&lt;/span>https:&lt;span style="color:#75715e">//repository.map.naver.com/archive/maven/...&amp;#39;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>PKIX path building failed: unable to find valid certification path to requested target
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>하지만 브라우저에서는 해당 .pom 파일이 정상 다운로드됩니다. 이때 우리는 아래를 의심해야 합니다.&lt;/p>
+&lt;h2 id="-문제-원인">🔍 문제 원인
+&lt;/h2>&lt;p>✅ Gradle은 브라우저와 달리 자체 JDK 인증서 저장소(cacerts)를 사용합니다&lt;/p>
+&lt;p>macOS는 시스템 Keychain을 사용해 프록시 인증서를 신뢰&lt;/p>
+&lt;p>하지만 Gradle은 JVM 내부의 cacerts만 신뢰함&lt;/p>
+&lt;p>네이버 저장소의 SSL 인증서 또는 프록시가 삽입한 인증서를 신뢰하지 못하면 위 오류 발생&lt;/p>
+&lt;h2 id="-문제-해결을-위한-삽질-과정">🧭 문제 해결을 위한 삽질 과정
+&lt;/h2>&lt;p>❌ 처음에는 Android Studio 내장 JDK에 인증서를 등록했지만&amp;hellip;&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>/Applications/Android&lt;span style="color:#960050;background-color:#1e0010">\&lt;/span> &lt;span style="color:#a6e22e">Studio&lt;/span>.app/Contents/jbr/Contents/Home/lib/security/cacerts
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 경로에 인증서를 등록했는데, Gradle은 여전히 실패했습니다.&lt;/p>
+&lt;p>✅ ./gradlew -version 으로 확인해보니?&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>JVM: &lt;span style="color:#ae81ff">22.0&lt;/span>.&lt;span style="color:#ae81ff">2&lt;/span> (Oracle Corporation)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>JVM home: /Users/&lt;span style="color:#f92672">..&lt;/span>./openjdk-&lt;span style="color:#ae81ff">22.0&lt;/span>.&lt;span style="color:#ae81ff">2&lt;/span>/Contents/Home
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>👉 Gradle은 시스템 JDK (OpenJDK 22)를 사용 중이었던 것!&lt;/p>
+&lt;p>✅ 그래서 해당 경로로 다시 인증서 등록&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>sudo keytool -importcert \
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -alias naver-map \
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -&lt;span style="color:#66d9ef">file&lt;/span> ~/Downloads/naver-map.cer \
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -keystore /Users/you/Library/Java/JavaVirtualMachines/openjdk-&lt;span style="color:#ae81ff">22.0&lt;/span>.&lt;span style="color:#ae81ff">2&lt;/span>/Contents/Home/lib/security/cacerts \
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -storepass changeit
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>-file은 브라우저에서 DER 형식으로 저장한 인증서&lt;/p>
+&lt;p>-storepass 기본값은 changeit&lt;/p>
+&lt;p>등록 완료 후 ./gradlew clean build 성공! 🎉&lt;/p>
+&lt;h2 id="-인증서-추출-방법-macos-기준">🧪 인증서 추출 방법 (macOS 기준)
+&lt;/h2>&lt;p>Safari 또는 Chrome으로 &lt;a class="link" href="https://repository.map.naver.com" target="_blank" rel="noopener"
+>https://repository.map.naver.com&lt;/a> 접속&lt;/p>
+&lt;p>주소창 자물쇠 클릭 → 인증서 보기&lt;/p>
+&lt;p>인증서 계층에서 서버 인증서 또는 루트 인증서 선택&lt;/p>
+&lt;p>[Export] 클릭 → DER encoded .cer 형식으로 저장&lt;/p>
+&lt;p>⚠️ 주의: 회사 네트워크에서는 프록시가 인증서를 바꿨을 수도 있습니다&lt;/p>
+&lt;p>많은 회사는 HTTPS 트래픽을 검사하기 위해 SSL 프록시 (중간자 공격 구조)를 사용합니다.
+이 경우 네이버의 인증서 대신 사내 인증서가 삽입되어 브라우저는 OK, Gradle은 실패할 수 있습니다.&lt;/p>
+&lt;p>✅ 마무리&lt;/p>
+&lt;p>이번 경험을 통해 아래를 다시 한번 정리할 수 있었습니다:&lt;/p>
+&lt;p>Gradle의 SSL은 브라우저와 별개의 JDK 인증서 체인에 의존&lt;/p>
+&lt;p>시스템 JDK인지 Android Studio 내장 JDK인지 반드시 확인&lt;/p>
+&lt;p>프록시 환경에선 SSL 인증서가 중간에 바뀔 수 있음&lt;/p></description></item></channel></rss>
