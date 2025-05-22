@@ -1,41 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coroutine on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutine/</link><description>Recent content in Coroutine on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutine/index.xml" rel="self" type="application/rss+xml"/><item><title>비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다</title><link>https://jaemin-baek.github.io/post/coroutine2/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine2/</guid><description>&lt;h2 id="비동기-코드를-동기-코드처럼-쉽게-작성하게-해준다">비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다
-&lt;/h2>&lt;p>먼저 &amp;ldquo;비동기 코드를 동기처럼&amp;quot;이란 무슨 뜻인가?
-비동기 코드는 원래 **콜백(callback)**이나 &lt;strong>이벤트 리스너&lt;/strong>로 작성되기 때문에,
-코드 흐름이 분리되고 복잡해지기 쉬워요.&lt;/p>
-&lt;p>하지만 코루틴을 사용하면, 그런 복잡한 구조를 &amp;ldquo;한 줄씩 순차적으로&amp;rdquo; 작성할 수 있어서
-**마치 일반 함수(=동기 함수)**처럼 코드를 짤 수 있다는 뜻이에요.&lt;/p>
-&lt;h3 id="예시-1-비동기-코드-콜백-지옥">예시 1: 비동기 코드 (콜백 지옥)
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>getUser { user &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getProfile(user.id) { profile &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getPosts(profile.id) { posts &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;완료: &lt;/span>&lt;span style="color:#e6db74">$posts&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>
-&lt;p>중첩 콜백이 많아짐 (일명 콜백 헬/지옥)&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>코드 흐름이 위→아래로 자연스럽지 않음&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>예외 처리도 복잡&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="예시-2-코루틴-사용-동기처럼-보임">예시 2: 코루틴 사용 (동기처럼 보임)
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchAll&lt;/span>() {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> user = getUser()
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> profile = getProfile(user.id)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> posts = getPosts(profile.id)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;완료: &lt;/span>&lt;span style="color:#e6db74">$posts&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>마치 동기 함수처럼 보이죠?&lt;/p>
-&lt;p>하지만 실제로는 getUser, getProfile, getPosts는 각각 suspend 함수이고&lt;/p>
-&lt;p>내부적으로는 중단과 재개가 발생하지만, 작성 방식은 순차적이고 간단&lt;/p>
-&lt;h3 id="다시-말해-한-줄-요약하면">다시 말해 한 줄 요약하면..!
-&lt;/h3>&lt;blockquote>
-&lt;p>&amp;ldquo;비동기 코드를 동기 코드처럼 쓴다&amp;rdquo; = 비동기의 복잡함을 숨기고, 자연스러운 코드 흐름을 만든다.&lt;/p>&lt;/blockquote></description></item><item><title>코루틴은 일시 중단과 재개가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다</title><link>https://jaemin-baek.github.io/post/coroutine1/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine1/</guid><description>&lt;h2 id="코루틴은-일시-중단과-재개가-가능한-함수">코루틴은 일시 중단과 재개가 가능한 함수
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Coroutine on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/coroutine/</link><description>Recent content in Coroutine on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/coroutine/index.xml" rel="self" type="application/rss+xml"/><item><title>코루틴 장점1: 코루틴은 일시 중단과 재개가 가능한 함수</title><link>https://jaemin-baek.github.io/post/coroutine1/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine1/</guid><description>&lt;h2 id="코루틴은-일시-중단과-재개가-가능한-함수">코루틴은 일시 중단과 재개가 가능한 함수
 &lt;/h2>&lt;p>코틀린에서는 &lt;strong>일시 중단&lt;/strong>을 suspend 라는 키워드로 표현합니다.&lt;/p>
 &lt;p>suspend는 &lt;strong>이 함수는 중단(suspend)될 수 있다&lt;/strong>는 의미이죠&lt;/p>
 &lt;p>즉, 함수가 실행 도중 잠시 멈췄다가 나중에 이어서 다시 실행될 수 있음을 나타냅니다.&lt;/p>
@@ -118,7 +81,44 @@
 &lt;p>스레드가 놀지 않고 실행 가능한 코루틴에게 계속 작업을 넘김&lt;/p>
 &lt;p>시간 순서가 충족되면 → A가 우선순위 없이도 재개됨&lt;/p>
 &lt;h2 id="결론">결론:
-&lt;/h2>&lt;p>코루틴은 일시 중단(suspend)과 재개(resume)가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다&lt;/p></description></item><item><title>주요 코루틴 라이브러리 모듈 종류</title><link>https://jaemin-baek.github.io/post/coroutinelib/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinelib/</guid><description>&lt;h2 id="주요-코루틴-라이브러리-모듈-종류">주요 코루틴 라이브러리 모듈 종류
+&lt;/h2>&lt;p>코루틴은 일시 중단(suspend)과 재개(resume)가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다&lt;/p></description></item><item><title>코루틴 장점2: 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다</title><link>https://jaemin-baek.github.io/post/coroutine2/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine2/</guid><description>&lt;h2 id="비동기-코드를-동기-코드처럼-쉽게-작성하게-해준다">비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다
+&lt;/h2>&lt;p>먼저 &amp;ldquo;비동기 코드를 동기처럼&amp;quot;이란 무슨 뜻인가?
+비동기 코드는 원래 **콜백(callback)**이나 &lt;strong>이벤트 리스너&lt;/strong>로 작성되기 때문에,
+코드 흐름이 분리되고 복잡해지기 쉬워요.&lt;/p>
+&lt;p>하지만 코루틴을 사용하면, 그런 복잡한 구조를 &amp;ldquo;한 줄씩 순차적으로&amp;rdquo; 작성할 수 있어서
+**마치 일반 함수(=동기 함수)**처럼 코드를 짤 수 있다는 뜻이에요.&lt;/p>
+&lt;h3 id="예시-1-비동기-코드-콜백-지옥">예시 1: 비동기 코드 (콜백 지옥)
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>getUser { user &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getProfile(user.id) { profile &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> getPosts(profile.id) { posts &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;완료: &lt;/span>&lt;span style="color:#e6db74">$posts&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>중첩 콜백이 많아짐 (일명 콜백 헬/지옥)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>코드 흐름이 위→아래로 자연스럽지 않음&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>예외 처리도 복잡&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="예시-2-코루틴-사용-동기처럼-보임">예시 2: 코루틴 사용 (동기처럼 보임)
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchAll&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> user = getUser()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> profile = getProfile(user.id)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> posts = getPosts(profile.id)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;완료: &lt;/span>&lt;span style="color:#e6db74">$posts&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>마치 동기 함수처럼 보이죠?&lt;/p>
+&lt;p>하지만 실제로는 getUser, getProfile, getPosts는 각각 suspend 함수이고&lt;/p>
+&lt;p>내부적으로는 중단과 재개가 발생하지만, 작성 방식은 순차적이고 간단&lt;/p>
+&lt;h3 id="다시-말해-한-줄-요약하면">다시 말해 한 줄 요약하면..!
+&lt;/h3>&lt;blockquote>
+&lt;p>&amp;ldquo;비동기 코드를 동기 코드처럼 쓴다&amp;rdquo; = 비동기의 복잡함을 숨기고, 자연스러운 코드 흐름을 만든다.&lt;/p>&lt;/blockquote></description></item><item><title>주요 코루틴 라이브러리 모듈 종류</title><link>https://jaemin-baek.github.io/post/coroutinelib/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinelib/</guid><description>&lt;h2 id="주요-코루틴-라이브러리-모듈-종류">주요 코루틴 라이브러리 모듈 종류
 &lt;/h2>&lt;h3 id="1-공통core">1. 공통(Core)
 &lt;/h3>&lt;p>&lt;img src="https://github.com/user-attachments/assets/eb25b970-a573-45eb-ad07-5b9d0436f32e"
 loading="lazy"
