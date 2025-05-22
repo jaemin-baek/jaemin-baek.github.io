@@ -102,8 +102,10 @@
 &lt;/h2>&lt;ul>
 &lt;li>Kotlin 공식 문서: &lt;a class="link" href="https://kotlinlang.org/docs/coroutines-overview.html" target="_blank" rel="noopener"
 >https://kotlinlang.org/docs/coroutines-overview.html&lt;/a>&lt;/li>
-&lt;li>Roman Elizarov (설계자) 발표: &lt;a class="link" href="https://www.youtube.com/watch?v=_hfBv0a09Jc" target="_blank" rel="noopener"
+&lt;li>KotlinConf 2019 Roman Elizarov (설계자) 발표: &lt;a class="link" href="https://www.youtube.com/watch?v=_hfBv0a09Jc" target="_blank" rel="noopener"
 >KotlinConf 2019: Coroutines Under the Hood&lt;/a>&lt;/li>
+&lt;li>KotlinConf 2017 Roman Elizarov (설계자) 발표: &lt;a class="link" href="https://youtu.be/YrrUCSi72E8?si=EoNjXdNJ2wvMJIpG" target="_blank" rel="noopener"
+>https://youtu.be/YrrUCSi72E8?si=EoNjXdNJ2wvMJIpG&lt;/a>&lt;/li>
 &lt;li>Kotlin GitHub: &lt;a class="link" href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank" rel="noopener"
 >https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
 &lt;li>kotlinx.coroutines 구현 내부 코드: &lt;code>suspendCancellableCoroutine.kt&lt;/code>, &lt;code>Delay.kt&lt;/code>&lt;/li>
