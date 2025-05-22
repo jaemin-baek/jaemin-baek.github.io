@@ -90,7 +90,75 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
 &lt;h3 id="결론">결론
 &lt;/h3>&lt;p>Expression Body는 Kotlin 코드의 간결함과 가독성을 높이는 강력한 기능입니다. 하지만 남용 시 복잡한 로직이 숨어버릴 수 있으므로, 상황에 맞는 사용이 중요합니다.&lt;/p></description></item><item><title>Kotlin 문법 정리: Lambda Expression</title><link>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</guid><description>&lt;h1 id="람다-표현식-lambda-expression">람다 표현식 (Lambda Expression)
-&lt;/h1></description></item><item><title>Kotlin 문법 정리: Trailing Lambda Syntax</title><link>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</guid><description>&lt;h1 id="트레일링-람다-문법-trailing-lambda-syntax">트레일링 람다 문법 (Trailing Lambda Syntax)
+&lt;/h1>&lt;h2 id="정의">정의
+&lt;/h2>&lt;p>람다 표현식은 익명 함수(anonymous function)를 간결하게 표현한 것으로, 함수를 값처럼 다룰 수 있도록 해줍니다.
+코틀린에서는 중괄호 {}를 사용하여 정의하며, 변수에 할당하거나 함수 인자로 넘기는 등 일급 시민(first-class citizen) 으로 취급됩니다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> square = { x: Int &lt;span style="color:#f92672">-&amp;gt;&lt;/span> x * x }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>println(square(&lt;span style="color:#ae81ff">4&lt;/span>)) &lt;span style="color:#75715e">// 16
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="람다-표현식의-철학">람다 표현식의 철학
+&lt;/h2>&lt;p>람다는 단순히 &amp;ldquo;짧게 쓰는 함수&amp;quot;가 아닙니다. 함수형 프로그래밍의 핵심 철학, 즉 동작을 데이터처럼 다룰 수 있는 능력을 나타냅니다.&lt;/p>
+&lt;p>람다를 사용하면, 코드의 흐름을 제어하거나 설계를 바꾸지 않고도 기능을 전달할 수 있습니다.
+이것은 OOP의 상속과 다형성보다 더 유연한 전략을 제공하며, 전략 패턴의 대체물로도 활용될 수 있습니다.&lt;/p>
+&lt;blockquote>
+&lt;p>&amp;ldquo;인터페이스를 따로 만들 필요 없이, 곧바로 행동을 전달할 수 있는 능력.&amp;rdquo; — 이것이 람다의 본질적인 힘입니다.&lt;/p>&lt;/blockquote>
+&lt;p>코틀린은 람다를 통해 다음과 같은 설계 철학을 구현합니다:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>간결성: 최소한의 문법으로 최대한의 표현&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>표현력: 이름 없는 함수로도 충분히 의미 전달 가능&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>조합 가능성: 고차 함수와 조합하여 유연한 API 구성 가능&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>불- 변성 강조: 상태 없는 함수형 스타일 지향&lt;/p>
+&lt;h2 id="문법-구조">문법 구조
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> 이름: (입력타입) &lt;span style="color:#f92672">-&amp;gt;&lt;/span> 출력타입 = { 매개변수 &lt;span style="color:#f92672">-&amp;gt;&lt;/span> 본문 }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="예">예
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> greet: (String) &lt;span style="color:#f92672">-&amp;gt;&lt;/span> String = { name &lt;span style="color:#f92672">-&amp;gt;&lt;/span> &lt;span style="color:#e6db74">&amp;#34;Hello, &lt;/span>&lt;span style="color:#e6db74">$name&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> greet = { name: String &lt;span style="color:#f92672">-&amp;gt;&lt;/span> &lt;span style="color:#e6db74">&amp;#34;Hello, &lt;/span>&lt;span style="color:#e6db74">$name&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="고차-함수와-함께-쓰기">고차 함수와 함께 쓰기
+&lt;/h2>&lt;p>람다의 가장 강력한 점은 고차 함수(Higher-Order Function) 와 함께 쓸 때 드러납니다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">calculate&lt;/span>(x: Int, y: Int, op: (Int, Int) &lt;span style="color:#f92672">-&amp;gt;&lt;/span> Int): Int {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> op(x, y)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> sum = calculate(&lt;span style="color:#ae81ff">3&lt;/span>, &lt;span style="color:#ae81ff">4&lt;/span>) { a, b &lt;span style="color:#f92672">-&amp;gt;&lt;/span> a + b } &lt;span style="color:#75715e">// 7
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>위 코드는 calculate 함수의 동작을 람다로 주입합니다. 이는 전략 패턴을 코드 수준에서 자연스럽게 표현하는 방식입니다&lt;/p>
+&lt;h2 id="실무에서의-활용">실무에서의 활용
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>컬렉션 처리: map, filter, reduce&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>UI 이벤트 처리: setOnClickListener { &amp;hellip; }&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>DSL 구성 요소: apply, with, build.gradle.kts&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>비동기 콜백: Retrofit, Coroutine Scope 내부 처리 등&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="주의할-점">주의할 점
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>람다 캡처 비용: 외부 변수 캡처 시, 메모리 비용 및 예기치 않은 참조 유지에 주의&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>남용 금지: 람다로 모든 걸 처리하려 하면 오히려 가독성 하락&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>타입 명시 생략의 위험: IDE가 추론하더라도 명시가 더 명확할 때가 있음&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="요약">요약
+&lt;/h2>&lt;p>람다 표현식은 단순한 문법 편의성을 넘어, 행위를 코드로 캡슐화하는 도구입니다.&lt;/p>
+&lt;p>코드를 데이터처럼 다루는 함수형 사고방식은 선언형 프로그래밍, 조합 가능성 높은 API, 의존성 분리, 상태 최소화 등 현대 소프트웨어 설계에서 매우 중요한 가치를 담고 있습니다.&lt;/p>
+&lt;p>람다는 읽기 쉽고, 전달 가능하고, 테스트하기 좋은 코드를 설계할 수 있는 핵심 도구입니다.&lt;/p>
+&lt;p>적절한 곳에 사용하는 람다는 코드 품질을 한 단계 끌어올리는 열쇠가 됩니다.&lt;/p></description></item><item><title>Kotlin 문법 정리: Trailing Lambda Syntax</title><link>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</guid><description>&lt;h1 id="트레일링-람다-문법-trailing-lambda-syntax">트레일링 람다 문법 (Trailing Lambda Syntax)
 &lt;/h1>&lt;h2 id="정의">정의
 &lt;/h2>&lt;p>트레일링 람다(Trailing Lambda)는 함수의 마지막 파라미터가 람다(lambda expression)일 경우,
 해당 람다를 함수 호출 괄호 () 밖으로 빼서 더 읽기 쉬운 형태로 표현하는 코틀린의 문법입니다.&lt;/p>
