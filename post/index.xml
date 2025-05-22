@@ -1,4 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/post/</link><description>Recent content in Posts on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 문법 정리: Expression Body Function</title><link>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</guid><description>&lt;h1 id="kotlin-함수-문법-요약">Kotlin 함수 문법 요약
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/post/</link><description>Recent content in Posts on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 11 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>익명 함수란? (anonymous function)</title><link>https://jaemin-baek.github.io/post/kotlinanonymousfunction/</link><pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinanonymousfunction/</guid><description>&lt;h1 id="1-익명-함수란-anonymous-function">1. 익명 함수란? (anonymous function)
+&lt;/h1>&lt;blockquote>
+&lt;p>이름이 없는 함수&lt;/p>&lt;/blockquote>
+&lt;p>보통 우리가 쓰는 함수는 이름이 있는 함수입니다&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">sayHello&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>하지만 어떤 함수는 이름 없이도 쓸 수 있습니다. 이것이 익명 함수예요.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이렇게 쓰면 이름이 없기 때문에 이 자체로는 실행이 안 되고, 변수에 담아서 써야 합니다&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> greet = &lt;span style="color:#66d9ef">fun&lt;/span>() { println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>) }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>greet() &lt;span style="color:#75715e">// Hello
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="2-그럼-람다-표현식은-뭐가-다르냐">2. 그럼 람다 표현식은 뭐가 다르냐?
+&lt;/h1>&lt;p>람다 표현식은 익명 함수를 더 간결하게 쓰는 문법이에요.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> greet = { println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>) } &lt;span style="color:#75715e">// 람다 표현식
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>greet() &lt;span style="color:#75715e">// Hello
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>즉, fun() {} 을 {}로 바꾼 것!&lt;/p>
+&lt;h1 id="3-함수를-값처럼-다룬다는-무슨-뜻">3. &amp;ldquo;함수를 값처럼 다룬다&amp;quot;는 무슨 뜻?
+&lt;/h1>&lt;p>이 말이 중요한데요. 함수도 변수에 넣고, 다른 함수에 넘기고, 리턴할 수도 있다는 뜻입니다.&lt;/p>
+&lt;p>예를 들어&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> add = { a: Int, b: Int &lt;span style="color:#f92672">-&amp;gt;&lt;/span> a + b } &lt;span style="color:#75715e">// 함수처럼 생긴 값을 변수에 저장
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">calculate&lt;/span>(x: Int, y: Int, op: (Int, Int) &lt;span style="color:#f92672">-&amp;gt;&lt;/span> Int): Int {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> op(x, y) &lt;span style="color:#75715e">// 함수(값)를 받아서 실행
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> result = calculate(&lt;span style="color:#ae81ff">3&lt;/span>, &lt;span style="color:#ae81ff">5&lt;/span>, add) &lt;span style="color:#75715e">// 함수 자체를 넘김!
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>println(result) &lt;span style="color:#75715e">// 8
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>여기서 add는 함수지만 값처럼 변수에 담겨 다뤄졌고&lt;/p>
+&lt;p>calculate는 함수 하나를 인자로 받아서 실행했죠&lt;/p>
+&lt;p>이게 바로 &amp;ldquo;함수를 값처럼 다룰 수 있다&amp;rdquo; 는 뜻이에요.
+함수를 변수처럼 사용 → 함수형 프로그래밍의 핵심입니다.&lt;/p></description></item><item><title>Kotlin 문법 정리: Expression Body Function</title><link>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</guid><description>&lt;h1 id="kotlin-함수-문법-요약">Kotlin 함수 문법 요약
 &lt;/h1>&lt;h2 id="식-본문-함수-expression-body-function">식 본문 함수 (Expression Body Function)
 &lt;/h2>&lt;p>함수 본문이 단일 표현식일 경우, 중괄호 없이 &lt;code>=&lt;/code> 로 정의할 수 있습니다.&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">add&lt;/span>(a: Int, b: Int) = a + b
