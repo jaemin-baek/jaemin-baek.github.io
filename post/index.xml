@@ -1,14 +1,25 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/post/</link><description>Recent content in Posts on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 20 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 문법 정리: Expression Body Function</title><link>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</link><pubDate>Tue, 20 May 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</guid><description>&lt;h1 id="kotlin-함수-문법-요약">Kotlin 함수 문법 요약
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/post/</link><description>Recent content in Posts on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 문법 정리: Expression Body Function</title><link>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinexpressionbodyfunction/</guid><description>&lt;h1 id="kotlin-함수-문법-요약">Kotlin 함수 문법 요약
 &lt;/h1>&lt;h2 id="식-본문-함수-expression-body-function">식 본문 함수 (Expression Body Function)
 &lt;/h2>&lt;p>함수 본문이 단일 표현식일 경우, 중괄호 없이 &lt;code>=&lt;/code> 로 정의할 수 있습니다.&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">add&lt;/span>(a: Int, b: Int) = a + b
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>return 키워드를 명시하지 않아도 자동 반환됨&lt;/p>
-&lt;p>본문이 단 하나의 표현식일 때만 사용 가능&lt;/p>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>return 키워드를 명시하지 않아도 자동 반환됩니다.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>함수의 결과가 단일 식(expression)일 때 사용됩니다.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>간결한 함수 작성에 유리하며, 특히 getters, utility functions, single-line transformations 등에서 자주 활용됩니다.&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h3 id="블록-본문-함수와-비교">블록 본문 함수와 비교
 &lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">add&lt;/span>(a: Int, b: Int): Int {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> a + b
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;table>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>블록 본문 함수는 여러 줄의 로직을 포함할 수 있어 더 복잡한 처리가 가능합니다.&lt;/p>
+&lt;p>반드시 return 키워드를 명시해야 결과를 반환합니다.&lt;/p>
+&lt;table>
 &lt;thead>
 &lt;tr>
 &lt;th>Syntax&lt;/th>
@@ -28,7 +39,42 @@
 &lt;td>Multiple lines allowed, explicit return&lt;/td>
 &lt;/tr>
 &lt;/tbody>
-&lt;/table></description></item><item><title>Kotlin 문법 정리: Lambda Expression</title><link>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</guid><description>&lt;h1 id="람다-표현식-lambda-expression">람다 표현식 (Lambda Expression)
+&lt;/table>
+&lt;h3 id="expression-body-사용의-이점">Expression Body 사용의 이점
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>가독성 향상: 간단한 함수는 더 읽기 쉬운 형태로 표현됨&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>코드 길이 단축: 반복적인 return 문 생략 가능&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>함수형 스타일 지향: Kotlin의 함수형 프로그래밍 특징과 잘 어울림&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> square: (Int) &lt;span style="color:#f92672">-&amp;gt;&lt;/span> Int = { &lt;span style="color:#66d9ef">it&lt;/span> * &lt;span style="color:#66d9ef">it&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">isEven&lt;/span>(n: Int) = n % &lt;span style="color:#ae81ff">2&lt;/span> &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">greet&lt;/span>(name: String) = &lt;span style="color:#e6db74">&amp;#34;Hello, &lt;/span>&lt;span style="color:#e6db74">$name&lt;/span>&lt;span style="color:#e6db74">!&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="주의할-점">주의할 점
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>여러 줄 로직에는 적합하지 않음 → 블록 본문을 사용해야 가독성 유지&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>반환 타입이 명확하지 않을 경우, 타입 추론이 어려워질 수 있음&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="나쁜-예">나쁜 예)
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">risky&lt;/span>() = &lt;span style="color:#66d9ef">if&lt;/span> (someCondition) &lt;span style="color:#e6db74">&amp;#34;yes&amp;#34;&lt;/span> &lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#66d9ef">null&lt;/span> &lt;span style="color:#75715e">// 타입 명시가 더 안전할 수 있음
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="좋은-예">좋은 예)
+&lt;/h4>&lt;p>모델 객체의 getter&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> fullName: String
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">get&lt;/span>() = &lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">$firstName&lt;/span>&lt;span style="color:#e6db74"> &lt;/span>&lt;span style="color:#e6db74">$lastName&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Repository, Service, UseCase 등에서 한 줄로 끝나는 경우&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">findUserById&lt;/span>(id: Int) = userRepository.findById(id)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="결론">결론
+&lt;/h3>&lt;p>Expression Body는 Kotlin 코드의 간결함과 가독성을 높이는 강력한 기능입니다. 하지만 남용 시 복잡한 로직이 숨어버릴 수 있으므로, 상황에 맞는 사용이 중요합니다.&lt;/p></description></item><item><title>Kotlin 문법 정리: Lambda Expression</title><link>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</guid><description>&lt;h1 id="람다-표현식-lambda-expression">람다 표현식 (Lambda Expression)
 &lt;/h1></description></item><item><title>Kotlin 문법 정리: Trailing Lambda Syntax</title><link>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</guid><description>&lt;h1 id="트레일링-람다-문법-trailing-lambda-syntax">트레일링 람다 문법 (Trailing Lambda Syntax)
 &lt;/h1></description></item><item><title>코루틴 장점1: 코루틴은 일시 중단과 재개가 가능한 함수</title><link>https://jaemin-baek.github.io/post/coroutine1/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine1/</guid><description>&lt;h2 id="코루틴은-일시-중단과-재개가-가능한-함수">코루틴은 일시 중단과 재개가 가능한 함수
 &lt;/h2>&lt;p>코틀린에서는 &lt;strong>일시 중단&lt;/strong>을 suspend 라는 키워드로 표현합니다.&lt;/p>
