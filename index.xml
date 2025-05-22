@@ -91,7 +91,93 @@
 &lt;h3 id="결론">결론
 &lt;/h3>&lt;p>Expression Body는 Kotlin 코드의 간결함과 가독성을 높이는 강력한 기능입니다. 하지만 남용 시 복잡한 로직이 숨어버릴 수 있으므로, 상황에 맞는 사용이 중요합니다.&lt;/p></description></item><item><title>Kotlin 문법 정리: Lambda Expression</title><link>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinlambdaexpression/</guid><description>&lt;h1 id="람다-표현식-lambda-expression">람다 표현식 (Lambda Expression)
 &lt;/h1></description></item><item><title>Kotlin 문법 정리: Trailing Lambda Syntax</title><link>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlintrailinglambdasyntax/</guid><description>&lt;h1 id="트레일링-람다-문법-trailing-lambda-syntax">트레일링 람다 문법 (Trailing Lambda Syntax)
-&lt;/h1></description></item><item><title>코루틴 장점1: 코루틴은 일시 중단과 재개가 가능한 함수</title><link>https://jaemin-baek.github.io/post/coroutine1/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine1/</guid><description>&lt;h2 id="코루틴은-일시-중단과-재개가-가능한-함수">코루틴은 일시 중단과 재개가 가능한 함수
+&lt;/h1>&lt;h2 id="정의">정의
+&lt;/h2>&lt;p>트레일링 람다(Trailing Lambda)는 함수의 마지막 파라미터가 람다(lambda expression)일 경우,
+해당 람다를 함수 호출 괄호 () 밖으로 빼서 더 읽기 쉬운 형태로 표현하는 코틀린의 문법입니다.&lt;/p>
+&lt;p>이 문법은 코드의 명확성, 선언적 스타일, 그리고 함수형 프로그래밍 철학에 기반한 Kotlin의 설계 철학을 잘 보여줍니다.&lt;/p>
+&lt;h2 id="기본-예제">기본 예제
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">doSomething&lt;/span>(action: () &lt;span style="color:#f92672">-&amp;gt;&lt;/span> Unit) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> action()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// 일반적인 호출
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>doSomething({ println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>) })
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// 트레일링 람다 사용
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>doSomething {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>위 두 코드는 동일한 동작을 하지만, 두 번째 예시는 람다 블록의 의도를 더 명확히 드러냅니다.&lt;/p>
+&lt;h2 id="왜-필요한가-코틀린-철학적-배경">왜 필요한가? (코틀린 철학적 배경)
+&lt;/h2>&lt;p>Kotlin은 간결성(conciseness), 표현력(expressiveness), 그리고 안전성(safety)을 중시하는 언어입니다.&lt;/p>
+&lt;h3 id="트레일링-람다는-이런-철학을-다음과-같은-방식으로-실현합니다">트레일링 람다는 이런 철학을 다음과 같은 방식으로 실현합니다:
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>의도를 드러내는 코드: 마지막 인자가 람다인 경우, 괄호 밖으로 빼는 것이 람다의 &amp;ldquo;중심적 역할&amp;quot;을 강조함&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>읽기 쉬운 DSL 스타일: apply, run, with, build.gradle.kts 같은 DSL에서 직관적인 문법 제공&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>콜백 기반 함수의 가독성 향상: 네트워크 요청, 버튼 클릭, 파일 처리 등에서 콜백이 많을 때 유리함&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="실제-활용-예시">실제 활용 예시
+&lt;/h2>&lt;h3 id="1-코루틴에서">1. 코루틴에서
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;ol>
+&lt;li>코루틴에서&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>runBlocking {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello from coroutine&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;ol start="2">
+&lt;li>컬렉션 처리에서&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> list = listOf(&lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#ae81ff">2&lt;/span>, &lt;span style="color:#ae81ff">3&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>list.forEach {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#66d9ef">it&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;ol start="3">
+&lt;li>UI 콜백에서 (Android 기준)&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>button.setOnClickListener {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">Toast&lt;/span>.makeText(context, &lt;span style="color:#e6db74">&amp;#34;Clicked&amp;#34;&lt;/span>, &lt;span style="color:#a6e22e">Toast&lt;/span>.LENGTH_SHORT).show()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="주의할-점">주의할 점
+&lt;/h2>&lt;ul>
+&lt;li>
+&lt;p>람다가 마지막 인자일 때만 트레일링 람다 문법 사용 가능&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>람다가 유일한 인자라면 () 생략 가능:&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>runBlocking {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 가능
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>하지만 중간에 람다가 오면 절대 밖으로 뺄 수 없음:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">foo&lt;/span>(a: Int, action: () &lt;span style="color:#f92672">-&amp;gt;&lt;/span> Unit)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>foo(&lt;span style="color:#ae81ff">1&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// 가능 (람다가 마지막)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>foo({ &lt;span style="color:#f92672">..&lt;/span>. }, &lt;span style="color:#ae81ff">1&lt;/span>) &lt;span style="color:#75715e">// ❌ 불가능
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="결론">결론
+&lt;/h2>&lt;p>트레일링 람다는 단순한 문법 이상의 의미를 가집니다. Kotlin이 추구하는 명료한 코드, 함수형 프로그래밍, 선언형 DSL 작성을 가능하게 해주는 강력한 문법 도구이며, 코드를 읽는 사람의 관점에서 쓰는 코드를 지향합니다.&lt;/p>
+&lt;p>적절한 상황에서 트레일링 람다를 활용하면, 코드가 더 직관적이고 우아해질 수 있습니다.&lt;/p></description></item><item><title>코루틴 장점1: 코루틴은 일시 중단과 재개가 가능한 함수</title><link>https://jaemin-baek.github.io/post/coroutine1/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine1/</guid><description>&lt;h2 id="코루틴은-일시-중단과-재개가-가능한-함수">코루틴은 일시 중단과 재개가 가능한 함수
 &lt;/h2>&lt;p>코틀린에서는 &lt;strong>일시 중단&lt;/strong>을 suspend 라는 키워드로 표현합니다.&lt;/p>
 &lt;p>suspend는 &lt;strong>이 함수는 중단(suspend)될 수 있다&lt;/strong>는 의미이죠&lt;/p>
 &lt;p>즉, 함수가 실행 도중 잠시 멈췄다가 나중에 이어서 다시 실행될 수 있음을 나타냅니다.&lt;/p>
