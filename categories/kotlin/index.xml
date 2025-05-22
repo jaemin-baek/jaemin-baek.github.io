@@ -1,4 +1,87 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 09 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>주요 코루틴 라이브러리 모듈 종류</title><link>https://jaemin-baek.github.io/post/coroutinelib/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinelib/</guid><description>&lt;h2 id="주요-코루틴-라이브러리-모듈-종류">주요 코루틴 라이브러리 모듈 종류
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>코루틴은 일시 중단과 재개가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다</title><link>https://jaemin-baek.github.io/post/coroutine1/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine1/</guid><description>&lt;h2 id="코루틴은-일시-중단과-재개가-가능한-함수로-비동기-코드를-동기-코드처럼-쉽게-작성하게-해준다">코루틴은 일시 중단과 재개가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다
+&lt;/h2>&lt;p>코틀린에서는 **&amp;ldquo;일시 중단&amp;rdquo;**을 suspend 라는 키워드로 표현합니다.&lt;/p>
+&lt;p>suspend는 **&amp;ldquo;이 함수는 중단(suspend)될 수 있다&amp;rdquo;**는 의미이죠&lt;/p>
+&lt;p>즉, 함수가 실행 도중 잠시 멈췄다가 나중에 이어서 다시 실행될 수 있음을 나타냅니다.&lt;/p>
+&lt;p>이런 함수는 코루틴 안에서만 호출할 수 있습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">fetchUserData&lt;/span>(): User {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>) &lt;span style="color:#75715e">// 1초 일시 중단 (non-blocking)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">return&lt;/span> User(&lt;span style="color:#e6db74">&amp;#34;jaemin&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>여기서 delay(1000)은 현재 실행 중인 스레드를 막지 않고 (코루틴을 실행하고 있던 스레드를 블로킹하지 않고)
+1초 동안 코루틴만 일시 중단합니다.&lt;/p>
+&lt;p>이게 코루틴의 핵심 장점이죠 — 효율적이고 가벼운 비동기 처리.&lt;/p>
+&lt;p>suspend 함수는 코루틴 컨텍스트 안에서만 실행 가능합니다.
+즉, 코루틴 블록 안에서만 호출 가능하죠&lt;/p>
+&lt;p>일반 함수는 실행을 시작하면 → 끝날 때까지 쭉 실행됨.
+→ 중간에 멈추거나 재개하는 기능 없음&lt;/p>
+&lt;p>suspend 함수는 실행 중 &amp;ldquo;중단&amp;quot;했다가 &amp;ldquo;재개&amp;quot;할 수 있음
+→ 이게 코루틴의 핵심 기능&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">import&lt;/span> kotlinx.coroutines.*
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() = runBlocking {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;🕒 코루틴 A: 작업 시작&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">2000&lt;/span>) &lt;span style="color:#75715e">// 여기서 중단됨 (2초 동안 멈춤)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> println(&lt;span style="color:#e6db74">&amp;#34;✅ 코루틴 A: 작업 완료&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;💡 코루틴 B: 작업 시작&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> repeat(&lt;span style="color:#ae81ff">5&lt;/span>) { i &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;💡 코루틴 B: &lt;/span>&lt;span style="color:#e6db74">$i&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">400&lt;/span>) &lt;span style="color:#75715e">// 반복하면서 작업함
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;💡 코루틴 B: 작업 완료&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>1 → 2 → 3 한 번에 실행됨. 멈추거나 나중에 이어서 실행 못함&lt;/p>
+&lt;p>suspend 함수 (코루틴)
+중간에 멈출 수 있음&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">helloSuspend&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;1&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>) &lt;span style="color:#75715e">// 💡 여기서 중단됨! (다른 일 가능)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> println(&lt;span style="color:#e6db74">&amp;#34;2&amp;#34;&lt;/span>) &lt;span style="color:#75715e">// 💡 1초 후에 여기서 다시 이어서 실행
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="왜-일반-함수는-중단재개-안-되나">왜 일반 함수는 중단/재개 안 되나?
+&lt;/h3>&lt;p>일반 함수는 JVM 바이트코드 수준에서 스택 기반으로 한 번에 실행되도록 설계됨.&lt;/p>
+&lt;p>반면 suspend 함수는 컴파일 시 내부적으로 Continuation이라는 상태 저장 구조로 변환됨.
+즉, **“지금 어디까지 실행했는지 기억하는 설계”**가 적용되는 것.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;🅰️ A 시작&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">2000&lt;/span>) &lt;span style="color:#75715e">// ← 여기서 코루틴 A는 &amp;#34;suspend&amp;#34; = 대기 상태로 빠짐
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> println(&lt;span style="color:#e6db74">&amp;#34;🅰️ A 끝&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>launch {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> repeat(&lt;span style="color:#ae81ff">5&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;🅱️ B: &lt;/span>&lt;span style="color:#e6db74">$it&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">400&lt;/span>) &lt;span style="color:#75715e">// ← 이것도 suspend 지점
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="결과">결과:
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅰️&lt;/span> A 시작: &lt;span style="color:#ae81ff">1747879622324&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">0&lt;/span> at &lt;span style="color:#ae81ff">1747879622329&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">1&lt;/span> at &lt;span style="color:#ae81ff">1747879622735&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">2&lt;/span> at &lt;span style="color:#ae81ff">1747879623140&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">3&lt;/span> at &lt;span style="color:#ae81ff">1747879623545&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">4&lt;/span> at &lt;span style="color:#ae81ff">1747879623947&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅰️&lt;/span> A 끝: &lt;span style="color:#ae81ff">1747879624333&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">5&lt;/span> at &lt;span style="color:#ae81ff">1747879624351&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">6&lt;/span> at &lt;span style="color:#ae81ff">1747879624755&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">7&lt;/span> at &lt;span style="color:#ae81ff">1747879625160&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">8&lt;/span> at &lt;span style="color:#ae81ff">1747879625565&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#960050;background-color:#1e0010">🅱️&lt;/span> B: &lt;span style="color:#ae81ff">9&lt;/span> at &lt;span style="color:#ae81ff">1747879625970&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="실행-흐름">실행 흐름:
+&lt;/h4>&lt;p>A는 0ms에 시작해서 → delay(2000) → 2000ms쯤에 다시 실행될 준비 완료&lt;/p>
+&lt;p>B는 0ms부터 시작해서 → 400ms 간격으로 반복&lt;/p>
+&lt;p>2000ms쯤 되면 B는 5번째나 6번째 반복 중일 텐데&lt;/p>
+&lt;p>그 타이밍에 스레드가 A를 재개할 틈이 생기면, A가 다시 실행됩니다&lt;/p>
+&lt;h4 id="이게-가능한-이유">이게 가능한 이유:
+&lt;/h4>&lt;p>코루틴은 항상 suspend → resume을 반복&lt;/p>
+&lt;p>스레드가 놀지 않고 실행 가능한 코루틴에게 계속 작업을 넘김&lt;/p>
+&lt;p>시간 순서가 충족되면 → A가 우선순위 없이도 재개됨&lt;/p>
+&lt;h2 id="결론">결론:
+&lt;/h2>&lt;p>코루틴은 일시 중단(suspend)과 재개(resume)가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다&lt;/p></description></item><item><title>주요 코루틴 라이브러리 모듈 종류</title><link>https://jaemin-baek.github.io/post/coroutinelib/</link><pubDate>Sun, 09 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinelib/</guid><description>&lt;h2 id="주요-코루틴-라이브러리-모듈-종류">주요 코루틴 라이브러리 모듈 종류
 &lt;/h2>&lt;h3 id="1-공통core">1. 공통(Core)
 &lt;/h3>&lt;p>&lt;img src="https://github.com/user-attachments/assets/eb25b970-a573-45eb-ad07-5b9d0436f32e"
 loading="lazy"
