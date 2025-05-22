@@ -1,5 +1,5 @@
 ---
-title: "비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다"
+title: "코루틴 장점2: 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다"
 date: 2025-03-10
 draft: false
 tags: ["kotlin", "coroutine", "multithreading", "concurrency"]
@@ -55,6 +55,8 @@ suspend fun fetchAll() {
 ### 다시 말해 한 줄 요약하면..!
 
 > "비동기 코드를 동기 코드처럼 쓴다" = 비동기의 복잡함을 숨기고, 자연스러운 코드 흐름을 만든다.
+>
+> 
 
 
 

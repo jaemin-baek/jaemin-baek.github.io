@@ -1,5 +1,5 @@
 ---
-title: "코루틴은 일시 중단과 재개가 가능한 함수로, 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다"
+title: "코루틴 장점1: 코루틴은 일시 중단과 재개가 가능한 함수"
 date: 2025-03-10
 draft: false
 tags: ["kotlin", "coroutine", "multithreading", "concurrency"]
