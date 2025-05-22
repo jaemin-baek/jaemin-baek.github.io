@@ -13,6 +13,21 @@
 &lt;p>간결한 함수 작성에 유리하며, 특히 getters, utility functions, single-line transformations 등에서 자주 활용됩니다.&lt;/p>
 &lt;/li>
 &lt;/ul>
+&lt;h3 id="단일-표현식이란">단일 표현식이란?
+&lt;/h3>&lt;p>하나의 결과값을 내는 하나의 명령 또는 계산식
+즉, return 없이도 값을 만들어내는 단 하나의 식(expression) 을 말합니다.&lt;/p>
+&lt;h4 id="예-단일-표현식-o">예: 단일 표현식 (O)
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">add&lt;/span>(a: Int, b: Int) = a + b
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>a + b는 하나의 식이고, **하나의 값(Int)**을 만듭니다.&lt;/p>
+&lt;p>그래서 = 오른쪽만 보고도 반환값이 명확함&lt;/p>
+&lt;h4 id="예-단일-표현식-아님-x">예: 단일 표현식 아님 (X)
+&lt;/h4>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">add&lt;/span>(a: Int, b: Int): Int {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> sum = a + b
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(sum)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> sum
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>여기에는 **여러 문장(statements)**이 있고&lt;/p>
+&lt;p>val, println, return 등 복합적인 흐름이 존재하므로 → 단일 표현식이 아님&lt;/p>
 &lt;h3 id="블록-본문-함수와-비교">블록 본문 함수와 비교
 &lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">add&lt;/span>(a: Int, b: Int): Int {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> a + b
