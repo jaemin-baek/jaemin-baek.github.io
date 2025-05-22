@@ -22,6 +22,33 @@ fun add(a: Int, b: Int) = a + b
 
 - 간결한 함수 작성에 유리하며, 특히 getters, utility functions, single-line transformations 등에서 자주 활용됩니다.
 
+### 단일 표현식이란?
+하나의 결과값을 내는 하나의 명령 또는 계산식
+즉, return 없이도 값을 만들어내는 단 하나의 식(expression) 을 말합니다.
+
+
+#### 예: 단일 표현식 (O)
+```kotlin
+fun add(a: Int, b: Int) = a + b
+```
+a + b는 하나의 식이고, **하나의 값(Int)**을 만듭니다.
+
+그래서 = 오른쪽만 보고도 반환값이 명확함
+
+
+#### 예: 단일 표현식 아님 (X)
+```kotlin
+fun add(a: Int, b: Int): Int {
+    val sum = a + b
+    println(sum)
+    return sum
+}
+```
+여기에는 **여러 문장(statements)**이 있고
+
+val, println, return 등 복합적인 흐름이 존재하므로 → 단일 표현식이 아님
+
+
 
 ### 블록 본문 함수와 비교
 
