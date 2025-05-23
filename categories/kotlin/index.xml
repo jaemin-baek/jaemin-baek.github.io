@@ -1,4 +1,130 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 12 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)</title><link>https://jaemin-baek.github.io/post/coroutinecontinuation/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontinuation/</guid><description>&lt;h1 id="kotlin-코루틴-내부-구조-상태-머신--continuation--cps">Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 13 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>Kotlin Multiplatform의 expect/actual 완전 정리</title><link>https://jaemin-baek.github.io/post/kotlinactualexpect/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinactualexpect/</guid><description>&lt;h1 id="kotlin-multiplatform의-expectactual-완전-정리">Kotlin Multiplatform의 expect/actual 완전 정리
+&lt;/h1>&lt;p>Kotlin Multiplatform(KMP)을 이해하기 위해 반드시 알아야 할 키워드가 바로 &lt;code>expect&lt;/code>와 &lt;code>actual&lt;/code>입니다. 이 키워드는 플랫폼마다 다른 구현을 제공하면서도, 공통 인터페이스를 유지하는 &lt;strong>다형성 선언 방식&lt;/strong>을 가능하게 합니다.&lt;/p>
+&lt;p>이 글에서는 &lt;code>expect&lt;/code>/&lt;code>actual&lt;/code> 키워드의 개념부터 컴파일 타임 처리 방식, IDE에서 보이지 않는 이유까지 자세히 설명합니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="기본-개념-expect와-actual이란">기본 개념: &lt;code>expect&lt;/code>와 &lt;code>actual&lt;/code>이란?
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>키워드&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>expect&lt;/code>&lt;/td>
+&lt;td>공통 코드에 선언된 API 인터페이스 (stub)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>actual&lt;/code>&lt;/td>
+&lt;td>각 플랫폼에서의 실제 구현&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>즉, &lt;code>expect&lt;/code>는 **계약(Contract)**이고,&lt;br>
+&lt;code>actual&lt;/code>은 그 계약에 맞는 **실제 구현(Implementation)**입니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="예시-코드">예시 코드
+&lt;/h2>&lt;h3 id="commonmain-공통-모듈">commonMain (공통 모듈)
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">// 선언만 있고 구현 없음
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">expect&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">getPlatformName&lt;/span>(): String
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="jvmmain">jvmMain
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">actual&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">getPlatformName&lt;/span>(): String = &lt;span style="color:#e6db74">&amp;#34;JVM&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="iosmain">iosMain
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">actual&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">getPlatformName&lt;/span>(): String = &lt;span style="color:#e6db74">&amp;#34;iOS&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>expect&lt;/code>는 인터페이스만 정의하고, 각 플랫폼에 맞는 &lt;code>actual&lt;/code> 구현이 연결됩니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="왜-jar에서는-expect가-안-보일까">왜 &lt;code>.jar&lt;/code>에서는 &lt;code>expect&lt;/code>가 안 보일까?
+&lt;/h2>&lt;h3 id="external-libraries에서는-expect를-찾을-수-없음">External Libraries에서는 &lt;code>expect&lt;/code>를 찾을 수 없음
+&lt;/h3>&lt;p>Gradle에서 다운받은 JAR 파일(&lt;code>kotlinx-coroutines-core-jvm-1.7.3.jar&lt;/code>)은 &lt;strong>JVM에서 실행 가능한 바이트코드&lt;/strong>만 포함합니다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>expect&lt;/code>는 &lt;strong>컴파일 타임에만 존재하는 추상 선언&lt;/strong>입니다&lt;/li>
+&lt;li>JVM에는 &lt;code>actual&lt;/code> 구현만 컴파일되고 포함됨&lt;/li>
+&lt;li>따라서 &lt;code>.jar&lt;/code> 안에서는 &lt;code>expect&lt;/code> 선언을 확인할 수 없습니다&lt;/li>
+&lt;/ul>
+&lt;p>🔎 대신 &lt;code>expect&lt;/code>를 확인하려면:&lt;/p>
+&lt;ul>
+&lt;li>GitHub 저장소: &lt;a class="link" href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank" rel="noopener"
+>https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
+&lt;li>경로 예: &lt;code>kotlinx-coroutines-core/commonMain/kotlin/kotlinx/coroutines/Builders.kt&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="사용-목적">사용 목적
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>상황&lt;/th>
+&lt;th>이유&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>플랫폼별 파일 경로 필요&lt;/td>
+&lt;td>Android: &lt;code>Context.filesDir&lt;/code>, iOS: &lt;code>NSFileManager&lt;/code> 등&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>UI, 시스템 API 분리&lt;/td>
+&lt;td>JVM은 &lt;code>Swing&lt;/code>, iOS는 &lt;code>UIKit&lt;/code> 사용 등&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>네이티브 코드 연동&lt;/td>
+&lt;td>&lt;code>actual&lt;/code>에서 C/C++ 호출 가능&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="ide-팁-expectactual-관계-보기">IDE 팁: &lt;code>expect/actual&lt;/code> 관계 보기
+&lt;/h2>&lt;ol>
+&lt;li>&lt;code>commonMain&lt;/code>에 &lt;code>expect&lt;/code> 선언 추가&lt;/li>
+&lt;li>&lt;code>jvmMain&lt;/code>/&lt;code>iosMain&lt;/code>에 &lt;code>actual&lt;/code> 구현 작성&lt;/li>
+&lt;li>IntelliJ나 Android Studio에서는 &lt;code>Cmd+B&lt;/code>로 상호 이동 가능&lt;br>
+(단, 소스가 연결되어 있어야 함)&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>&lt;code>expect&lt;/code>에 커서 올리면 구현된 &lt;code>actual&lt;/code> 목록을 툴팁으로 확인할 수 있음&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="정리-요약">정리 요약
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>키워드&lt;/th>
+&lt;th>목적&lt;/th>
+&lt;th>컴파일 타임 존재&lt;/th>
+&lt;th>런타임 존재&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>expect&lt;/code>&lt;/td>
+&lt;td>공통 선언&lt;/td>
+&lt;td>✅ 있음&lt;/td>
+&lt;td>❌ 없음&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>actual&lt;/code>&lt;/td>
+&lt;td>플랫폼 구현&lt;/td>
+&lt;td>✅ 있음&lt;/td>
+&lt;td>✅ 있음&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;ul>
+&lt;li>&lt;code>.jar&lt;/code>에는 &lt;code>actual&lt;/code>만 존재 → &lt;code>expect&lt;/code>는 보이지 않음&lt;/li>
+&lt;li>&lt;code>expect&lt;/code>는 &lt;strong>다형성의 선언부&lt;/strong>, &lt;code>actual&lt;/code>은 &lt;strong>구현부&lt;/strong> 역할&lt;/li>
+&lt;li>Kotlin Multiplatform에서 플랫폼 특화 코드를 안전하게 관리할 수 있게 해 줌&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="-참고-링크">🔗 참고 링크
+&lt;/h2>&lt;ul>
+&lt;li>Kotlin 공식 문서: &lt;a class="link" href="https://kotlinlang.org/docs/multiplatform.html" target="_blank" rel="noopener"
+>https://kotlinlang.org/docs/multiplatform.html&lt;/a>&lt;/li>
+&lt;li>GitHub: &lt;a class="link" href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank" rel="noopener"
+>https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
+&lt;li>Expect/Actual 예제: &lt;a class="link" href="https://kotlinlang.org/docs/mpp-connect-to-apis.html" target="_blank" rel="noopener"
+>https://kotlinlang.org/docs/mpp-connect-to-apis.html&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>이제부터 &lt;code>.jar&lt;/code>에서 &lt;code>expect&lt;/code>가 안 보이는 이유를 분명하게 이해하셨을 겁니다.&lt;br>
+Kotlin MPP를 활용한 크로스 플랫폼 개발에서 가장 핵심적인 문법이니 반드시 익혀두세요!&lt;/p></description></item><item><title>Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)</title><link>https://jaemin-baek.github.io/post/coroutinecontinuation/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontinuation/</guid><description>&lt;h1 id="kotlin-코루틴-내부-구조-상태-머신--continuation--cps">Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)
 &lt;/h1>&lt;p>Kotlin의 &lt;code>suspend&lt;/code> 키워드를 사용하는 코루틴은 단순한 비동기 기능이 아닙니다. 내부적으로는 &lt;strong>상태 머신(state machine)&lt;/strong> 과 &lt;strong>Continuation-passing style (CPS)&lt;/strong> 기반의 구조로 동작하며, 이러한 설계를 통해 코루틴은 &lt;strong>비동기 코드를 동기처럼 자연스럽게 표현&lt;/strong>할 수 있습니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="기본-개념-suspend-함수란">기본 개념: &lt;code>suspend&lt;/code> 함수란?
