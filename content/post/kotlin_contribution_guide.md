@@ -1,9 +1,9 @@
 ---
 title: "Kotlin 언어 기능 제안 및 코드 기여 실전 가이드"
-date: 2025-05-23
+date: 2025-03-12
 draft: false
 categories: ["Kotlin"]
-tags: ["contribution", "compiler", "KEEP", "language design"]
+tags: ["contribution", "compiler", "language design"]
 ---
 
 # Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
