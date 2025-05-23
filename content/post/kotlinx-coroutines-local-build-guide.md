@@ -1,6 +1,6 @@
 ---
 title: "[v.0.0] Kotlinx.coroutines 커스텀 수정 후 IntelliJ에서 테스트하는 전체 과정"
-date: 2025-05-23
+date: 2025-03-13
 draft: false
 categories: ["Kotlin"]
 tags: ["Coroutines", "Gradle", "Local Build", "IntelliJ"]
