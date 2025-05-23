@@ -122,7 +122,7 @@
 >https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
 &lt;li>Expect/Actual 예제: &lt;a class="link" href="https://kotlinlang.org/docs/mpp-connect-to-apis.html" target="_blank" rel="noopener"
 >https://kotlinlang.org/docs/mpp-connect-to-apis.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlin_contribution_guide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlin_contribution_guide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
+&lt;/ul></description></item><item><title>Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlincontributionguide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlincontributionguide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
 &lt;/h1>&lt;p>이 문서는 Kotlin 언어에 새로운 기능을 직접 제안하고, 설계하고, 컴파일러 코드까지 기여하는 전체 과정을 다룹니다. 단순한 이슈 제기를 넘어서 실제 &lt;strong>KEEP 문서 작성부터 parser 수정, IR 처리, 테스트 작성, PR 제출까지&lt;/strong> 모든 단계를 실습 중심으로 안내합니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="kotlin-컴파일-과정-요약-psi--fir--ir--bytecode">Kotlin 컴파일 과정 요약: PSI → FIR → IR → Bytecode
