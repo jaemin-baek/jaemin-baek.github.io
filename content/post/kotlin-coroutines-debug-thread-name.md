@@ -1,5 +1,5 @@
 ---
-title: "Kotlin 코루틴 디버깅 스레드 이름 표시 설정 (with @coroutine#)"
+title: "[v.1.0] Kotlin 코루틴 디버깅 스레드 이름 표시 설정 (with @coroutine#)"
 date: 2025-03-13
 draft: false
 categories: ["Kotlin"]
@@ -8,7 +8,7 @@ tags: ["Coroutines", "Debugging", "IntelliJ", "JVM Options"]
 
 # Kotlin 코루틴 디버깅 스레드 이름 표시 설정 (with @coroutine#)
 
-Kotlin의 코루틴에서 `Thread.currentThread().name`을 출력했을 때, 강의에서는 `main @coroutine#1` 같은 형식이 나오는데 내 코드에선 그냥 `main`만 나오는 이유는 **JVM 디버깅 옵션 설정 여부** 때문입니다.
+일반적으로 Kotlin 코루틴에서 `Thread.currentThread().name`을 출력했을 때, `main @coroutine#1` 같은 형식이 나오는데 그냥 `main`만 나오는 이유는 **JVM 디버깅 옵션 설정 여부** 때문입니다.
 
 ---
 
@@ -26,13 +26,11 @@ fun main() = runBlocking {
 main
 ```
 
-하지만 강의에서는:
+원래는 @coroutine 수식어가 붙어야 함
 
 ```
 main @coroutine#1
 ```
-
-이렇게 출력됨.
 
 ---
 
