@@ -101,8 +101,8 @@
 &lt;td>IntelliJ에서 테스트, 디버깅&lt;/td>
 &lt;/tr>
 &lt;/tbody>
-&lt;/table></description></item><item><title>Kotlin 코루틴 디버깅 스레드 이름 표시 설정 (with @coroutine#)</title><link>https://jaemin-baek.github.io/post/kotlin-coroutines-debug-thread-name/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlin-coroutines-debug-thread-name/</guid><description>&lt;h1 id="kotlin-코루틴-디버깅-스레드-이름-표시-설정-with-coroutine">Kotlin 코루틴 디버깅 스레드 이름 표시 설정 (with @coroutine#)
-&lt;/h1>&lt;p>Kotlin의 코루틴에서 &lt;code>Thread.currentThread().name&lt;/code>을 출력했을 때, 강의에서는 &lt;code>main @coroutine#1&lt;/code> 같은 형식이 나오는데 내 코드에선 그냥 &lt;code>main&lt;/code>만 나오는 이유는 &lt;strong>JVM 디버깅 옵션 설정 여부&lt;/strong> 때문입니다.&lt;/p>
+&lt;/table></description></item><item><title>[v.1.0] Kotlin 코루틴 디버깅 스레드 이름 표시 설정 (with @coroutine#)</title><link>https://jaemin-baek.github.io/post/kotlin-coroutines-debug-thread-name/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlin-coroutines-debug-thread-name/</guid><description>&lt;h1 id="kotlin-코루틴-디버깅-스레드-이름-표시-설정-with-coroutine">Kotlin 코루틴 디버깅 스레드 이름 표시 설정 (with @coroutine#)
+&lt;/h1>&lt;p>일반적으로 Kotlin 코루틴에서 &lt;code>Thread.currentThread().name&lt;/code>을 출력했을 때, &lt;code>main @coroutine#1&lt;/code> 같은 형식이 나오는데 그냥 &lt;code>main&lt;/code>만 나오는 이유는 &lt;strong>JVM 디버깅 옵션 설정 여부&lt;/strong> 때문입니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="문제-상황">문제 상황
 &lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() = runBlocking {
@@ -110,10 +110,9 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>출력 결과:&lt;/p>
 &lt;pre tabindex="0">&lt;code>main
-&lt;/code>&lt;/pre>&lt;p>하지만 강의에서는:&lt;/p>
+&lt;/code>&lt;/pre>&lt;p>원래는 @coroutine 수식어가 붙어야 함&lt;/p>
 &lt;pre tabindex="0">&lt;code>main @coroutine#1
-&lt;/code>&lt;/pre>&lt;p>이렇게 출력됨.&lt;/p>
-&lt;hr>
+&lt;/code>&lt;/pre>&lt;hr>
 &lt;h2 id="원인">원인
 &lt;/h2>&lt;p>Kotlinx Coroutines는 디버깅 용도로 &lt;strong>스레드 이름에 &lt;code>@coroutine#N&lt;/code> 수식어&lt;/strong>를 붙일 수 있습니다.&lt;br>
 이 기능은 기본적으로 비활성화되어 있으며, JVM 옵션을 통해 활성화할 수 있습니다.&lt;/p>
