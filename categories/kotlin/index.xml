@@ -1,107 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 23 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>[v.0.0] Kotlinx.coroutines 커스텀 수정 후 IntelliJ에서 테스트하는 전체 과정</title><link>https://jaemin-baek.github.io/post/kotlinx-coroutines-local-build-guide/</link><pubDate>Fri, 23 May 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinx-coroutines-local-build-guide/</guid><description>&lt;h1 id="kotlinxcoroutines-커스텀-수정-후-intellij에서-테스트하는-전체-과정">Kotlinx.coroutines 커스텀 수정 후 IntelliJ에서 테스트하는 전체 과정
-&lt;/h1>&lt;p>Kotlin의 코루틴 라이브러리인 &lt;code>kotlinx.coroutines&lt;/code>의 소스코드를 직접 수정하고, 이를 빌드해서 내가 사용하는 프로젝트에 적용해보는 과정을 정리합니다.&lt;/p>
-&lt;hr>
-&lt;h2 id="목표">목표
-&lt;/h2>&lt;p>수정한 &lt;code>kotlinx.coroutines&lt;/code>를 로컬 빌드한 뒤, 내 IntelliJ 프로젝트에서 직접 불러와 테스트하는 것.&lt;/p>
-&lt;hr>
-&lt;h2 id="1-github-저장소-클론-및-코드-수정">1. GitHub 저장소 클론 및 코드 수정
-&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git clone https://github.com/Kotlin/kotlinx.coroutines.git
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cd kotlinx.coroutines
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>예: &lt;code>Delay.kt&lt;/code>, &lt;code>CancellableContinuation.kt&lt;/code> 등 내부 로직 수정&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;h2 id="2-gradle-빌드-수행">2. Gradle 빌드 수행
-&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>./gradlew :kotlinx-coroutines-core:build
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>빌드 결과물 위치:&lt;/p>
-&lt;pre tabindex="0">&lt;code>build/libs/kotlinx-coroutines-core-1.7.3.jar
-&lt;/code>&lt;/pre>&lt;hr>
-&lt;h2 id="3-intellij-프로젝트에서-사용하는-방법">3. IntelliJ 프로젝트에서 사용하는 방법
-&lt;/h2>&lt;h3 id="방법-1-libs-폴더에-직접-넣기">방법 1: libs 폴더에 직접 넣기
-&lt;/h3>&lt;ol>
-&lt;li>앱 프로젝트에 &lt;code>libs/&lt;/code> 폴더 생성&lt;/li>
-&lt;li>빌드된 JAR 복사:&lt;/li>
-&lt;/ol>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>cp build/libs/kotlinx-coroutines-core-1.7.3.jar &amp;lt;your_project&amp;gt;/libs/
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="3">
-&lt;li>&lt;code>build.gradle.kts&lt;/code> 혹은 &lt;code>build.gradle&lt;/code>에 추가:&lt;/li>
-&lt;/ol>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>dependencies {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation(files(&lt;span style="color:#e6db74">&amp;#34;libs/kotlinx-coroutines-core-1.7.3.jar&amp;#34;&lt;/span>))
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="4">
-&lt;li>Gradle sync 및 리빌드&lt;/li>
-&lt;/ol>
-&lt;hr>
-&lt;h3 id="방법-2-maven-local로-배포">방법 2: Maven Local로 배포
-&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>./gradlew publishToMavenLocal
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>그 후 앱 프로젝트에서 설정:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>repositories {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> mavenLocal()
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>dependencies {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation(&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>Maven Local 경로: &lt;code>~/.m2/repository/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.7.3/&lt;/code>&lt;/p>&lt;/blockquote>
-&lt;hr>
-&lt;h2 id="4-intellij에서-테스트">4. IntelliJ에서 테스트
-&lt;/h2>&lt;ul>
-&lt;li>디버깅, 로그, 단위 테스트 등을 통해 수정된 코드가 잘 반영되었는지 확인&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;h2 id="5-참고-팁">5. 참고 팁
-&lt;/h2>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>항목&lt;/th>
-&lt;th>설명&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>캐시 문제&lt;/td>
-&lt;td>&lt;code>./gradlew clean&lt;/code> 후 재시도&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>충돌 검사&lt;/td>
-&lt;td>&lt;code>./gradlew dependencies --configuration runtimeClasspath&lt;/code> 로 확인&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>클래스 확인&lt;/td>
-&lt;td>IntelliJ에서 &lt;code>.class&lt;/code> 디컴파일 확인 가능&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;hr>
-&lt;h2 id="정리">정리
-&lt;/h2>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>단계&lt;/th>
-&lt;th>설명&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>수정&lt;/td>
-&lt;td>GitHub 클론 후 코드 변경&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>빌드&lt;/td>
-&lt;td>Gradle로 로컬 빌드 or Maven local 배포&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>연결&lt;/td>
-&lt;td>JAR 직접 추가 or Maven Local 참조&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>실행&lt;/td>
-&lt;td>IntelliJ에서 테스트, 디버깅&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table></description></item><item><title>[v.0.0] Kotlin Multiplatform의 expect/actual 정리</title><link>https://jaemin-baek.github.io/post/kotlinactualexpect/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinactualexpect/</guid><description>&lt;h1 id="kotlin-multiplatform의-expectactual-정리">Kotlin Multiplatform의 expect/actual 정리
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kotlin on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/categories/kotlin/</link><description>Recent content in Kotlin on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 13 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/categories/kotlin/index.xml" rel="self" type="application/rss+xml"/><item><title>[v.0.0] Kotlin Multiplatform의 expect/actual 정리</title><link>https://jaemin-baek.github.io/post/kotlinactualexpect/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinactualexpect/</guid><description>&lt;h1 id="kotlin-multiplatform의-expectactual-정리">Kotlin Multiplatform의 expect/actual 정리
 &lt;/h1>&lt;p>Kotlin Multiplatform(KMP)을 이해하기 위해 반드시 알아야 할 키워드가 바로 &lt;code>expect&lt;/code>와 &lt;code>actual&lt;/code>입니다. 이 키워드는 플랫폼마다 다른 구현을 제공하면서도, 공통 인터페이스를 유지하는 &lt;strong>다형성 선언 방식&lt;/strong>을 가능하게 합니다.&lt;/p>
 &lt;p>이 글에서는 &lt;code>expect&lt;/code>/&lt;code>actual&lt;/code> 키워드의 개념부터 컴파일 타임 처리 방식, IDE에서 보이지 않는 이유까지 자세히 설명합니다.&lt;/p>
 &lt;hr>
@@ -225,7 +122,110 @@
 >https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
 &lt;li>Expect/Actual 예제: &lt;a class="link" href="https://kotlinlang.org/docs/mpp-connect-to-apis.html" target="_blank" rel="noopener"
 >https://kotlinlang.org/docs/mpp-connect-to-apis.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>[v.0.0] Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlincontributionguide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlincontributionguide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
+&lt;/ul></description></item><item><title>[v.0.0] Kotlinx.coroutines 커스텀 수정 후 IntelliJ에서 테스트하는 전체 과정</title><link>https://jaemin-baek.github.io/post/kotlinx-coroutines-local-build-guide/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinx-coroutines-local-build-guide/</guid><description>&lt;h1 id="kotlinxcoroutines-커스텀-수정-후-intellij에서-테스트하는-전체-과정">Kotlinx.coroutines 커스텀 수정 후 IntelliJ에서 테스트하는 전체 과정
+&lt;/h1>&lt;p>Kotlin의 코루틴 라이브러리인 &lt;code>kotlinx.coroutines&lt;/code>의 소스코드를 직접 수정하고, 이를 빌드해서 내가 사용하는 프로젝트에 적용해보는 과정을 정리합니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="목표">목표
+&lt;/h2>&lt;p>수정한 &lt;code>kotlinx.coroutines&lt;/code>를 로컬 빌드한 뒤, 내 IntelliJ 프로젝트에서 직접 불러와 테스트하는 것.&lt;/p>
+&lt;hr>
+&lt;h2 id="1-github-저장소-클론-및-코드-수정">1. GitHub 저장소 클론 및 코드 수정
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git clone https://github.com/Kotlin/kotlinx.coroutines.git
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cd kotlinx.coroutines
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>예: &lt;code>Delay.kt&lt;/code>, &lt;code>CancellableContinuation.kt&lt;/code> 등 내부 로직 수정&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="2-gradle-빌드-수행">2. Gradle 빌드 수행
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>./gradlew :kotlinx-coroutines-core:build
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>빌드 결과물 위치:&lt;/p>
+&lt;pre tabindex="0">&lt;code>build/libs/kotlinx-coroutines-core-1.7.3.jar
+&lt;/code>&lt;/pre>&lt;hr>
+&lt;h2 id="3-intellij-프로젝트에서-사용하는-방법">3. IntelliJ 프로젝트에서 사용하는 방법
+&lt;/h2>&lt;h3 id="방법-1-libs-폴더에-직접-넣기">방법 1: libs 폴더에 직접 넣기
+&lt;/h3>&lt;ol>
+&lt;li>앱 프로젝트에 &lt;code>libs/&lt;/code> 폴더 생성&lt;/li>
+&lt;li>빌드된 JAR 복사:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>cp build/libs/kotlinx-coroutines-core-1.7.3.jar &amp;lt;your_project&amp;gt;/libs/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="3">
+&lt;li>&lt;code>build.gradle.kts&lt;/code> 혹은 &lt;code>build.gradle&lt;/code>에 추가:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>dependencies {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation(files(&lt;span style="color:#e6db74">&amp;#34;libs/kotlinx-coroutines-core-1.7.3.jar&amp;#34;&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="4">
+&lt;li>Gradle sync 및 리빌드&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h3 id="방법-2-maven-local로-배포">방법 2: Maven Local로 배포
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>./gradlew publishToMavenLocal
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>그 후 앱 프로젝트에서 설정:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>repositories {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> mavenLocal()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>dependencies {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> implementation(&lt;span style="color:#e6db74">&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Maven Local 경로: &lt;code>~/.m2/repository/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.7.3/&lt;/code>&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="4-intellij에서-테스트">4. IntelliJ에서 테스트
+&lt;/h2>&lt;ul>
+&lt;li>디버깅, 로그, 단위 테스트 등을 통해 수정된 코드가 잘 반영되었는지 확인&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="5-참고-팁">5. 참고 팁
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>항목&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>캐시 문제&lt;/td>
+&lt;td>&lt;code>./gradlew clean&lt;/code> 후 재시도&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>충돌 검사&lt;/td>
+&lt;td>&lt;code>./gradlew dependencies --configuration runtimeClasspath&lt;/code> 로 확인&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>클래스 확인&lt;/td>
+&lt;td>IntelliJ에서 &lt;code>.class&lt;/code> 디컴파일 확인 가능&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="정리">정리
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>단계&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>수정&lt;/td>
+&lt;td>GitHub 클론 후 코드 변경&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>빌드&lt;/td>
+&lt;td>Gradle로 로컬 빌드 or Maven local 배포&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>연결&lt;/td>
+&lt;td>JAR 직접 추가 or Maven Local 참조&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>실행&lt;/td>
+&lt;td>IntelliJ에서 테스트, 디버깅&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item><item><title>[v.0.0] Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlincontributionguide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlincontributionguide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
 &lt;/h1>&lt;p>이 문서는 Kotlin 언어에 새로운 기능을 직접 제안하고, 설계하고, 컴파일러 코드까지 기여하는 전체 과정을 다룹니다. 단순한 이슈 제기를 넘어서 실제 &lt;strong>KEEP 문서 작성부터 parser 수정, IR 처리, 테스트 작성, PR 제출까지&lt;/strong> 모든 단계를 실습 중심으로 안내합니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="kotlin-컴파일-과정-요약-psi--fir--ir--bytecode">Kotlin 컴파일 과정 요약: PSI → FIR → IR → Bytecode
