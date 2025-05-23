@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Job on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/job/</link><description>Recent content in Job on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 08 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/job/index.xml" rel="self" type="application/rss+xml"/><item><title>GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Job on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/job/</link><description>Recent content in Job on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 08 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/job/index.xml" rel="self" type="application/rss+xml"/><item><title>[v.0.0] GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안</title><link>https://jaemin-baek.github.io/post/coroutineglobalscope/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutineglobalscope/</guid><description>&lt;h2 id="globalscope는-왜-위험한가">GlobalScope는 왜 위험한가?
 &lt;/h2>&lt;p>구조적 동시성 관점에서의 설명과 대안&lt;/p>
 &lt;p>Kotlin에서는 &lt;code>GlobalScope.launch&lt;/code>를 통해 간단하게 코루틴을 실행할 수 있다.&lt;br>
 하지만 아무 생각 없이 GlobalScope를 사용하는 것은 &lt;strong>구조적 동시성 원칙을 깨뜨리고&lt;/strong>,&lt;br>
@@ -113,7 +113,7 @@
 &lt;blockquote>
 &lt;p>구조적 동시성을 지키기 위해서는&lt;br>
 &lt;strong>코루틴의 생명주기를 관리할 수 있는 스코프&lt;/strong>를 명확히 설계하고,&lt;br>
-필요할 경우 &lt;code>Job&lt;/code>을 반환하거나, &lt;code>coroutineScope&lt;/code> 내에서 suspend 함수를 사용하는 것이 권장된다.&lt;/p>&lt;/blockquote></description></item><item><title>구조적 동시성이란 무엇인가? 코루틴의 안정성과 예측 가능성을 위한 원칙</title><link>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</guid><description>&lt;h2 id="구조적-동시성이란-무엇인가">구조적 동시성이란 무엇인가?
+필요할 경우 &lt;code>Job&lt;/code>을 반환하거나, &lt;code>coroutineScope&lt;/code> 내에서 suspend 함수를 사용하는 것이 권장된다.&lt;/p>&lt;/blockquote></description></item><item><title>[v.0.0] 구조적 동시성이란 무엇인가? 코루틴의 안정성과 예측 가능성을 위한 원칙</title><link>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</link><pubDate>Sat, 08 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinestructuredconcurrency/</guid><description>&lt;h2 id="구조적-동시성이란-무엇인가">구조적 동시성이란 무엇인가?
 &lt;/h2>&lt;p>코루틴의 안정성과 예측 가능성을 위한 원칙&lt;/p>
 &lt;p>Kotlin의 코루틴 철학에서 가장 핵심적인 개념 중 하나가 바로 **구조적 동시성(Structured Concurrency)**이다.&lt;br>
 이 개념은 코루틴이 언제 시작되고 언제 종료되는지를 &lt;strong>코드의 구조(스코프)에 따라 명확하게 보장&lt;/strong>하도록 만든다.&lt;/p>
@@ -223,7 +223,7 @@
 &lt;/h3>&lt;blockquote>
 &lt;p>구조적 동시성은 &lt;strong>코루틴이 언제 시작되고 언제 종료되는지를 명확하게 통제&lt;/strong>할 수 있도록 한다.&lt;br>
 이를 통해 개발자는 &lt;strong>예측 가능한 흐름, 자동 정리, 안정적인 에러 전파&lt;/strong>를 기반으로&lt;br>
-복잡한 비동기 프로그램을 안전하게 설계할 수 있다.&lt;/p>&lt;/blockquote></description></item><item><title>CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해</title><link>https://jaemin-baek.github.io/post/coroutinecontext/</link><pubDate>Tue, 04 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontext/</guid><description>&lt;h2 id="coroutinecontext란-무엇인가-코루틴-실행-환경의-핵심-이해">CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해
+복잡한 비동기 프로그램을 안전하게 설계할 수 있다.&lt;/p>&lt;/blockquote></description></item><item><title>[v.0.0] CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해</title><link>https://jaemin-baek.github.io/post/coroutinecontext/</link><pubDate>Tue, 04 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontext/</guid><description>&lt;h2 id="coroutinecontext란-무엇인가-코루틴-실행-환경의-핵심-이해">CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해
 &lt;/h2>&lt;p>Kotlin 코루틴을 사용하다 보면 반드시 등장하는 개념이 있다. 바로 &lt;code>CoroutineContext&lt;/code>.&lt;br>
 이 객체는 코루틴의 실행에 필요한 모든 정보를 담고 있는 &lt;strong>컨텍스트 컨테이너&lt;/strong>이며,&lt;br>
 코루틴의 동작 방식, 위치, 생명주기, 예외 처리 방식 등을 결정하는 &lt;strong>핵심 구성 요소&lt;/strong>이다.&lt;/p>
@@ -325,7 +325,7 @@
 Dispatcher, Job, Name, ExceptionHandler 등 다양한 정보가 담겨 있으며,
 CoroutineScope, withContext, launch, async 등 코루틴 관련 도구들은 모두 이 Context를 바탕으로 동작한다.&lt;/p>
 &lt;p>코루틴을 잘 다루려면 단순한 launch나 async뿐 아니라,
-이들을 감싸고 있는 CoroutineContext의 구조와 흐름을 정확히 이해하는 것이 중요하다.&lt;/p></description></item><item><title>CoroutineScope.cancel()과 Job.cancel()은 같은가?</title><link>https://jaemin-baek.github.io/post/coroutinejobcancel/</link><pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinejobcancel/</guid><description>&lt;h2 id="coroutinescopecancel과-jobcancel은-같은가">CoroutineScope.cancel()과 Job.cancel()은 같은가?
+이들을 감싸고 있는 CoroutineContext의 구조와 흐름을 정확히 이해하는 것이 중요하다.&lt;/p></description></item><item><title>[v.0.0] CoroutineScope.cancel()과 Job.cancel()은 같은가?</title><link>https://jaemin-baek.github.io/post/coroutinejobcancel/</link><pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinejobcancel/</guid><description>&lt;h2 id="coroutinescopecancel과-jobcancel은-같은가">CoroutineScope.cancel()과 Job.cancel()은 같은가?
 &lt;/h2>&lt;p>Kotlin 코루틴을 사용하다 보면 &lt;code>CoroutineScope.cancel()&lt;/code>과 &lt;code>Job.cancel()&lt;/code>을 모두 보게 된다. 이 둘은 이름은 비슷하지만, 실제로 동일한 기능일까? 둘의 차이는 어디에 있을까? 본 포스트에서는 이 질문을 중심으로, Kotlin 표준과 &lt;code>kotlinx.coroutines&lt;/code>의 차이를 기반으로 정확한 동작 방식을 설명한다.&lt;/p>
 &lt;hr>
 &lt;h3 id="1-job이란">1. Job이란?
@@ -370,7 +370,7 @@ CoroutineScope, withContext, launch, async 등 코루틴 관련 도구들은 모
 &lt;h3 id="6-결론">6. 결론
 &lt;/h3>&lt;p>CoroutineScope.cancel()은 Kotlin 표준의 기능이 아니라,
 kotlinx.coroutines에서 제공하는 확장 함수이다.
-내부적으로는 Job.cancel()을 위임 호출하며, 같은 대상이라면 동작 결과는 동일하다.&lt;/p></description></item><item><title>Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조</title><link>https://jaemin-baek.github.io/post/supervisorjob/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/supervisorjob/</guid><description>&lt;h2 id="kotlin-coroutine에서-supervisorjob의-역할과-scopejob-구조">Kotlin Coroutine에서 SupervisorJob의 역할과 &lt;code>scopeJob&lt;/code> 구조
+내부적으로는 Job.cancel()을 위임 호출하며, 같은 대상이라면 동작 결과는 동일하다.&lt;/p></description></item><item><title>[v.0.0] Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조</title><link>https://jaemin-baek.github.io/post/supervisorjob/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/supervisorjob/</guid><description>&lt;h2 id="kotlin-coroutine에서-supervisorjob의-역할과-scopejob-구조">Kotlin Coroutine에서 SupervisorJob의 역할과 &lt;code>scopeJob&lt;/code> 구조
 &lt;/h2>&lt;p>Kotlin 코루틴에서는 비동기 작업의 생명주기와 예외 처리를 체계적으로 관리하기 위해 &lt;code>Job&lt;/code> 기반의 구조적 동시성을 제공한다. 본 문서에서는 그 중 &lt;code>SupervisorJob&lt;/code>을 중심으로 하는 &lt;code>scopeJob&lt;/code>의 역할과 필요성, 그리고 일반 &lt;code>Job&lt;/code>과의 차이에 대해 고찰한다.&lt;/p>
 &lt;hr>
 &lt;h3 id="1-개요">1. 개요
