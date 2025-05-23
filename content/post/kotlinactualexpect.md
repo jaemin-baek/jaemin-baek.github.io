@@ -62,7 +62,7 @@ Gradle에서 다운받은 JAR 파일(`kotlinx-coroutines-core-jvm-1.7.3.jar`)은
 - JVM에는 `actual` 구현만 컴파일되고 포함됨
 - 따라서 `.jar` 안에서는 `expect` 선언을 확인할 수 없습니다
 
-🔎 대신 `expect`를 확인하려면:
+대신 `expect`를 확인하려면:
 
 - GitHub 저장소: https://github.com/Kotlin/kotlinx.coroutines
 - 경로 예: `kotlinx-coroutines-core/commonMain/kotlin/kotlinx/coroutines/Builders.kt`
@@ -103,11 +103,8 @@ Gradle에서 다운받은 JAR 파일(`kotlinx-coroutines-core-jvm-1.7.3.jar`)은
 
 ---
 
-## 🔗 참고 링크
+## 참고 링크
 
 - Kotlin 공식 문서: https://kotlinlang.org/docs/multiplatform.html
 - GitHub: https://github.com/Kotlin/kotlinx.coroutines
 - Expect/Actual 예제: https://kotlinlang.org/docs/mpp-connect-to-apis.html
-
-이제부터 `.jar`에서 `expect`가 안 보이는 이유를 분명하게 이해하셨을 겁니다.  
-Kotlin MPP를 활용한 크로스 플랫폼 개발에서 가장 핵심적인 문법이니 반드시 익혀두세요!
