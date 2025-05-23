@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Multiplatform의 expect/actual 완전 정리"
+title: "Kotlin Multiplatform의 expect/actual 정리"
 date: 2025-03-13
 draft: false
 categories: ["Kotlin"]
@@ -7,7 +7,7 @@ tags: ["Multiplatform", "expect", "actual", "Kotlin"]
 ---
 
 
-# Kotlin Multiplatform의 expect/actual 완전 정리
+# Kotlin Multiplatform의 expect/actual 정리
 
 Kotlin Multiplatform(KMP)을 이해하기 위해 반드시 알아야 할 키워드가 바로 `expect`와 `actual`입니다. 이 키워드는 플랫폼마다 다른 구현을 제공하면서도, 공통 인터페이스를 유지하는 **다형성 선언 방식**을 가능하게 합니다.
 
