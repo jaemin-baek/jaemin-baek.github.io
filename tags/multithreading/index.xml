@@ -137,7 +137,7 @@ getUser(), getProfile(), getPosts()가 느린 작업이면?&lt;/p>
 &lt;p>다른 일을 못 하게되므로 비효율적, 앱 멈춘 것처럼 보임&lt;/p>
 &lt;h3 id="다시-말해-한-줄-요약하면">다시 말해 한 줄 요약하면..!
 &lt;/h3>&lt;blockquote>
-&lt;p>&amp;ldquo;비동기 코드를 동기 코드처럼 쓴다&amp;rdquo; = 비동기의 복잡함을 숨기고, 자연스러운 코드 흐름을 만든다.&lt;/p>&lt;/blockquote></description></item><item><title>Kotlin 코루틴의 멀티스레드 동작 방식</title><link>https://jaemin-baek.github.io/post/coroutine/</link><pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine/</guid><description>&lt;h2 id="kotlin-coroutine의-멀티스레드-동작-방식">Kotlin Coroutine의 멀티스레드 동작 방식
+&lt;p>&amp;ldquo;비동기 코드를 동기 코드처럼 쓴다&amp;rdquo; = 비동기의 복잡함을 숨기고, 자연스러운 코드 흐름을 만든다.&lt;/p>&lt;/blockquote></description></item><item><title>[v.0.0] Kotlin 코루틴의 멀티스레드 동작 방식</title><link>https://jaemin-baek.github.io/post/coroutine/</link><pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine/</guid><description>&lt;h2 id="kotlin-coroutine의-멀티스레드-동작-방식">Kotlin Coroutine의 멀티스레드 동작 방식
 &lt;/h2>&lt;h3 id="1-개요">1. 개요
 &lt;/h3>&lt;p>Kotlin의 코루틴은 경량 스레드(Lightweight Thread) 개념에 기반하여 비동기 작업을 처리하는 구조로 설계되었다. 본 문서에서는 코루틴이 멀티스레드 환경에서 어떤 방식으로 실행되고 스케줄링되는지를 기술하고, 관련 디스패처(&lt;code>CoroutineDispatcher&lt;/code>)의 역할과 실행 흐름에 대해 서술한다.&lt;/p>
 &lt;hr>

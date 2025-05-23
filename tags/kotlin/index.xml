@@ -2181,7 +2181,7 @@ Kotlin 코루틴의 구조적 동시성 모델에서 핵심적인 개념 중 하
 &lt;hr>
 &lt;h3 id="7-결론">7. 결론
 &lt;/h3>&lt;p>코루틴의 실행 컨텍스트 선택은 코드의 동시성 구조와 예외 처리 전략에 직접적인 영향을 미친다. runBlocking은 동기-비동기 경계를 연결하는 데 유용하며, coroutineScope는 구조적 동시성을 제공하고, supervisorScope는 자식 코루틴의 독립 실행을 보장한다. 각 스코프의 특성을 이해하고 상황에 맞게 사용하는 것이 안전하고 예측 가능한 비동기 프로그래밍을 구현하는 데 핵심이 된다.&lt;/p>
-&lt;hr></description></item><item><title>Kotlin 코루틴의 멀티스레드 동작 방식</title><link>https://jaemin-baek.github.io/post/coroutine/</link><pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine/</guid><description>&lt;h2 id="kotlin-coroutine의-멀티스레드-동작-방식">Kotlin Coroutine의 멀티스레드 동작 방식
+&lt;hr></description></item><item><title>[v.0.0] Kotlin 코루틴의 멀티스레드 동작 방식</title><link>https://jaemin-baek.github.io/post/coroutine/</link><pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine/</guid><description>&lt;h2 id="kotlin-coroutine의-멀티스레드-동작-방식">Kotlin Coroutine의 멀티스레드 동작 방식
 &lt;/h2>&lt;h3 id="1-개요">1. 개요
 &lt;/h3>&lt;p>Kotlin의 코루틴은 경량 스레드(Lightweight Thread) 개념에 기반하여 비동기 작업을 처리하는 구조로 설계되었다. 본 문서에서는 코루틴이 멀티스레드 환경에서 어떤 방식으로 실행되고 스케줄링되는지를 기술하고, 관련 디스패처(&lt;code>CoroutineDispatcher&lt;/code>)의 역할과 실행 흐름에 대해 서술한다.&lt;/p>
 &lt;hr>

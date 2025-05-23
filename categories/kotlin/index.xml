@@ -122,151 +122,7 @@
 >https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
 &lt;li>Expect/Actual 예제: &lt;a class="link" href="https://kotlinlang.org/docs/mpp-connect-to-apis.html" target="_blank" rel="noopener"
 >https://kotlinlang.org/docs/mpp-connect-to-apis.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>[v.0.0] Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)</title><link>https://jaemin-baek.github.io/post/coroutinecontinuation/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontinuation/</guid><description>&lt;h1 id="kotlin-코루틴-내부-구조-상태-머신--continuation--cps">Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)
-&lt;/h1>&lt;p>Kotlin의 &lt;code>suspend&lt;/code> 키워드를 사용하는 코루틴은 단순한 비동기 기능이 아닙니다. 내부적으로는 &lt;strong>상태 머신(state machine)&lt;/strong> 과 &lt;strong>Continuation-passing style (CPS)&lt;/strong> 기반의 구조로 동작하며, 이러한 설계를 통해 코루틴은 &lt;strong>비동기 코드를 동기처럼 자연스럽게 표현&lt;/strong>할 수 있습니다.&lt;/p>
-&lt;hr>
-&lt;h2 id="기본-개념-suspend-함수란">기본 개념: &lt;code>suspend&lt;/code> 함수란?
-&lt;/h2>&lt;p>&lt;code>suspend&lt;/code> 함수는 &lt;strong>중단(suspend)&lt;/strong> 및 &lt;strong>재개(resume)&lt;/strong> 가 가능한 함수입니다. 컴파일러는 이를 위해 &lt;code>Continuation&lt;/code> 객체를 생성하고 상태 추적 코드를 자동 생성합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">greet&lt;/span>(): String {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;World&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#e6db74">&amp;#34;Done&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>위 코드는 컴파일러에 의해 상태 머신으로 변환됩니다.&lt;/p>
-&lt;hr>
-&lt;h2 id="상태-머신-구조-컴파일-결과-개념도">상태 머신 구조 (컴파일 결과 개념도)
-&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">GreetContinuation&lt;/span>(&lt;span style="color:#66d9ef">val&lt;/span> completion: Continuation&amp;lt;String&amp;gt;) : Continuation&amp;lt;Any?&amp;gt; {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> label = &lt;span style="color:#ae81ff">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">lateinit&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> result: String
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">val&lt;/span> context = EmptyCoroutineContext
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">resumeWith&lt;/span>(&lt;span style="color:#66d9ef">data&lt;/span>: Result&amp;lt;Any?&amp;gt;) {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span> {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">when&lt;/span> (label) {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">0&lt;/span> &lt;span style="color:#f92672">-&amp;gt;&lt;/span> {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> label = &lt;span style="color:#ae81ff">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>) &lt;span style="color:#75715e">// suspend 후 현재 상태 저장
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">return&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">1&lt;/span> &lt;span style="color:#f92672">-&amp;gt;&lt;/span> {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;World&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> result = &lt;span style="color:#e6db74">&amp;#34;Done&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> completion.resumeWith(&lt;span style="color:#a6e22e">Result&lt;/span>.success(result))
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#66d9ef">catch&lt;/span> (e: Throwable) {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> completion.resumeWith(&lt;span style="color:#a6e22e">Result&lt;/span>.failure(e))
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>→ &lt;code>label&lt;/code> 값으로 상태를 저장하며, 중단 이후 적절한 지점에서 재개됩니다.&lt;/p>
-&lt;hr>
-&lt;h2 id="cps-continuation-passing-style">CPS (Continuation-Passing Style)
-&lt;/h2>&lt;p>Kotlin 코루틴은 내부적으로 **CPS 변환(CPS Transformation)**을 통해 구현됩니다. 이는 모든 &lt;code>suspend&lt;/code> 함수가 &lt;strong>다음 실행 내용을 Continuation(콜백)&lt;/strong> 으로 넘기는 방식으로 동작한다는 뜻입니다.&lt;/p>
-&lt;p>예시:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>() {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;A&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;B&amp;#34;&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>→ 컴파일러는 이 코드를 &lt;code>hello(continuation)&lt;/code> 형태로 변환하며, delay 이후 재개 위치를 기억해 두었다가 &lt;code>resumeWith&lt;/code>로 다시 이어서 실행합니다.&lt;/p>
-&lt;hr>
-&lt;h2 id="delay-함수의-내부">delay 함수의 내부
-&lt;/h2>&lt;p>Kotlin의 &lt;code>delay()&lt;/code> 함수는 다음과 같이 작동합니다 (JVM 기준):&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">delay&lt;/span>(timeMillis: Long) = suspendCancellableCoroutine&amp;lt;Unit&amp;gt; { cont &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> scheduled = executor.schedule({
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cont.resume(Unit)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }, timeMillis, &lt;span style="color:#a6e22e">TimeUnit&lt;/span>.MILLISECONDS)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cont.invokeOnCancellation {
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scheduled.cancel(&lt;span style="color:#66d9ef">false&lt;/span>)
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>&lt;code>executor&lt;/code>: 내부적으로는 자바의 &lt;code>ScheduledExecutorService&lt;/code> 사용&lt;/li>
-&lt;li>&lt;code>suspendCancellableCoroutine&lt;/code>: 코루틴 중단 가능 지점 생성&lt;/li>
-&lt;li>&lt;code>resume()&lt;/code>: 일정 시간 후 코루틴 재개&lt;/li>
-&lt;/ul>
-&lt;p>→ 스레드를 블로킹하지 않고 코루틴만 중단시킴&lt;/p>
-&lt;hr>
-&lt;h2 id="dispatchers와-스레드">Dispatchers와 스레드
-&lt;/h2>&lt;p>Kotlin 코루틴은 직접 스레드를 만들지 않습니다. 대신, 다음과 같은 &lt;strong>Dispatcher&lt;/strong>를 통해 JVM의 스레드 풀을 재사용합니다:&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>Dispatcher&lt;/th>
-&lt;th>설명&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>Default&lt;/td>
-&lt;td>CPU 연산용 스레드풀 (ForkJoinPool 기반)&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>IO&lt;/td>
-&lt;td>IO용 무제한 스레드풀&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Main&lt;/td>
-&lt;td>Android 메인 스레드 등 UI 전용&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Unconfined&lt;/td>
-&lt;td>처음 호출된 스레드에서 실행&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>→ 결국 코루틴은 &lt;strong>JVM 스레드에서 실행되지만&lt;/strong>, 코루틴 자체는 스레드가 아닙니다.&lt;/p>
-&lt;hr>
-&lt;h2 id="참고-자료">참고 자료
-&lt;/h2>&lt;ul>
-&lt;li>Kotlin 공식 문서: &lt;a class="link" href="https://kotlinlang.org/docs/coroutines-overview.html" target="_blank" rel="noopener"
->https://kotlinlang.org/docs/coroutines-overview.html&lt;/a>&lt;/li>
-&lt;li>KotlinConf 2019 Roman Elizarov (설계자) 발표: &lt;a class="link" href="https://www.youtube.com/watch?v=_hfBv0a09Jc" target="_blank" rel="noopener"
->KotlinConf 2019: Coroutines Under the Hood&lt;/a>&lt;/li>
-&lt;li>KotlinConf 2017 Roman Elizarov (설계자) 발표: &lt;a class="link" href="https://youtu.be/YrrUCSi72E8?si=EoNjXdNJ2wvMJIpG" target="_blank" rel="noopener"
->https://youtu.be/YrrUCSi72E8?si=EoNjXdNJ2wvMJIpG&lt;/a>&lt;/li>
-&lt;li>Kotlin GitHub: &lt;a class="link" href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank" rel="noopener"
->https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
-&lt;li>kotlinx.coroutines 구현 내부 코드: &lt;code>suspendCancellableCoroutine.kt&lt;/code>, &lt;code>Delay.kt&lt;/code>&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;h2 id="마무리-요약">마무리 요약
-&lt;/h2>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>핵심 요소&lt;/th>
-&lt;th>설명&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>&lt;code>suspend&lt;/code>&lt;/td>
-&lt;td>상태 머신으로 변환됨 (코드 쪼개짐)&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;code>Continuation&lt;/code>&lt;/td>
-&lt;td>재개 지점 추적 객체&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;code>delay()&lt;/code>&lt;/td>
-&lt;td>실제로는 스케줄된 콜백 등록 후 중단&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>실행 위치&lt;/td>
-&lt;td>JVM 스레드풀 (Dispatcher)&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>철학&lt;/td>
-&lt;td>비동기 코드를 동기처럼 쓰게 해주는 언어 설계&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>Kotlin 코루틴은 단순한 비동기 처리 기술이 아니라, &lt;strong>언어, 컴파일러, 런타임이 조화롭게 설계된 고급 개념&lt;/strong>입니다.&lt;/p></description></item><item><title>Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlincontributionguide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlincontributionguide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
+&lt;/ul></description></item><item><title>[v.0.0] Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlincontributionguide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlincontributionguide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
 &lt;/h1>&lt;p>이 문서는 Kotlin 언어에 새로운 기능을 직접 제안하고, 설계하고, 컴파일러 코드까지 기여하는 전체 과정을 다룹니다. 단순한 이슈 제기를 넘어서 실제 &lt;strong>KEEP 문서 작성부터 parser 수정, IR 처리, 테스트 작성, PR 제출까지&lt;/strong> 모든 단계를 실습 중심으로 안내합니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="kotlin-컴파일-과정-요약-psi--fir--ir--bytecode">Kotlin 컴파일 과정 요약: PSI → FIR → IR → Bytecode
@@ -467,7 +323,151 @@
 | 9 | 기능 릴리스 전후 지속적 기여 |
 | 10 | 실제 사례 학습 |
 | 11 | 공식 문서화 기여 완료 |
-&lt;/code>&lt;/pre></description></item><item><title>[v.0.0] Kotlin Receiver Lambda</title><link>https://jaemin-baek.github.io/post/kotlinlamda/</link><pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinlamda/</guid><description>&lt;h1 id="kotlin-리시버-람다receiver-lambda-정리">Kotlin 리시버 람다(Receiver Lambda) 정리
+&lt;/code>&lt;/pre></description></item><item><title>[v.0.0] Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)</title><link>https://jaemin-baek.github.io/post/coroutinecontinuation/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontinuation/</guid><description>&lt;h1 id="kotlin-코루틴-내부-구조-상태-머신--continuation--cps">Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)
+&lt;/h1>&lt;p>Kotlin의 &lt;code>suspend&lt;/code> 키워드를 사용하는 코루틴은 단순한 비동기 기능이 아닙니다. 내부적으로는 &lt;strong>상태 머신(state machine)&lt;/strong> 과 &lt;strong>Continuation-passing style (CPS)&lt;/strong> 기반의 구조로 동작하며, 이러한 설계를 통해 코루틴은 &lt;strong>비동기 코드를 동기처럼 자연스럽게 표현&lt;/strong>할 수 있습니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="기본-개념-suspend-함수란">기본 개념: &lt;code>suspend&lt;/code> 함수란?
+&lt;/h2>&lt;p>&lt;code>suspend&lt;/code> 함수는 &lt;strong>중단(suspend)&lt;/strong> 및 &lt;strong>재개(resume)&lt;/strong> 가 가능한 함수입니다. 컴파일러는 이를 위해 &lt;code>Continuation&lt;/code> 객체를 생성하고 상태 추적 코드를 자동 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">greet&lt;/span>(): String {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;World&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#e6db74">&amp;#34;Done&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>위 코드는 컴파일러에 의해 상태 머신으로 변환됩니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="상태-머신-구조-컴파일-결과-개념도">상태 머신 구조 (컴파일 결과 개념도)
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">GreetContinuation&lt;/span>(&lt;span style="color:#66d9ef">val&lt;/span> completion: Continuation&amp;lt;String&amp;gt;) : Continuation&amp;lt;Any?&amp;gt; {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">var&lt;/span> label = &lt;span style="color:#ae81ff">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">lateinit&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> result: String
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">val&lt;/span> context = EmptyCoroutineContext
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">override&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">resumeWith&lt;/span>(&lt;span style="color:#66d9ef">data&lt;/span>: Result&amp;lt;Any?&amp;gt;) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">try&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">when&lt;/span> (label) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">0&lt;/span> &lt;span style="color:#f92672">-&amp;gt;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> label = &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>, &lt;span style="color:#66d9ef">this&lt;/span>) &lt;span style="color:#75715e">// suspend 후 현재 상태 저장
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">return&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">1&lt;/span> &lt;span style="color:#f92672">-&amp;gt;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;World&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> result = &lt;span style="color:#e6db74">&amp;#34;Done&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> completion.resumeWith(&lt;span style="color:#a6e22e">Result&lt;/span>.success(result))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#66d9ef">catch&lt;/span> (e: Throwable) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> completion.resumeWith(&lt;span style="color:#a6e22e">Result&lt;/span>.failure(e))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>→ &lt;code>label&lt;/code> 값으로 상태를 저장하며, 중단 이후 적절한 지점에서 재개됩니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="cps-continuation-passing-style">CPS (Continuation-Passing Style)
+&lt;/h2>&lt;p>Kotlin 코루틴은 내부적으로 **CPS 변환(CPS Transformation)**을 통해 구현됩니다. 이는 모든 &lt;code>suspend&lt;/code> 함수가 &lt;strong>다음 실행 내용을 Continuation(콜백)&lt;/strong> 으로 넘기는 방식으로 동작한다는 뜻입니다.&lt;/p>
+&lt;p>예시:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;A&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delay(&lt;span style="color:#ae81ff">1000&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;B&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>→ 컴파일러는 이 코드를 &lt;code>hello(continuation)&lt;/code> 형태로 변환하며, delay 이후 재개 위치를 기억해 두었다가 &lt;code>resumeWith&lt;/code>로 다시 이어서 실행합니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="delay-함수의-내부">delay 함수의 내부
+&lt;/h2>&lt;p>Kotlin의 &lt;code>delay()&lt;/code> 함수는 다음과 같이 작동합니다 (JVM 기준):&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#66d9ef">fun&lt;/span> &lt;span style="color:#a6e22e">delay&lt;/span>(timeMillis: Long) = suspendCancellableCoroutine&amp;lt;Unit&amp;gt; { cont &lt;span style="color:#f92672">-&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">val&lt;/span> scheduled = executor.schedule({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cont.resume(Unit)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }, timeMillis, &lt;span style="color:#a6e22e">TimeUnit&lt;/span>.MILLISECONDS)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cont.invokeOnCancellation {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> scheduled.cancel(&lt;span style="color:#66d9ef">false&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>executor&lt;/code>: 내부적으로는 자바의 &lt;code>ScheduledExecutorService&lt;/code> 사용&lt;/li>
+&lt;li>&lt;code>suspendCancellableCoroutine&lt;/code>: 코루틴 중단 가능 지점 생성&lt;/li>
+&lt;li>&lt;code>resume()&lt;/code>: 일정 시간 후 코루틴 재개&lt;/li>
+&lt;/ul>
+&lt;p>→ 스레드를 블로킹하지 않고 코루틴만 중단시킴&lt;/p>
+&lt;hr>
+&lt;h2 id="dispatchers와-스레드">Dispatchers와 스레드
+&lt;/h2>&lt;p>Kotlin 코루틴은 직접 스레드를 만들지 않습니다. 대신, 다음과 같은 &lt;strong>Dispatcher&lt;/strong>를 통해 JVM의 스레드 풀을 재사용합니다:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Dispatcher&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Default&lt;/td>
+&lt;td>CPU 연산용 스레드풀 (ForkJoinPool 기반)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>IO&lt;/td>
+&lt;td>IO용 무제한 스레드풀&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Main&lt;/td>
+&lt;td>Android 메인 스레드 등 UI 전용&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Unconfined&lt;/td>
+&lt;td>처음 호출된 스레드에서 실행&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>→ 결국 코루틴은 &lt;strong>JVM 스레드에서 실행되지만&lt;/strong>, 코루틴 자체는 스레드가 아닙니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="참고-자료">참고 자료
+&lt;/h2>&lt;ul>
+&lt;li>Kotlin 공식 문서: &lt;a class="link" href="https://kotlinlang.org/docs/coroutines-overview.html" target="_blank" rel="noopener"
+>https://kotlinlang.org/docs/coroutines-overview.html&lt;/a>&lt;/li>
+&lt;li>KotlinConf 2019 Roman Elizarov (설계자) 발표: &lt;a class="link" href="https://www.youtube.com/watch?v=_hfBv0a09Jc" target="_blank" rel="noopener"
+>KotlinConf 2019: Coroutines Under the Hood&lt;/a>&lt;/li>
+&lt;li>KotlinConf 2017 Roman Elizarov (설계자) 발표: &lt;a class="link" href="https://youtu.be/YrrUCSi72E8?si=EoNjXdNJ2wvMJIpG" target="_blank" rel="noopener"
+>https://youtu.be/YrrUCSi72E8?si=EoNjXdNJ2wvMJIpG&lt;/a>&lt;/li>
+&lt;li>Kotlin GitHub: &lt;a class="link" href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank" rel="noopener"
+>https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
+&lt;li>kotlinx.coroutines 구현 내부 코드: &lt;code>suspendCancellableCoroutine.kt&lt;/code>, &lt;code>Delay.kt&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="마무리-요약">마무리 요약
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>핵심 요소&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>suspend&lt;/code>&lt;/td>
+&lt;td>상태 머신으로 변환됨 (코드 쪼개짐)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>Continuation&lt;/code>&lt;/td>
+&lt;td>재개 지점 추적 객체&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>delay()&lt;/code>&lt;/td>
+&lt;td>실제로는 스케줄된 콜백 등록 후 중단&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>실행 위치&lt;/td>
+&lt;td>JVM 스레드풀 (Dispatcher)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>철학&lt;/td>
+&lt;td>비동기 코드를 동기처럼 쓰게 해주는 언어 설계&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>Kotlin 코루틴은 단순한 비동기 처리 기술이 아니라, &lt;strong>언어, 컴파일러, 런타임이 조화롭게 설계된 고급 개념&lt;/strong>입니다.&lt;/p></description></item><item><title>[v.0.0] Kotlin Receiver Lambda</title><link>https://jaemin-baek.github.io/post/kotlinlamda/</link><pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinlamda/</guid><description>&lt;h1 id="kotlin-리시버-람다receiver-lambda-정리">Kotlin 리시버 람다(Receiver Lambda) 정리
 &lt;/h1>&lt;p>Kotlin에서는 람다 표현식을 한 단계 더 확장하여, &lt;strong>리시버(수신자)를 가지는 람다&lt;/strong>를 정의할 수 있습니다. 이것을 &lt;strong>리시버 람다(Receiver Lambda)&lt;/strong> 또는 &lt;strong>확장 람다(Extension Lambda)&lt;/strong> 라고 하며, Kotlin DSL, 코루틴, 빌더 패턴 등에 자주 사용됩니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="기본-문법">기본 문법
@@ -2382,7 +2382,7 @@ Kotlin 코루틴의 구조적 동시성 모델에서 핵심적인 개념 중 하
 &lt;hr>
 &lt;h3 id="7-결론">7. 결론
 &lt;/h3>&lt;p>코루틴의 실행 컨텍스트 선택은 코드의 동시성 구조와 예외 처리 전략에 직접적인 영향을 미친다. runBlocking은 동기-비동기 경계를 연결하는 데 유용하며, coroutineScope는 구조적 동시성을 제공하고, supervisorScope는 자식 코루틴의 독립 실행을 보장한다. 각 스코프의 특성을 이해하고 상황에 맞게 사용하는 것이 안전하고 예측 가능한 비동기 프로그래밍을 구현하는 데 핵심이 된다.&lt;/p>
-&lt;hr></description></item><item><title>Kotlin 코루틴의 멀티스레드 동작 방식</title><link>https://jaemin-baek.github.io/post/coroutine/</link><pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine/</guid><description>&lt;h2 id="kotlin-coroutine의-멀티스레드-동작-방식">Kotlin Coroutine의 멀티스레드 동작 방식
+&lt;hr></description></item><item><title>[v.0.0] Kotlin 코루틴의 멀티스레드 동작 방식</title><link>https://jaemin-baek.github.io/post/coroutine/</link><pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutine/</guid><description>&lt;h2 id="kotlin-coroutine의-멀티스레드-동작-방식">Kotlin Coroutine의 멀티스레드 동작 방식
 &lt;/h2>&lt;h3 id="1-개요">1. 개요
 &lt;/h3>&lt;p>Kotlin의 코루틴은 경량 스레드(Lightweight Thread) 개념에 기반하여 비동기 작업을 처리하는 구조로 설계되었다. 본 문서에서는 코루틴이 멀티스레드 환경에서 어떤 방식으로 실행되고 스케줄링되는지를 기술하고, 관련 디스패처(&lt;code>CoroutineDispatcher&lt;/code>)의 역할과 실행 흐름에 대해 서술한다.&lt;/p>
 &lt;hr>
