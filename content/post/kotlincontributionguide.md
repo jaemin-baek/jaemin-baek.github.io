@@ -1,5 +1,5 @@
 ---
-title: "Kotlin 언어 기능 제안 및 코드 기여 실전 가이드"
+title: "[v.0.0] Kotlin 언어 기능 제안 및 코드 기여 실전 가이드"
 date: 2025-03-12
 draft: false
 categories: ["Kotlin"]

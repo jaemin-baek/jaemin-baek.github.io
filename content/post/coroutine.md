@@ -1,5 +1,5 @@
 ---
-title: "Kotlin 코루틴의 멀티스레드 동작 방식"
+title: "[v.0.0] Kotlin 코루틴의 멀티스레드 동작 방식"
 date: 2025-02-16
 draft: false
 tags: ["kotlin", "coroutine", "multithreading", "concurrency"]
