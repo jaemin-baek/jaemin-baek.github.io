@@ -42,7 +42,7 @@
 &lt;li>JVM에는 &lt;code>actual&lt;/code> 구현만 컴파일되고 포함됨&lt;/li>
 &lt;li>따라서 &lt;code>.jar&lt;/code> 안에서는 &lt;code>expect&lt;/code> 선언을 확인할 수 없습니다&lt;/li>
 &lt;/ul>
-&lt;p>🔎 대신 &lt;code>expect&lt;/code>를 확인하려면:&lt;/p>
+&lt;p>대신 &lt;code>expect&lt;/code>를 확인하려면:&lt;/p>
 &lt;ul>
 &lt;li>GitHub 저장소: &lt;a class="link" href="https://github.com/Kotlin/kotlinx.coroutines" target="_blank" rel="noopener"
 >https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
@@ -114,7 +114,7 @@
 &lt;li>Kotlin Multiplatform에서 플랫폼 특화 코드를 안전하게 관리할 수 있게 해 줌&lt;/li>
 &lt;/ul>
 &lt;hr>
-&lt;h2 id="-참고-링크">🔗 참고 링크
+&lt;h2 id="참고-링크">참고 링크
 &lt;/h2>&lt;ul>
 &lt;li>Kotlin 공식 문서: &lt;a class="link" href="https://kotlinlang.org/docs/multiplatform.html" target="_blank" rel="noopener"
 >https://kotlinlang.org/docs/multiplatform.html&lt;/a>&lt;/li>
@@ -122,9 +122,7 @@
 >https://github.com/Kotlin/kotlinx.coroutines&lt;/a>&lt;/li>
 &lt;li>Expect/Actual 예제: &lt;a class="link" href="https://kotlinlang.org/docs/mpp-connect-to-apis.html" target="_blank" rel="noopener"
 >https://kotlinlang.org/docs/mpp-connect-to-apis.html&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;p>이제부터 &lt;code>.jar&lt;/code>에서 &lt;code>expect&lt;/code>가 안 보이는 이유를 분명하게 이해하셨을 겁니다.&lt;br>
-Kotlin MPP를 활용한 크로스 플랫폼 개발에서 가장 핵심적인 문법이니 반드시 익혀두세요!&lt;/p></description></item><item><title>Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)</title><link>https://jaemin-baek.github.io/post/coroutinecontinuation/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontinuation/</guid><description>&lt;h1 id="kotlin-코루틴-내부-구조-상태-머신--continuation--cps">Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)
+&lt;/ul></description></item><item><title>Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)</title><link>https://jaemin-baek.github.io/post/coroutinecontinuation/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/coroutinecontinuation/</guid><description>&lt;h1 id="kotlin-코루틴-내부-구조-상태-머신--continuation--cps">Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)
 &lt;/h1>&lt;p>Kotlin의 &lt;code>suspend&lt;/code> 키워드를 사용하는 코루틴은 단순한 비동기 기능이 아닙니다. 내부적으로는 &lt;strong>상태 머신(state machine)&lt;/strong> 과 &lt;strong>Continuation-passing style (CPS)&lt;/strong> 기반의 구조로 동작하며, 이러한 설계를 통해 코루틴은 &lt;strong>비동기 코드를 동기처럼 자연스럽게 표현&lt;/strong>할 수 있습니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="기본-개념-suspend-함수란">기본 개념: &lt;code>suspend&lt;/code> 함수란?
