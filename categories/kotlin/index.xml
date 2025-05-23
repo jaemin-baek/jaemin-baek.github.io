@@ -142,7 +142,109 @@
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
-&lt;p>Kotlin 코루틴은 단순한 비동기 처리 기술이 아니라, &lt;strong>언어, 컴파일러, 런타임이 조화롭게 설계된 고급 개념&lt;/strong>입니다.&lt;/p></description></item><item><title>익명 함수란? (anonymous function)</title><link>https://jaemin-baek.github.io/post/kotlinanonymousfunction/</link><pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinanonymousfunction/</guid><description>&lt;h1 id="1-익명-함수란-anonymous-function">1. 익명 함수란? (anonymous function)
+&lt;p>Kotlin 코루틴은 단순한 비동기 처리 기술이 아니라, &lt;strong>언어, 컴파일러, 런타임이 조화롭게 설계된 고급 개념&lt;/strong>입니다.&lt;/p></description></item><item><title>Kotlin Receiver Lambda</title><link>https://jaemin-baek.github.io/post/kotlinlamda/</link><pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinlamda/</guid><description>&lt;h1 id="kotlin-리시버-람다receiver-lambda-정리">Kotlin 리시버 람다(Receiver Lambda) 정리
+&lt;/h1>&lt;p>Kotlin에서는 람다 표현식을 한 단계 더 확장하여, &lt;strong>리시버(수신자)를 가지는 람다&lt;/strong>를 정의할 수 있습니다. 이것을 &lt;strong>리시버 람다(Receiver Lambda)&lt;/strong> 또는 &lt;strong>확장 람다(Extension Lambda)&lt;/strong> 라고 하며, Kotlin DSL, 코루틴, 빌더 패턴 등에 자주 사용됩니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="기본-문법">기본 문법
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">ReceiverType&lt;/span>.() &lt;span style="color:#f92672">-&amp;gt;&lt;/span> ReturnType
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>ReceiverType&lt;/code>: 리시버(수신자)의 타입&lt;/li>
+&lt;li>&lt;code>this&lt;/code>는 리시버를 가리킴&lt;/li>
+&lt;li>리시버의 멤버에 직접 접근 가능 (&lt;code>this.&lt;/code> 생략 가능)&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="예제-string---unit">예제: String.() -&amp;gt; Unit
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> printLength: &lt;span style="color:#a6e22e">String&lt;/span>.() &lt;span style="color:#f92672">-&amp;gt;&lt;/span> Unit = {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;[리시버] 길이 = &lt;/span>&lt;span style="color:#e6db74">${this.length}&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e6db74">&amp;#34;Hello&amp;#34;&lt;/span>.printLength() &lt;span style="color:#75715e">// 출력: [리시버] 길이 = 5
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>위에서 &lt;code>this&lt;/code>는 &lt;code>&amp;quot;Hello&amp;quot;&lt;/code> 문자열&lt;/li>
+&lt;li>리시버 타입은 &lt;code>String&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="일반-람다-vs-리시버-람다">일반 람다 vs 리시버 람다
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>형태&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>() -&amp;gt; Unit&lt;/code>&lt;/td>
+&lt;td>일반 람다. 외부에서 전달받는 값만 사용&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>String.() -&amp;gt; Unit&lt;/code>&lt;/td>
+&lt;td>&lt;code>String&lt;/code>을 리시버로 사용. 내부에서 &lt;code>this.length&lt;/code> 등 사용 가능&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="실전-예시-1-apply-">실전 예시 1: &lt;code>apply {}&lt;/code>
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">data&lt;/span> &lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">User&lt;/span>(&lt;span style="color:#66d9ef">var&lt;/span> name: String, &lt;span style="color:#66d9ef">var&lt;/span> age: Int)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">val&lt;/span> user = User(&lt;span style="color:#e6db74">&amp;#34;Tom&amp;#34;&lt;/span>, &lt;span style="color:#ae81ff">30&lt;/span>).apply {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name = &lt;span style="color:#e6db74">&amp;#34;Jerry&amp;#34;&lt;/span> &lt;span style="color:#75715e">// this.name 으로도 가능
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> age = &lt;span style="color:#ae81ff">25&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>apply&lt;/code>는 &lt;code>T.apply(block: T.() -&amp;gt; Unit)&lt;/code>으로 선언되어 있음&lt;/li>
+&lt;li>내부에서 &lt;code>this&lt;/code>는 &lt;code>User&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="실전-예시-2-코루틴-runblocking-">실전 예시 2: 코루틴 &lt;code>runBlocking {}&lt;/code>
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fun&lt;/span> &amp;lt;&lt;span style="color:#a6e22e">T&lt;/span>&amp;gt; &lt;span style="color:#a6e22e">runBlocking&lt;/span>(block: &lt;span style="color:#66d9ef">suspend&lt;/span> &lt;span style="color:#a6e22e">CoroutineScope&lt;/span>.() &lt;span style="color:#f92672">-&amp;gt;&lt;/span> T): T
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>block&lt;/code>은 &lt;code>CoroutineScope&lt;/code>를 리시버로 갖는 suspend 람다&lt;/li>
+&lt;li>내부에서 &lt;code>launch&lt;/code>, &lt;code>async&lt;/code> 등을 &lt;code>this.&lt;/code> 없이 사용 가능&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span style="display:flex;">&lt;span>runBlocking {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> launch { println(&lt;span style="color:#e6db74">&amp;#34;Hi from coroutine&amp;#34;&lt;/span>) }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h2 id="리시버-람다의-장점">리시버 람다의 장점
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>장점&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>DSL 작성에 유리&lt;/td>
+&lt;td>&lt;code>this&lt;/code> 생략 가능. 직관적인 문법 제공&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>컨텍스트 스코프 제공&lt;/td>
+&lt;td>내부에서 특정 타입의 기능을 자연스럽게 활용 가능&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Kotlin 특유의 선언형 스타일 표현 가능&lt;/td>
+&lt;td>&lt;code>apply&lt;/code>, &lt;code>with&lt;/code>, &lt;code>run&lt;/code>, &lt;code>build.gradle.kts&lt;/code> 등에서 사용됨&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="요약-정리">요약 정리
+&lt;/h2>&lt;ul>
+&lt;li>&lt;code>Receiver.() -&amp;gt; T&lt;/code>는 &lt;strong>리시버를 갖는 람다 타입&lt;/strong>&lt;/li>
+&lt;li>내부에서 &lt;code>this&lt;/code>는 리시버 객체를 가리킴&lt;/li>
+&lt;li>&lt;code>apply&lt;/code>, &lt;code>runBlocking&lt;/code>, &lt;code>withContext&lt;/code> 등에서 사용됨&lt;/li>
+&lt;/ul>
+&lt;p>리시버 람다는 Kotlin DSL, 구조화된 코루틴, 빌더 패턴 등을 가능하게 하는 핵심적인 언어 기능입니다. Kotlin의 선언형 프로그래밍 스타일을 이해하려면 &lt;strong>리시버 람다의 개념을 정확히 이해하는 것이 매우 중요&lt;/strong>합니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="참고-자료">참고 자료
+&lt;/h2>&lt;ul>
+&lt;li>Kotlin 공식 문서: &lt;a class="link" href="https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver" target="_blank" rel="noopener"
+>https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver&lt;/a>&lt;/li>
+&lt;li>Kotlin 표준 라이브러리 예시: &lt;code>apply&lt;/code>, &lt;code>run&lt;/code>, &lt;code>with&lt;/code>&lt;/li>
+&lt;li>JetBrains Kotlin 슬라이드: DSL 만들기&lt;/li>
+&lt;/ul></description></item><item><title>익명 함수란? (anonymous function)</title><link>https://jaemin-baek.github.io/post/kotlinanonymousfunction/</link><pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlinanonymousfunction/</guid><description>&lt;h1 id="1-익명-함수란-anonymous-function">1. 익명 함수란? (anonymous function)
 &lt;/h1>&lt;blockquote>
 &lt;p>이름이 없는 함수&lt;/p>&lt;/blockquote>
 &lt;p>보통 우리가 쓰는 함수는 이름이 있는 함수입니다&lt;/p>
