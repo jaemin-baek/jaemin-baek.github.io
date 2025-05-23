@@ -1,5 +1,5 @@
 ---
-title: "예외(Exception)를 반대하는 개발자들의 주장과 대안"
+title: "[v.0.0] 예외(Exception)를 반대하는 개발자들의 주장과 대안"
 date: 2025-03-13
 draft: false
 categories: ["Software Design"]

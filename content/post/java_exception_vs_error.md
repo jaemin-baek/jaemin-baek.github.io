@@ -1,5 +1,5 @@
 ---
-title: "[v0.0] Java에서 Exception과 Error의 차이와 명명 이유"
+title: "[v.0.0] Java에서 Exception과 Error의 차이와 명명 이유"
 date: 2025-03-13
 draft: false
 categories: ["Java"]
