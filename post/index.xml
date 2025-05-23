@@ -373,7 +373,95 @@ main @coroutine#1
 &lt;hr>
 &lt;h2 id="-결론">✨ 결론
 &lt;/h2>&lt;p>Java에서 &lt;code>Exception&lt;/code>이라는 용어는 오류를 &lt;strong>논리적으로 설명 가능한 &amp;lsquo;예외적 사건&amp;rsquo;&lt;/strong> 으로 정의하며, 개발자가 이를 &lt;strong>정제된 방식으로 처리&lt;/strong>하도록 유도하기 위해 선택된 개념입니다.&lt;br>
-반면 &lt;code>Error&lt;/code>는 시스템적 결함을 나타내며 &lt;strong>정상적인 흐름에서의 개입을 금지&lt;/strong>하는 철학을 따릅니다.&lt;/p></description></item><item><title>[v.0.0] Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlincontributionguide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlincontributionguide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
+반면 &lt;code>Error&lt;/code>는 시스템적 결함을 나타내며 &lt;strong>정상적인 흐름에서의 개입을 금지&lt;/strong>하는 철학을 따릅니다.&lt;/p></description></item><item><title>예외(Exception)를 반대하는 개발자들의 주장과 대안</title><link>https://jaemin-baek.github.io/post/exception-opposition-summary/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/exception-opposition-summary/</guid><description>&lt;h1 id="예외exception를-반대하는-개발자들의-주장과-대안">예외(Exception)를 반대하는 개발자들의 주장과 대안
+&lt;/h1>&lt;p>프로그래밍에서 Exception(예외)은 매우 흔한 오류 처리 방식이지만, 이를 &lt;strong>반대하거나 제한적으로 사용해야 한다는 주장도 꾸준히 존재&lt;/strong>합니다. 이 문서에서는 그 주요 논거들과 대안을 정리합니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="예외-사용을-반대하는-주요-주장">예외 사용을 반대하는 주요 주장
+&lt;/h2>&lt;h3 id="1-제어-흐름을-숨긴다-control-flow-hiding">1. 제어 흐름을 숨긴다 (Control Flow Hiding)
+&lt;/h3>&lt;ul>
+&lt;li>예외는 함수 시그니처에 드러나지 않음&lt;/li>
+&lt;li>호출자가 어떤 예외가 발생할지 예측하기 어려움&lt;/li>
+&lt;li>코드 흐름이 불명확해짐 → 유지보수 어려움&lt;/li>
+&lt;/ul>
+&lt;h3 id="2-함수형-프로그래밍에서는-예외-대신-값을-사용">2. 함수형 프로그래밍에서는 예외 대신 값을 사용
+&lt;/h3>&lt;ul>
+&lt;li>&lt;code>Result&lt;/code>, &lt;code>Either&lt;/code>, &lt;code>Try&lt;/code> 등으로 오류를 모델링&lt;/li>
+&lt;li>오류가 &lt;strong>타입 시스템에 명시&lt;/strong>되어 컴파일 타임에 예측 가능&lt;/li>
+&lt;li>안정적인 체이닝과 패턴 매칭이 가능&lt;/li>
+&lt;/ul>
+&lt;h3 id="3-성능-비용-존재">3. 성능 비용 존재
+&lt;/h3>&lt;ul>
+&lt;li>스택 추적 생성, GC 부하, 최적화 방해 요소 존재&lt;/li>
+&lt;li>성능 민감한 시스템에서는 오히려 성능 저하 요인&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="주요-인물-및-커뮤니티의-입장">주요 인물 및 커뮤니티의 입장
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>인물/집단&lt;/th>
+&lt;th>입장 요약&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Rob Pike (Go 설계자)&lt;/td>
+&lt;td>Go는 &lt;code>error&lt;/code>를 반환값으로 처리하고 예외를 피함&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Haskell 커뮤니티&lt;/td>
+&lt;td>오류는 타입으로 표현하고 예외는 피함&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Kotlin 함수형 지향&lt;/td>
+&lt;td>&lt;code>Result&amp;lt;T&amp;gt;&lt;/code>와 &lt;code>sealed class&lt;/code>로 오류 모델링 선호&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>C++ 일부 진영&lt;/td>
+&lt;td>예외 대신 명시적 오류 코드 사용 선호&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="예외를-대체하는-방식">예외를 대체하는 방식
+&lt;/h2>&lt;ul>
+&lt;li>&lt;code>sealed class&lt;/code> + &lt;code>when&lt;/code> 구문&lt;/li>
+&lt;li>&lt;code>Result&amp;lt;T&amp;gt;&lt;/code>, &lt;code>Either&amp;lt;L, R&amp;gt;&lt;/code> (Arrow 등)&lt;/li>
+&lt;li>&lt;code>Try&amp;lt;T&amp;gt;&lt;/code>&lt;/li>
+&lt;li>명시적 error code (&lt;code>Boolean&lt;/code>, &lt;code>null&lt;/code> 등)&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="실무에서의-현실적-판단">실무에서의 현실적 판단
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>관점&lt;/th>
+&lt;th>예외 사용&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>명령형 언어 (Java 등)&lt;/td>
+&lt;td>널리 사용됨&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>함수형 패러다임&lt;/td>
+&lt;td>예외 대신 오류를 값으로 처리&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>시스템 프로그래밍&lt;/td>
+&lt;td>성능 및 안정성 위해 예외 최소화&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>실무&lt;/td>
+&lt;td>&lt;strong>예외 + Result 혼합 전략&lt;/strong> 자주 사용됨&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="결론">결론
+&lt;/h2>&lt;p>Exception은 강력하고 편리하지만, &lt;strong>코드 가독성, 예측 가능성, 성능 측면에서 단점&lt;/strong>도 존재합니다.&lt;br>
+따라서, &lt;strong>도메인 요구사항과 설계 철학에 따라 예외와 값 기반 오류 처리 방식을 혼합하여 사용하는 전략이 가장 실용적&lt;/strong>입니다.&lt;/p></description></item><item><title>[v.0.0] Kotlin 언어 기능 제안 및 코드 기여 실전 가이드</title><link>https://jaemin-baek.github.io/post/kotlincontributionguide/</link><pubDate>Wed, 12 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/kotlincontributionguide/</guid><description>&lt;h1 id="kotlin-언어-기능-제안-및-코드-기여-실전-가이드">Kotlin 언어 기능 제안 및 코드 기여 실전 가이드
 &lt;/h1>&lt;p>이 문서는 Kotlin 언어에 새로운 기능을 직접 제안하고, 설계하고, 컴파일러 코드까지 기여하는 전체 과정을 다룹니다. 단순한 이슈 제기를 넘어서 실제 &lt;strong>KEEP 문서 작성부터 parser 수정, IR 처리, 테스트 작성, PR 제출까지&lt;/strong> 모든 단계를 실습 중심으로 안내합니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="kotlin-컴파일-과정-요약-psi--fir--ir--bytecode">Kotlin 컴파일 과정 요약: PSI → FIR → IR → Bytecode
