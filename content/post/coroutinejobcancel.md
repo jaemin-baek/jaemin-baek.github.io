@@ -1,5 +1,5 @@
 ---
-title: "CoroutineScope.cancel()과 Job.cancel()은 같은가?"
+title: "[v.0.0] CoroutineScope.cancel()과 Job.cancel()은 같은가?"
 date: 2025-03-03
 draft: false
 tags: ["kotlin", "coroutine", "job", "cancel", "coroutinescope", ]

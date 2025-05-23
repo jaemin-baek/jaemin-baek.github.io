@@ -1,5 +1,5 @@
 ---
-title: "주요 코루틴 라이브러리 모듈 종류"
+title: "[v.0.0] 주요 코루틴 라이브러리 모듈 종류"
 date: 2025-03-09
 draft: false
 tags: ["kotlin", "coroutine"]

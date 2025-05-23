@@ -1,5 +1,5 @@
 ---
-title: "구조적 동시성이란 무엇인가? 코루틴의 안정성과 예측 가능성을 위한 원칙"
+title: "[v.0.0] 구조적 동시성이란 무엇인가? 코루틴의 안정성과 예측 가능성을 위한 원칙"
 date: 2025-03-08
 draft: false
 tags: ["kotlin", "coroutine", "structured concurrency", "job", "스코프", "비동기"]

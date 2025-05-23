@@ -1,5 +1,5 @@
 ---
-title: "Gradle에서 Naver Map SDK SSL 오류 해결 (macOS 기준)"
+title: "[v.0.0] Gradle에서 Naver Map SDK SSL 오류 해결 (macOS 기준)"
 date: 2025-03-11
 draft: false
 categories: ["Android", "Gradle", "네이버 지도"]

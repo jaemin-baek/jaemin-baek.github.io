@@ -1,5 +1,5 @@
 ---
-title: "구조적 동시성과 SupervisorJob의 실제 설계 활용"
+title: "[v.0.0] 구조적 동시성과 SupervisorJob의 실제 설계 활용"
 date: 2025-03-05
 draft: false
 tags: ["kotlin", "coroutine", "supervisorjob", "structured concurrency", "exception handling"]

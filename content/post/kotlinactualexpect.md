@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Multiplatform의 expect/actual 정리"
+title: "[v.0.0] Kotlin Multiplatform의 expect/actual 정리"
 date: 2025-03-13
 draft: false
 categories: ["Kotlin"]

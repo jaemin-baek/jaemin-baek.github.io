@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Receiver Lambda"
+title: "[v.0.0] Kotlin Receiver Lambda"
 date: 2025-03-11
 draft: false
 categories: ["Kotlin"]

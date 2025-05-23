@@ -1,5 +1,5 @@
 ---
-title: "코루틴 장점2: 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다"
+title: "[v.0.0] 코루틴 장점2: 비동기 코드를 동기 코드처럼 쉽게 작성하게 해준다"
 date: 2025-03-10
 draft: false
 tags: ["kotlin", "coroutine", "multithreading", "concurrency"]

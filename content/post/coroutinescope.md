@@ -1,5 +1,5 @@
 ---
-title: "Kotlin 코루틴의 runBlocking, coroutineScope, supervisorScope 비교"
+title: "[v.0.0] Kotlin 코루틴의 runBlocking, coroutineScope, supervisorScope 비교"
 date: 2025-02-19
 draft: false
 tags: ["kotlin", "coroutine", "concurrency", "runBlocking", "coroutineScope", "supervisorScope"]

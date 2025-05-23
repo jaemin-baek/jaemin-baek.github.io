@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조"
+title: "[v.0.0] Kotlin Coroutine에서 SupervisorJob의 역할과 scopeJob 구조"
 date: 2025-02-25
 draft: false
 tags: ["kotlin", "coroutine", "supervisorjob", "job", "coroutinescope"]

@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Coroutine에서 coroutineScope의 일시 정지(suspend) 동작 해석"
+title: "[v.0.0] Kotlin Coroutine에서 coroutineScope의 일시 정지(suspend) 동작 해석"
 date: 2025-03-02
 draft: false
 tags: ["kotlin", "coroutine", "coroutineScope", "suspend", "비동기 흐름"]

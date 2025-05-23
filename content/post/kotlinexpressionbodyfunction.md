@@ -1,5 +1,5 @@
 ---
-title: "Kotlin 문법 정리: Expression Body Function"
+title: "[v.0.0] Kotlin 문법 정리: Expression Body Function"
 date: 2025-03-10
 draft: false
 categories: ["Kotlin"]

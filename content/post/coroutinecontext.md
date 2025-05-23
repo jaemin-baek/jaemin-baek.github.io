@@ -1,5 +1,5 @@
 ---
-title: "CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해"
+title: "[v.0.0] CoroutineContext란 무엇인가? 코루틴 실행 환경의 핵심 이해"
 date: 2025-03-04
 draft: false
 tags: ["kotlin", "coroutine", "coroutinecontext", "dispatcher", "job"]

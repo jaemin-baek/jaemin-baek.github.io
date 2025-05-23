@@ -1,5 +1,5 @@
 ---
-title: "코루틴 장점1: 코루틴은 일시 중단과 재개가 가능한 함수"
+title: "[v.0.0] 코루틴 장점1: 코루틴은 일시 중단과 재개가 가능한 함수"
 date: 2025-03-10
 draft: false
 tags: ["kotlin", "coroutine", "multithreading", "concurrency"]

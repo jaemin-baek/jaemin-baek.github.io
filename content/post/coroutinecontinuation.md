@@ -1,5 +1,5 @@
 ---
-title: "Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)"
+title: "[v.0.0] Kotlin 코루틴 내부 구조 (상태 머신 + Continuation + CPS)"
 date: 2025-03-12
 draft: false
 categories: ["kotlin"]

@@ -1,5 +1,5 @@
 ---
-title: "익명 함수란? (anonymous function)"
+title: "[v.0.0] 익명 함수란? (anonymous function)"
 date: 2025-03-11
 draft: false
 categories: ["Kotlin"]

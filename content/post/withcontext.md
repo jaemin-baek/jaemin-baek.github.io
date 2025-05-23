@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Coroutine에서 withContext, launch, async의 개념 및 실행 방식 비교"
+title: "[v.0.0] Kotlin Coroutine에서 withContext, launch, async의 개념 및 실행 방식 비교"
 date: 2025-03-03
 draft: false
 tags: ["kotlin", "coroutine", "withContext", "launch", "async"]

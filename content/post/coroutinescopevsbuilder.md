@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Coroutine에서 CoroutineScope와 coroutineScope 빌더의 개념적 차이"
+title: "[v.0.0] Kotlin Coroutine에서 CoroutineScope와 coroutineScope 빌더의 개념적 차이"
 date: 2025-03-01
 draft: false
 tags: ["kotlin", "coroutine", "coroutinescope", "coroutineScope builder", "구조적 동시성"]

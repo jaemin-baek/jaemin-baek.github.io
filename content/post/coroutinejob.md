@@ -1,5 +1,5 @@
 ---
-title: "Kotlin 코루틴에서 에러 처리 제대로 이해하기"
+title: "[v.0.0] Kotlin 코루틴에서 에러 처리 제대로 이해하기"
 date: 2025-03-06
 draft: false
 tags: ["kotlin", "coroutine"]

@@ -1,5 +1,5 @@
 ---
-title: "GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안"
+title: "[v.0.0] GlobalScope는 왜 위험한가? 구조적 동시성 관점에서의 설명과 대안"
 date: 2025-03-08
 draft: false
 tags: ["kotlin", "coroutine", "globalscope", "structured concurrency", "job"]
