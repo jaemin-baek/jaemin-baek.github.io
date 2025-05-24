@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Compose skipping과 restart scope</title>
+  <desc id="desc">Compose가 다시 실행 가능한 범위와 건너뛸 수 있는 범위를 이용해 recomposition을 최적화하는 구조</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="run" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="skip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e1faee"/>
+      <stop offset="100%" stop-color="#bff1d7"/>
+    </linearGradient>
+    <linearGradient id="watch" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4eeff"/>
+      <stop offset="100%" stop-color="#ded1ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 19px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1050" cy="95" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="130" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">Recomposition은 많이 건너뛰는 쪽으로 설계되어 있습니다</text>
+  <text x="62" y="110" class="subtitle">입력이 바뀌지 않은 Composable은 다시 실행하지 않고 이전 결과를 재사용할 수 있습니다</text>
+
+  <g transform="translate(80 176)">
+    <rect x="0" y="0" width="250" height="126" rx="26" fill="url(#watch)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="50" class="label">Parent()</text>
+    <text x="30" y="88" class="text">State를 읽음</text>
+  </g>
+
+  <g transform="translate(480 140)">
+    <rect x="0" y="0" width="250" height="126" rx="26" fill="url(#run)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="50" class="label">CounterText()</text>
+    <text x="30" y="88" class="text">count 변경됨</text>
+  </g>
+
+  <g transform="translate(480 340)">
+    <rect x="0" y="0" width="250" height="126" rx="26" fill="url(#skip)" stroke="#16a34a" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="50" class="label">StaticHeader()</text>
+    <text x="30" y="88" class="text">입력 그대로</text>
+  </g>
+
+  <g transform="translate(860 240)">
+    <rect x="0" y="0" width="250" height="126" rx="26" fill="url(#skip)" stroke="#16a34a" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="50" class="label">Icon()</text>
+    <text x="30" y="88" class="text">건너뛰기 가능</text>
+  </g>
+
+  <path d="M340 230 C395 200 420 196 470 198" class="arrow"/>
+  <path d="M452 181 L478 198 L454 216" class="arrow"/>
+  <path d="M340 250 C395 310 420 360 470 394" class="arrow"/>
+  <path d="M452 394 L480 398 L462 375" class="arrow"/>
+  <path d="M740 404 C800 390 820 340 850 316" class="arrow"/>
+  <path d="M832 314 L860 310 L844 334" class="arrow"/>
+
+  <g transform="translate(170 510)">
+    <rect class="card" x="0" y="0" width="860" height="78" rx="24"/>
+    <rect x="0" y="0" width="8" height="78" rx="4" fill="#16a34a"/>
+    <text x="30" y="46" class="code">changed input -> run again, same stable input -> skip if possible</text>
+  </g>
+</svg>

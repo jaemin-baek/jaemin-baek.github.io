@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Compose 프레임의 세 단계</title>
+  <desc id="desc">Compose가 Composition, Layout, Drawing 단계를 거쳐 UI를 만들고 각 단계에서 읽은 State에 따라 필요한 작업만 다시 하는 구조</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4eeff"/>
+      <stop offset="100%" stop-color="#ded1ff"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff8ec"/>
+      <stop offset="100%" stop-color="#bdf0d5"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1050" cy="95" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="140" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">Compose는 한 프레임을 세 단계로 만듭니다</text>
+  <text x="62" y="110" class="subtitle">State를 어디서 읽었는지에 따라 다시 해야 할 일의 범위가 달라질 수 있습니다</text>
+
+  <g transform="translate(90 180)">
+    <rect x="0" y="0" width="280" height="185" rx="30" fill="url(#purple)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="56" class="label">1. Composition</text>
+    <text x="34" y="98" class="text">무엇을 보여줄까?</text>
+    <text x="34" y="136" class="small">Composable 실행</text>
+    <text x="34" y="164" class="small">UI tree 설명 생성</text>
+  </g>
+
+  <g transform="translate(460 180)">
+    <rect x="0" y="0" width="280" height="185" rx="30" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="56" class="label">2. Layout</text>
+    <text x="34" y="98" class="text">어디에 둘까?</text>
+    <text x="34" y="136" class="small">측정과 배치</text>
+    <text x="34" y="164" class="small">크기와 위치 결정</text>
+  </g>
+
+  <g transform="translate(830 180)">
+    <rect x="0" y="0" width="280" height="185" rx="30" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="56" class="label">3. Drawing</text>
+    <text x="34" y="98" class="text">어떻게 그릴까?</text>
+    <text x="34" y="136" class="small">Canvas에 그리기</text>
+    <text x="34" y="164" class="small">픽셀 결과 만들기</text>
+  </g>
+
+  <path d="M380 272 H450" class="arrow"/>
+  <path d="M434 254 L458 272 L434 290" class="arrow"/>
+  <path d="M750 272 H820" class="arrow"/>
+  <path d="M804 254 L828 272 L804 290" class="arrow"/>
+
+  <g transform="translate(130 438)">
+    <rect class="card" x="0" y="0" width="940" height="104" rx="26"/>
+    <rect x="0" y="0" width="8" height="104" rx="4" fill="#16a34a"/>
+    <text x="30" y="42" class="text">예: Draw 단계에서만 읽은 색상 값이 바뀌면, Composition까지 다시 할 필요가 없을 수 있습니다.</text>
+    <text x="30" y="76" class="small">그래서 Compose는 State read를 단계별로 추적하고, 필요한 작업만 다시 하려고 합니다.</text>
+  </g>
+</svg>

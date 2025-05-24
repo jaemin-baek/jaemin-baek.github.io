@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Recomposition 기본 흐름</title>
+  <desc id="desc">State 변경에서 recomposition과 UI 반영까지 이어지는 Compose 내부 흐름을 설명하는 PPT 스타일 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4eeff"/>
+      <stop offset="100%" stop-color="#ded1ff"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff8ec"/>
+      <stop offset="100%" stop-color="#bdf0d5"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e7f0ff"/>
+      <stop offset="100%" stop-color="#cfe0ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 19px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1055" cy="95" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="120" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">State가 바뀌면 Compose는 읽은 곳만 다시 계산합니다</text>
+  <text x="62" y="110" class="subtitle">핵심은 “누가 이 State를 읽었는지”를 기록해두는 것입니다</text>
+
+  <g transform="translate(60 190)">
+    <rect x="0" y="0" width="196" height="132" rx="28" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">State 변경</text>
+    <text x="30" y="92" class="text">count: 0 -> 1</text>
+  </g>
+
+  <g transform="translate(320 190)">
+    <rect x="0" y="0" width="210" height="132" rx="28" fill="url(#purple)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">읽은 곳 찾기</text>
+    <text x="30" y="92" class="text">Text가 count를 읽음</text>
+  </g>
+
+  <g transform="translate(600 190)">
+    <rect x="0" y="0" width="210" height="132" rx="28" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">다시 실행</text>
+    <text x="30" y="92" class="text">필요한 Composable</text>
+  </g>
+
+  <g transform="translate(880 190)">
+    <rect x="0" y="0" width="250" height="132" rx="28" fill="url(#blue)" stroke="#4b7bd8" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">변경 반영</text>
+    <text x="30" y="92" class="text">실제 UI tree 업데이트</text>
+  </g>
+
+  <path d="M262 256 H312" class="arrow"/>
+  <path d="M296 238 L320 256 L296 274" class="arrow"/>
+  <path d="M540 256 H590" class="arrow"/>
+  <path d="M574 238 L598 256 L574 274" class="arrow"/>
+  <path d="M820 256 H870" class="arrow"/>
+  <path d="M854 238 L878 256 L854 274" class="arrow"/>
+
+  <g transform="translate(170 420)">
+    <rect class="card" x="0" y="0" width="860" height="116" rx="26"/>
+    <rect x="0" y="0" width="8" height="116" rx="4" fill="#7c5cff"/>
+    <text x="30" y="44" class="code">var count by remember { mutableStateOf(0) }</text>
+    <text x="30" y="82" class="small">mutableStateOf의 value가 바뀌면, 그 value를 읽은 restart scope가 다시 실행될 수 있습니다.</text>
+  </g>
+</svg>
