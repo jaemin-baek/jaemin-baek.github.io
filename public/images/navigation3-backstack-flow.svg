@@ -1,0 +1,61 @@
+<svg width="1400" height="650" viewBox="0 0 1400 650" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="650" fill="#F8F7F1"/>
+  <text x="80" y="92" fill="#1F2522" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800">Navigation3에서 화면 이동을 읽는 순서</text>
+  <text x="82" y="136" fill="#66726C" font-family="Noto Serif KR, Georgia, serif" font-size="24">버튼 클릭은 NavController 명령이 아니라 backStack 변경으로 이어진다.</text>
+
+  <g transform="translate(80 212)">
+    <rect x="0" y="0" width="250" height="118" rx="20" fill="#FFFFFF" stroke="#D9DDD8" stroke-width="3"/>
+    <text x="28" y="44" fill="#66726C" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">STEP 1</text>
+    <text x="28" y="82" fill="#1F2522" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">UI event</text>
+    <text x="28" y="108" fill="#66726C" font-family="Inter, Arial, sans-serif" font-size="18">Detail 버튼 클릭</text>
+  </g>
+
+  <path d="M360 270H480" stroke="#61786F" stroke-width="8" stroke-linecap="round"/>
+  <path d="M480 270L454 247" stroke="#61786F" stroke-width="8" stroke-linecap="round"/>
+  <path d="M480 270L454 293" stroke="#61786F" stroke-width="8" stroke-linecap="round"/>
+
+  <g transform="translate(510 212)">
+    <rect x="0" y="0" width="310" height="118" rx="20" fill="#E8F1EE" stroke="#61786F" stroke-width="3"/>
+    <text x="28" y="44" fill="#61786F" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">STEP 2</text>
+    <text x="28" y="82" fill="#1F2522" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">backStack.add</text>
+    <text x="28" y="108" fill="#66726C" font-family="Inter, Arial, sans-serif" font-size="18">Detail(1)을 리스트에 추가</text>
+  </g>
+
+  <path d="M850 270H970" stroke="#61786F" stroke-width="8" stroke-linecap="round"/>
+  <path d="M970 270L944 247" stroke="#61786F" stroke-width="8" stroke-linecap="round"/>
+  <path d="M970 270L944 293" stroke="#61786F" stroke-width="8" stroke-linecap="round"/>
+
+  <g transform="translate(1000 212)">
+    <rect x="0" y="0" width="320" height="118" rx="20" fill="#FFFFFF" stroke="#D9DDD8" stroke-width="3"/>
+    <text x="28" y="44" fill="#66726C" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">STEP 3</text>
+    <text x="28" y="82" fill="#1F2522" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">[Home, Detail(1)]</text>
+    <text x="28" y="108" fill="#66726C" font-family="Inter, Arial, sans-serif" font-size="18">상태 리스트가 변경됨</text>
+  </g>
+
+  <path d="M1160 354V442" stroke="#6B55A5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1160 442L1137 416" stroke="#6B55A5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1160 442L1183 416" stroke="#6B55A5" stroke-width="8" stroke-linecap="round"/>
+
+  <g transform="translate(790 474)">
+    <rect x="0" y="0" width="270" height="94" rx="18" fill="#EFE9F8" stroke="#6B55A5" stroke-width="3"/>
+    <text x="28" y="38" fill="#6B55A5" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">STEP 4</text>
+    <text x="28" y="68" fill="#1F2522" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">NavDisplay</text>
+  </g>
+
+  <path d="M760 521H620" stroke="#6B55A5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M620 521L646 498" stroke="#6B55A5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M620 521L646 544" stroke="#6B55A5" stroke-width="8" stroke-linecap="round"/>
+
+  <g transform="translate(300 474)">
+    <rect x="0" y="0" width="290" height="94" rx="18" fill="#1F2522"/>
+    <text x="28" y="38" fill="#AFC8BD" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">STEP 5</text>
+    <text x="28" y="68" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">DetailScreen</text>
+  </g>
+
+  <g transform="translate(80 464)">
+    <rect x="0" y="0" width="170" height="48" rx="24" fill="#FFFFFF" stroke="#D9DDD8" stroke-width="2"/>
+    <text x="28" y="31" fill="#66726C" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">pop = remove</text>
+    <rect x="0" y="62" width="190" height="48" rx="24" fill="#FFFFFF" stroke="#D9DDD8" stroke-width="2"/>
+    <text x="28" y="93" fill="#66726C" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">reset = clear + add</text>
+  </g>
+</svg>
