@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">remember key가 바뀌면 다시 계산되는 구조</title>
+  <desc id="desc">remember에 key를 넣으면 key가 같을 때는 값을 재사용하고 key가 바뀔 때는 block을 다시 실행하는 구조</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e1faee"/>
+      <stop offset="100%" stop-color="#bff1d7"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e7f0ff"/>
+      <stop offset="100%" stop-color="#cfe0ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 19px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1050" cy="95" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="130" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">key는 “언제 다시 기억할지”를 정하는 기준입니다</text>
+  <text x="62" y="110" class="subtitle">key가 같으면 이전 값을 쓰고, key가 바뀌면 remember block을 다시 실행합니다</text>
+
+  <g transform="translate(82 178)">
+    <rect x="0" y="0" width="292" height="154" rx="28" fill="url(#green)" stroke="#16a34a" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="54" class="label">key 같음</text>
+    <text x="34" y="96" class="text">userId = "A"</text>
+    <text x="34" y="128" class="small">저장된 값 재사용</text>
+  </g>
+
+  <g transform="translate(454 178)">
+    <rect x="0" y="0" width="292" height="154" rx="28" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="54" class="label">key 바뀜</text>
+    <text x="34" y="96" class="text">userId: "A" -> "B"</text>
+    <text x="34" y="128" class="small">이전 기억은 폐기</text>
+  </g>
+
+  <g transform="translate(826 178)">
+    <rect x="0" y="0" width="292" height="154" rx="28" fill="url(#blue)" stroke="#4b7bd8" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="54" class="label">다시 계산</text>
+    <text x="34" y="96" class="text">block 재실행</text>
+    <text x="34" y="128" class="small">새 key에 맞는 값 생성</text>
+  </g>
+
+  <path d="M384 256 H444" class="arrow"/>
+  <path d="M428 238 L452 256 L428 274" class="arrow"/>
+  <path d="M756 256 H816" class="arrow"/>
+  <path d="M800 238 L824 256 L800 274" class="arrow"/>
+
+  <g transform="translate(160 430)">
+    <rect class="card" x="0" y="0" width="880" height="112" rx="26"/>
+    <rect x="0" y="0" width="8" height="112" rx="4" fill="#4b7bd8"/>
+    <text x="30" y="44" class="code">val avatar = remember(userId) { loadAvatarModel(userId) }</text>
+    <text x="30" y="82" class="small">userId가 같으면 avatar를 재사용하고, userId가 바뀌면 새 사용자 기준으로 다시 만듭니다.</text>
+  </g>
+</svg>

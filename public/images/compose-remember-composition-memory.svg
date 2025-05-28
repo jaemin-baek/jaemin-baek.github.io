@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">remember가 Composition에 값을 저장하는 방식</title>
+  <desc id="desc">초기 composition에서는 remember block을 실행하고 recomposition에서는 같은 위치의 저장된 값을 재사용하는 흐름</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4eeff"/>
+      <stop offset="100%" stop-color="#ded1ff"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff8ec"/>
+      <stop offset="100%" stop-color="#bdf0d5"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 19px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1058" cy="96" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="120" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">remember는 함수 안이 아니라 Composition에 값을 남깁니다</text>
+  <text x="62" y="110" class="subtitle">같은 call site가 다시 실행되면 block을 다시 실행하지 않고 저장된 값을 돌려줍니다</text>
+
+  <g transform="translate(70 170)">
+    <rect x="0" y="0" width="250" height="134" rx="28" fill="url(#purple)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">1. 첫 Composition</text>
+    <text x="30" y="92" class="text">remember block 실행</text>
+  </g>
+
+  <g transform="translate(450 152)">
+    <rect x="0" y="0" width="300" height="170" rx="30" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="54" class="label">Composition Memory</text>
+    <line x1="34" y1="78" x2="266" y2="78" stroke="#d19400" stroke-width="3" stroke-linecap="round"/>
+    <text x="42" y="120" class="code">slot #12 = value</text>
+    <text x="42" y="150" class="small">Composable 위치와 연결</text>
+  </g>
+
+  <g transform="translate(880 170)">
+    <rect x="0" y="0" width="250" height="134" rx="28" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">2. Recomposition</text>
+    <text x="30" y="92" class="text">저장된 값 재사용</text>
+  </g>
+
+  <path d="M330 236 H440" class="arrow"/>
+  <path d="M424 218 L448 236 L424 254" class="arrow"/>
+  <path d="M760 236 H870" class="arrow"/>
+  <path d="M854 218 L878 236 L854 254" class="arrow"/>
+
+  <g transform="translate(172 430)">
+    <rect class="card" x="0" y="0" width="856" height="102" rx="26"/>
+    <rect x="0" y="0" width="8" height="102" rx="4" fill="#7c5cff"/>
+    <text x="30" y="42" class="code">val formatter = remember { DateTimeFormatter.ofPattern("yyyy.MM.dd") }</text>
+    <text x="30" y="76" class="small">초기 composition에서 만들고, 같은 위치의 recomposition에서는 이전 formatter를 그대로 씁니다.</text>
+  </g>
+</svg>
