@@ -1,6 +1,8 @@
 ---
 title: "Android UI 성능 저하 요인: Frame Skipping, Jank, GPU Overdraw"
-date: 2025-05-29
+date: 2025-03-15
+draft: false
+categories: ["graphics"]
 tags: ["android", "performance", "jank", "gpu-overdraw", "frame-skipping"]
 description: "Android UI에서 발생할 수 있는 성능 저하 요소인 프레임 스킵, 잔커(Jank), GPU 오버드로우(Overdraw)에 대해 개념과 원인, 해결 방법을 소개합니다."
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Android 프레임 동기화 기술: BufferQueue, VSync, Triple Buffering"
-date: 2025-05-29
+date: 2025-03-15
 draft: false
 categories: ["graphics"]
 tags: ["android", "graphics", "vsync", "bufferqueue", "triple-buffering"]
