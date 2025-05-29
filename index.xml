@@ -6,8 +6,8 @@
 &lt;/h2>&lt;p>GPU는 기본적으로 &lt;strong>삼각형(triangle)&lt;/strong> 단위로 모든 그래픽을 처리합니다. 원, 사각형, 글자 등 모든 형태는 결국 &lt;strong>삼각형의 집합&lt;/strong>으로 변환되어 GPU에 전달됩니다.&lt;/p>
 &lt;p>이를 위해 필요한 것이 바로 다음 두 가지입니다:&lt;/p>
 &lt;ul>
-&lt;li>&lt;strong>Vertex Buffer (정점 버퍼)&lt;/strong>: 위치, 색상, 텍스처 좌표 등의 정점 데이터&lt;/li>
-&lt;li>&lt;strong>Index Buffer (인덱스 버퍼)&lt;/strong>: 어떤 정점들을 연결해 삼각형을 만들지에 대한 순서 정보&lt;/li>
+&lt;li>Vertex Buffer (정점 버퍼): 위치, 색상, 텍스처 좌표 등의 정점 데이터&lt;/li>
+&lt;li>Index Buffer (인덱스 버퍼): 어떤 정점들을 연결해 삼각형을 만들지에 대한 순서 정보&lt;/li>
 &lt;/ul>
 &lt;hr>
 &lt;h2 id="2-opengl-es--vulkan에서의-구조">2. OpenGL ES / Vulkan에서의 구조
