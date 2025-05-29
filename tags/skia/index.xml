@@ -87,4 +87,4 @@
 &lt;hr>
 &lt;h2 id="마무리">마무리
 &lt;/h2>&lt;p>Android는 단순한 View 그리기뿐 아니라, 실제로 매우 정교한 &lt;strong>GPU 기반 렌더링 파이프라인&lt;/strong>을 갖추고 있습니다. 특히 Skia, HardwareRenderer, SurfaceFlinger를 이해하면 &lt;strong>UI 성능 최적화, 커스텀 뷰, 하드웨어 가속&lt;/strong>에 대해 깊은 인사이트를 얻을 수 있습니다.&lt;/p>
-&lt;p>👉 다음 글에서는 &lt;code>BufferQueue&lt;/code>, &lt;code>VSync&lt;/code>, &lt;code>Triple Buffering&lt;/code> 같은 프레임 동기화 기술에 대해 다뤄보겠습니다.&lt;/p></description></item></channel></rss>
+&lt;p>다음 글에서는 &lt;code>BufferQueue&lt;/code>, &lt;code>VSync&lt;/code>, &lt;code>Triple Buffering&lt;/code> 같은 프레임 동기화 기술에 대해 다뤄보겠습니다.&lt;/p></description></item></channel></rss>
