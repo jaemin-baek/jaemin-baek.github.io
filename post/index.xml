@@ -91,7 +91,7 @@ Android는 &lt;code>Skia&lt;/code>라는 2D 그래픽 엔진을 사용하여 이
 &lt;/table>
 &lt;p>즉, Android 앱에서 버튼 하나를 그리더라도, 내부적으로는 &lt;strong>삼각형 메쉬를 GPU가 렌더링&lt;/strong>하고 있다는 점을 이해하면 성능 최적화나 커스텀 렌더링 구현에 큰 도움이 됩니다.&lt;/p>
 &lt;hr>
-&lt;p>👉 향후에는 &lt;code>HardwareRenderer&lt;/code>, &lt;code>SurfaceFlinger&lt;/code>, &lt;code>Skia&lt;/code> 등을 통해 Android의 렌더링 파이프라인을 더 깊이 있게 알아보겠습니다.&lt;/p></description></item><item><title>[v.0.0] Java에서 Exception과 Error의 차이와 명명 이유</title><link>https://jaemin-baek.github.io/post/java_exception_vs_error/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/java_exception_vs_error/</guid><description>&lt;h1 id="java에서-exception과-error의-차이와-명명-이유">Java에서 Exception과 Error의 차이와 명명 이유
+&lt;p>향후에는 &lt;code>HardwareRenderer&lt;/code>, &lt;code>SurfaceFlinger&lt;/code>, &lt;code>Skia&lt;/code> 등을 통해 Android의 렌더링 파이프라인을 더 깊이 있게 알아보겠습니다.&lt;/p></description></item><item><title>[v.0.0] Java에서 Exception과 Error의 차이와 명명 이유</title><link>https://jaemin-baek.github.io/post/java_exception_vs_error/</link><pubDate>Thu, 13 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/java_exception_vs_error/</guid><description>&lt;h1 id="java에서-exception과-error의-차이와-명명-이유">Java에서 Exception과 Error의 차이와 명명 이유
 &lt;/h1>&lt;p>Java에서 &lt;code>Exception&lt;/code>이라는 용어를 사용한 이유는 단순한 문법의 선택이 아니라 &lt;strong>철학적으로 오류를 &amp;ldquo;예외적인 상황(exceptional situation)&amp;ldquo;으로 분류하려는 시도&lt;/strong>에 뿌리를 두고 있습니다. 이 개념은 C++ 등 객체지향 언어에서 비롯되었고, Java는 이를 명시적 언어 설계 요소로 적극 도입했습니다.&lt;/p>
 &lt;hr>
 &lt;h2 id="-java가-exception이라는-용어를-채택한-배경">🔍 Java가 &lt;code>Exception&lt;/code>이라는 용어를 채택한 배경

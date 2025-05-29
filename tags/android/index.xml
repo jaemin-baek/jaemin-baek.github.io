@@ -91,4 +91,4 @@ Android는 &lt;code>Skia&lt;/code>라는 2D 그래픽 엔진을 사용하여 이
 &lt;/table>
 &lt;p>즉, Android 앱에서 버튼 하나를 그리더라도, 내부적으로는 &lt;strong>삼각형 메쉬를 GPU가 렌더링&lt;/strong>하고 있다는 점을 이해하면 성능 최적화나 커스텀 렌더링 구현에 큰 도움이 됩니다.&lt;/p>
 &lt;hr>
-&lt;p>👉 향후에는 &lt;code>HardwareRenderer&lt;/code>, &lt;code>SurfaceFlinger&lt;/code>, &lt;code>Skia&lt;/code> 등을 통해 Android의 렌더링 파이프라인을 더 깊이 있게 알아보겠습니다.&lt;/p></description></item></channel></rss>
+&lt;p>향후에는 &lt;code>HardwareRenderer&lt;/code>, &lt;code>SurfaceFlinger&lt;/code>, &lt;code>Skia&lt;/code> 등을 통해 Android의 렌더링 파이프라인을 더 깊이 있게 알아보겠습니다.&lt;/p></description></item></channel></rss>
