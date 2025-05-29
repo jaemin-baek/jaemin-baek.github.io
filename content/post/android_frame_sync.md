@@ -1,6 +1,8 @@
 ---
 title: "Android 프레임 동기화 기술: BufferQueue, VSync, Triple Buffering"
 date: 2025-05-29
+draft: false
+categories: ["graphics"]
 tags: ["android", "graphics", "vsync", "bufferqueue", "triple-buffering"]
 description: "Android의 프레임 동기화 기술인 VSync, BufferQueue, Triple Buffering에 대해 구조적으로 설명하고, 각 기술이 어떻게 렌더링 지연과 티어링을 방지하는지 알아봅니다."
 ---
