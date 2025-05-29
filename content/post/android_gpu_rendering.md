@@ -113,4 +113,4 @@ glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 ---
 
-👉 향후에는 `HardwareRenderer`, `SurfaceFlinger`, `Skia` 등을 통해 Android의 렌더링 파이프라인을 더 깊이 있게 알아보겠습니다.
+향후에는 `HardwareRenderer`, `SurfaceFlinger`, `Skia` 등을 통해 Android의 렌더링 파이프라인을 더 깊이 있게 알아보겠습니다.
