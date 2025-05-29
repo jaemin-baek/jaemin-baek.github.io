@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gpu on 리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/tags/gpu/</link><description>Recent content in Gpu on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 15 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/tags/gpu/index.xml" rel="self" type="application/rss+xml"/><item><title>안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기</title><link>https://jaemin-baek.github.io/post/android_gpu_rendering/</link><pubDate>Sat, 15 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/android_gpu_rendering/</guid><description>&lt;h1 id="안드로이드에서의-gpu-렌더링-구조-vertex-buffer와-index-buffer-이해하기">안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기
+&lt;/h1>&lt;p>Android 앱을 개발하면서 UI를 구성할 때 우리는 보통 XML로 &lt;code>TextView&lt;/code>, &lt;code>ImageView&lt;/code>, &lt;code>Button&lt;/code> 등을 배치합니다. 그러나 이러한 UI 요소들은 실제로 화면에 표시될 때 **GPU(Graphics Processing Unit)**를 통해 렌더링됩니다. 이 렌더링은 내부적으로 어떻게 동작할까요?&lt;/p>
+&lt;p>이 글에서는 Android의 GPU 렌더링 구조를 이해하기 위해 &lt;strong>Vertex Buffer&lt;/strong>와 &lt;strong>Index Buffer&lt;/strong>를 중심으로 살펴보겠습니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="1-gpu는-삼각형을-그리는-기계">1. GPU는 삼각형을 그리는 기계
+&lt;/h2>&lt;p>GPU는 기본적으로 &lt;strong>삼각형(triangle)&lt;/strong> 단위로 모든 그래픽을 처리합니다. 원, 사각형, 글자 등 모든 형태는 결국 &lt;strong>삼각형의 집합&lt;/strong>으로 변환되어 GPU에 전달됩니다.&lt;/p>
+&lt;p>이를 위해 필요한 것이 바로 다음 두 가지입니다:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Vertex Buffer (정점 버퍼)&lt;/strong>: 위치, 색상, 텍스처 좌표 등의 정점 데이터&lt;/li>
+&lt;li>&lt;strong>Index Buffer (인덱스 버퍼)&lt;/strong>: 어떤 정점들을 연결해 삼각형을 만들지에 대한 순서 정보&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="2-opengl-es--vulkan에서의-구조">2. OpenGL ES / Vulkan에서의 구조
+&lt;/h2>&lt;p>Android에서 직접 OpenGL ES나 Vulkan을 사용하는 경우, 아래와 같은 방식으로 데이터를 GPU에 전달합니다.&lt;/p>
+&lt;h3 id="-vertex-buffer">🔹 Vertex Buffer
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>GLfloat vertices[] &lt;span style="color:#f92672">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// x, y, r, g, b
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#ae81ff">0.0f&lt;/span>, &lt;span style="color:#ae81ff">0.5f&lt;/span>, &lt;span style="color:#ae81ff">1.0f&lt;/span>, &lt;span style="color:#ae81ff">0.0f&lt;/span>, &lt;span style="color:#ae81ff">0.0f&lt;/span>, &lt;span style="color:#75715e">// 정점 0
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#ae81ff">0.5f&lt;/span>, &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#ae81ff">0.5f&lt;/span>, &lt;span style="color:#ae81ff">0.0f&lt;/span>, &lt;span style="color:#ae81ff">1.0f&lt;/span>, &lt;span style="color:#ae81ff">0.0f&lt;/span>, &lt;span style="color:#75715e">// 정점 1
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#ae81ff">0.5f&lt;/span>, &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#ae81ff">0.5f&lt;/span>, &lt;span style="color:#ae81ff">0.0f&lt;/span>, &lt;span style="color:#ae81ff">0.0f&lt;/span>, &lt;span style="color:#ae81ff">1.0f&lt;/span> &lt;span style="color:#75715e">// 정점 2
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>};
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>정점 데이터에는 &lt;strong>위치 정보&lt;/strong>와 함께 &lt;strong>색상, 텍스처 좌표, 법선벡터&lt;/strong> 등이 포함될 수 있습니다.&lt;/p>
+&lt;h3 id="-index-buffer">🔹 Index Buffer
+&lt;/h3>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>GLuint indices[] &lt;span style="color:#f92672">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">0&lt;/span>, &lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#ae81ff">2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>};
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>위 예시는 정점 0-1-2를 연결하여 &lt;strong>삼각형 하나&lt;/strong>를 만드는 구조입니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="3-android-뷰-시스템은-어떻게-렌더링할까">3. Android 뷰 시스템은 어떻게 렌더링할까?
+&lt;/h2>&lt;p>일반적인 Android UI(&lt;code>View&lt;/code>, &lt;code>TextView&lt;/code>, &lt;code>LinearLayout&lt;/code> 등)는 개발자가 직접 GPU 명령을 다루지는 않지만, 내부에서는 아래와 같은 과정을 거칩니다:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>View → DisplayList 생성&lt;/strong>&lt;br>
+View가 자신의 그리기 명령을 &lt;code>DisplayList&lt;/code>라는 객체에 기록합니다.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>RenderThread → Skia → GPU 호출&lt;/strong>&lt;br>
+Android는 &lt;code>Skia&lt;/code>라는 2D 그래픽 엔진을 사용하여 이 명령들을 GPU 친화적인 형태로 변환하고, OpenGL ES 또는 Vulkan API를 통해 GPU에 전달합니다.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>GPU는 결국 정점과 삼각형으로 처리&lt;/strong>&lt;br>
+사각형 버튼 하나도 두 개의 삼각형으로 분할되어 렌더링됩니다.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h2 id="4-왜-index-buffer를-쓸까">4. 왜 Index Buffer를 쓸까?
+&lt;/h2>&lt;p>Index Buffer는 중복된 정점 데이터를 재사용할 수 있게 해줍니다. 예를 들어 사각형을 두 개의 삼각형으로 만들 때:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>정점: 0, 1, 2, 3
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>삼각형 1: 0, 1, 2
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>삼각형 2: 2, 3, 0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이렇게 하면 정점 2는 두 삼각형에 공유되어 메모리 사용이 효율적이고, 성능이 향상됩니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="5-android에서-직접-사용하는-예-opengl-es-예제">5. Android에서 직접 사용하는 예: OpenGL ES 예제
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">glGenBuffers&lt;/span>(&lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#f92672">&amp;amp;&lt;/span>vbo);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">glBindBuffer&lt;/span>(GL_ARRAY_BUFFER, vbo);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">glBufferData&lt;/span>(GL_ARRAY_BUFFER, &lt;span style="color:#66d9ef">sizeof&lt;/span>(vertices), vertices, GL_STATIC_DRAW);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">glGenBuffers&lt;/span>(&lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#f92672">&amp;amp;&lt;/span>ebo);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">glBindBuffer&lt;/span>(GL_ELEMENT_ARRAY_BUFFER, ebo);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">glBufferData&lt;/span>(GL_ELEMENT_ARRAY_BUFFER, &lt;span style="color:#66d9ef">sizeof&lt;/span>(indices), indices, GL_STATIC_DRAW);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#a6e22e">glDrawElements&lt;/span>(GL_TRIANGLES, &lt;span style="color:#ae81ff">6&lt;/span>, GL_UNSIGNED_INT, &lt;span style="color:#ae81ff">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 코드는 정점 버퍼와 인덱스 버퍼를 생성하고, 삼각형을 그리는 명령입니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="6-결론-안드로이드에서의-gpu-렌더링-핵심-요약">6. 결론: 안드로이드에서의 GPU 렌더링 핵심 요약
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>개념&lt;/th>
+&lt;th>역할&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>Vertex Buffer&lt;/strong>&lt;/td>
+&lt;td>정점 데이터 (위치, 색상, UV 등)를 GPU에 전달&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Index Buffer&lt;/strong>&lt;/td>
+&lt;td>삼각형을 구성할 정점 순서 정의&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Draw Call&lt;/strong>&lt;/td>
+&lt;td>정점 + 인덱스를 이용해 삼각형을 GPU가 그림&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>View 시스템&lt;/strong>&lt;/td>
+&lt;td>Skia와 RenderThread를 통해 내부적으로 이 구조 사용&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>즉, Android 앱에서 버튼 하나를 그리더라도, 내부적으로는 &lt;strong>삼각형 메쉬를 GPU가 렌더링&lt;/strong>하고 있다는 점을 이해하면 성능 최적화나 커스텀 렌더링 구현에 큰 도움이 됩니다.&lt;/p>
+&lt;hr>
+&lt;p>👉 향후에는 &lt;code>HardwareRenderer&lt;/code>, &lt;code>SurfaceFlinger&lt;/code>, &lt;code>Skia&lt;/code> 등을 통해 Android의 렌더링 파이프라인을 더 깊이 있게 알아보겠습니다.&lt;/p></description></item></channel></rss>
