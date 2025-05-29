@@ -1,13 +1,15 @@
 ---
 title: "안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기"
 date: 2025-03-15
+draft: false
+categories: ["graphics"]
 tags: ["android", "graphics", "opengl-es", "vulkan", "gpu"]
 description: "Android에서 View가 어떻게 GPU에 의해 렌더링되는지, 그리고 OpenGL ES/Vulkan에서 사용하는 정점 버퍼(Vertex Buffer)와 인덱스 버퍼(Index Buffer)에 대해 설명합니다."
 ---
 
 # 안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기
 
-Android 앱을 개발하면서 UI를 구성할 때 우리는 보통 XML로 `TextView`, `ImageView`, `Button` 등을 배치합니다. 그러나 이러한 UI 요소들은 실제로 화면에 표시될 때 **GPU(Graphics Processing Unit)**를 통해 렌더링됩니다. 이 렌더링은 내부적으로 어떻게 동작할까요?
+Android 앱을 개발하면서 UI를 구성할 때 우리는 보통 XML로 `TextView`, `ImageView`, `Button` 등을 배치합니다. 그러나 이러한 UI 요소들은 실제로 화면에 표시될 때 GPU(Graphics Processing Unit) 를 통해 렌더링됩니다. 이 렌더링은 내부적으로 어떻게 동작할까요?
 
 이 글에서는 Android의 GPU 렌더링 구조를 이해하기 위해 **Vertex Buffer**와 **Index Buffer**를 중심으로 살펴보겠습니다.
 
