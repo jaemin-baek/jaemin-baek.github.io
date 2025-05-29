@@ -109,4 +109,4 @@ GPU: 프레임 제출
 
 이러한 동기화 기술 덕분에 Android는 티어링 없는 부드러운 애니메이션을 유지하면서, GPU와 디스플레이 간 효율적인 작업 분할을 수행할 수 있습니다.
 
-👉 다음 글에서는 `Frame Skipping`, `Jank`, `GPU Overdraw`과 같은 성능 저하 요인에 대해 다뤄보겠습니다.
+다음 글에서는 `Frame Skipping`, `Jank`, `GPU Overdraw`과 같은 성능 저하 요인에 대해 다뤄보겠습니다.
