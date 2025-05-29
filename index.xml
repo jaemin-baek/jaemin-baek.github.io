@@ -1,4 +1,93 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/</link><description>Recent content on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 15 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기</title><link>https://jaemin-baek.github.io/post/android_gpu_rendering/</link><pubDate>Sat, 15 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/android_gpu_rendering/</guid><description>&lt;h1 id="안드로이드에서의-gpu-렌더링-구조-vertex-buffer와-index-buffer-이해하기">안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>리부트 기술 블로그v2</title><link>https://jaemin-baek.github.io/</link><description>Recent content on 리부트 기술 블로그v2</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 15 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jaemin-baek.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Android 렌더링 파이프라인 심화: Skia, HardwareRenderer, SurfaceFlinger</title><link>https://jaemin-baek.github.io/post/android_render_pipeline/</link><pubDate>Sat, 15 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/android_render_pipeline/</guid><description>&lt;h1 id="android-렌더링-파이프라인-심화-skia-hardwarerenderer-surfaceflinger">Android 렌더링 파이프라인 심화: Skia, HardwareRenderer, SurfaceFlinger
+&lt;/h1>&lt;p>이 글에서는 Android 시스템이 UI를 어떻게 실제 화면에 렌더링하는지, 그 과정에 참여하는 핵심 구성 요소인 &lt;strong>Skia&lt;/strong>, &lt;strong>RenderThread&lt;/strong>, &lt;strong>HardwareRenderer&lt;/strong>, &lt;strong>SurfaceFlinger&lt;/strong>에 대해 구조적으로 살펴봅니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="1-android-렌더링-전체-흐름">1. Android 렌더링 전체 흐름
+&lt;/h2>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>[앱의 View 계층]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ↓
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[DisplayList 생성]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ↓
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[RenderThread]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ↓
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[HardwareRenderer (Skia 활용)]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ↓
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[SurfaceFlinger]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ↓
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[Surface (Framebuffer) → 디스플레이]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h2 id="2-skia란">2. Skia란?
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>Skia&lt;/strong>는 Google에서 만든 고성능 2D 그래픽 라이브러리입니다.&lt;/li>
+&lt;li>Android의 &lt;code>Canvas&lt;/code> API는 내부적으로 Skia를 사용합니다.&lt;/li>
+&lt;li>포인트, 선, 텍스트, 곡선 등을 GPU 또는 CPU 기반으로 그릴 수 있습니다.&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>예: &lt;code>canvas.drawText(...)&lt;/code> → Skia가 실제 텍스트 패스를 폴리곤화하여 GPU에 전달&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="3-renderthread">3. RenderThread
+&lt;/h2>&lt;ul>
+&lt;li>Android 5.0(Lollipop) 이후 도입&lt;/li>
+&lt;li>View의 그리기 연산을 메인 스레드에서 분리하여 처리&lt;/li>
+&lt;li>&lt;strong>DisplayList를 수집하고, Skia를 통해 그리기 명령을 GPU에 전달&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>메인 스레드는 UI 이벤트와 로직 처리, RenderThread는 GPU 렌더링 전용&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="4-hardwarerenderer">4. HardwareRenderer
+&lt;/h2>&lt;ul>
+&lt;li>Skia를 통해 실제 그리기를 수행하는 핵심 클래스&lt;/li>
+&lt;li>&lt;code>HardwareRenderer&lt;/code>는 각 Window에 대한 렌더링 컨텍스트를 관리&lt;/li>
+&lt;li>GPU 백엔드(OpenGL ES 또는 Vulkan)에 맞춰 최적화된 렌더링 명령 생성&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>&lt;code>ViewRootImpl&lt;/code>이 이 Renderer를 호출하여 &lt;code>Surface&lt;/code>에 그려줌&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="5-surfaceflinger">5. SurfaceFlinger
+&lt;/h2>&lt;ul>
+&lt;li>안드로이드 시스템의 &lt;strong>디스플레이 합성 관리자&lt;/strong>&lt;/li>
+&lt;li>앱들이 그린 Surface들을 모아서 화면에 보여주는 역할&lt;/li>
+&lt;li>각 앱은 독립된 Surface에 그림 → SurfaceFlinger가 하나의 프레임으로 합성하여 디스플레이로 전송&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>**WMS(WindowManagerService)**와 통신하며, &lt;code>BufferQueue&lt;/code> 기반으로 동작&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="6-렌더링-파이프라인-전체-요약">6. 렌더링 파이프라인 전체 요약
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>단계&lt;/th>
+&lt;th>설명&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>View → DisplayList&lt;/td>
+&lt;td>UI 계층의 그리기 명령 수집&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>RenderThread&lt;/td>
+&lt;td>메인 스레드 분리 렌더링&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>HardwareRenderer&lt;/td>
+&lt;td>Skia로 GPU 명령 생성&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>SurfaceFlinger&lt;/td>
+&lt;td>여러 Surface 합성 후 화면 출력&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="7-디버깅-팁">7. 디버깅 팁
+&lt;/h2>&lt;ul>
+&lt;li>&lt;code>adb shell dumpsys SurfaceFlinger&lt;/code> → 현재 화면 레이어 구조 확인&lt;/li>
+&lt;li>&lt;code>GPU Rendering Profile&lt;/code> (개발자 옵션) → 프레임 시간 시각화&lt;/li>
+&lt;li>&lt;code>systrace&lt;/code> / &lt;code>perfetto&lt;/code> → 전체 프레임 렌더링 타임라인 분석&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="마무리">마무리
+&lt;/h2>&lt;p>Android는 단순한 View 그리기뿐 아니라, 실제로 매우 정교한 &lt;strong>GPU 기반 렌더링 파이프라인&lt;/strong>을 갖추고 있습니다. 특히 Skia, HardwareRenderer, SurfaceFlinger를 이해하면 &lt;strong>UI 성능 최적화, 커스텀 뷰, 하드웨어 가속&lt;/strong>에 대해 깊은 인사이트를 얻을 수 있습니다.&lt;/p>
+&lt;p>👉 다음 글에서는 &lt;code>BufferQueue&lt;/code>, &lt;code>VSync&lt;/code>, &lt;code>Triple Buffering&lt;/code> 같은 프레임 동기화 기술에 대해 다뤄보겠습니다.&lt;/p></description></item><item><title>안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기</title><link>https://jaemin-baek.github.io/post/android_gpu_rendering/</link><pubDate>Sat, 15 Mar 2025 00:00:00 +0000</pubDate><guid>https://jaemin-baek.github.io/post/android_gpu_rendering/</guid><description>&lt;h1 id="안드로이드에서의-gpu-렌더링-구조-vertex-buffer와-index-buffer-이해하기">안드로이드에서의 GPU 렌더링 구조: Vertex Buffer와 Index Buffer 이해하기
 &lt;/h1>&lt;p>Android 앱을 개발하면서 UI를 구성할 때 우리는 보통 XML로 &lt;code>TextView&lt;/code>, &lt;code>ImageView&lt;/code>, &lt;code>Button&lt;/code> 등을 배치합니다. 그러나 이러한 UI 요소들은 실제로 화면에 표시될 때 GPU(Graphics Processing Unit) 를 통해 렌더링됩니다. 이 렌더링은 내부적으로 어떻게 동작할까요?&lt;/p>
 &lt;p>이 글에서는 Android의 GPU 렌더링 구조를 이해하기 위해 &lt;strong>Vertex Buffer&lt;/strong>와 &lt;strong>Index Buffer&lt;/strong>를 중심으로 살펴보겠습니다.&lt;/p>
 &lt;hr>
