@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">일반 변수와 mutableStateOf 비교</title>
+  <desc id="desc">일반 변수는 Compose가 변경을 알 수 없고 mutableStateOf는 value 변경을 Compose가 관찰할 수 있다는 차이를 설명하는 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff0f0"/>
+      <stop offset="100%" stop-color="#ffd7d7"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e1faee"/>
+      <stop offset="100%" stop-color="#bff1d7"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 28px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 22px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 21px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1080" cy="95" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="135" cy="525" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">mutableStateOf는 “바뀌면 알려주는 상자”입니다</text>
+  <text x="62" y="110" class="subtitle">값을 담는 것보다 중요한 역할은 Compose가 읽기와 쓰기를 관찰할 수 있게 만드는 것입니다</text>
+
+  <g transform="translate(70 164)">
+    <rect class="card" x="0" y="0" width="500" height="340" rx="30"/>
+    <rect x="0" y="0" width="500" height="12" rx="6" fill="#ef4444"/>
+    <text x="36" y="58" class="label">일반 변수</text>
+    <text x="36" y="98" class="small">값은 바뀌지만 Compose가 자동으로 알기 어렵습니다</text>
+    <rect x="36" y="130" width="428" height="130" rx="22" fill="url(#red)" stroke="#ef4444" stroke-width="3"/>
+    <text x="64" y="178" class="code">var count = 0</text>
+    <text x="64" y="220" class="code">count = count + 1</text>
+    <text x="38" y="306" class="text">화면 갱신 신호가 없습니다</text>
+  </g>
+
+  <g transform="translate(630 164)">
+    <rect class="card" x="0" y="0" width="500" height="340" rx="30"/>
+    <rect x="0" y="0" width="500" height="12" rx="6" fill="#16a34a"/>
+    <text x="36" y="58" class="label">MutableState</text>
+    <text x="36" y="98" class="small">value 변경을 Compose Runtime이 추적할 수 있습니다</text>
+    <rect x="36" y="130" width="428" height="130" rx="22" fill="url(#green)" stroke="#16a34a" stroke-width="3"/>
+    <text x="64" y="178" class="code">val count = mutableStateOf(0)</text>
+    <text x="64" y="220" class="code">count.value = count.value + 1</text>
+    <text x="38" y="306" class="text">읽은 UI에 다시 계산 신호가 갑니다</text>
+  </g>
+
+  <path d="M575 326 H625" class="arrow"/>
+  <path d="M608 308 L632 326 L608 344" class="arrow"/>
+</svg>

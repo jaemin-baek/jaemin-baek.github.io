@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">SnapshotMutationPolicy와 값 변경 판단</title>
+  <desc id="desc">MutableState가 새 value를 변경으로 볼지 판단하는 mutation policy를 설명하는 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e1faee"/>
+      <stop offset="100%" stop-color="#bff1d7"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff0f0"/>
+      <stop offset="100%" stop-color="#ffd7d7"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 20px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1055" cy="95" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="130" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">새 value가 들어와도 항상 “변경”으로 보지는 않습니다</text>
+  <text x="62" y="110" class="subtitle">SnapshotMutationPolicy가 이전 값과 새 값을 비교해서 변경 여부를 판단합니다</text>
+
+  <g transform="translate(92 180)">
+    <rect x="0" y="0" width="286" height="154" rx="28" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="54" class="label">새 value 설정</text>
+    <text x="34" y="96" class="code">state.value = next</text>
+    <text x="34" y="128" class="small">setter 호출</text>
+  </g>
+
+  <g transform="translate(458 180)">
+    <rect x="0" y="0" width="286" height="154" rx="28" fill="url(#green)" stroke="#16a34a" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="54" class="label">동등성 비교</text>
+    <text x="34" y="96" class="text">old == new ?</text>
+    <text x="34" y="128" class="small">기본은 구조 동등성</text>
+  </g>
+
+  <g transform="translate(824 180)">
+    <rect x="0" y="0" width="286" height="154" rx="28" fill="url(#red)" stroke="#ef4444" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="54" class="label">변경이면 알림</text>
+    <text x="34" y="96" class="text">reader invalidation</text>
+    <text x="34" y="128" class="small">동등하면 변경 아님</text>
+  </g>
+
+  <path d="M388 256 H448" class="arrow"/>
+  <path d="M432 238 L456 256 L432 274" class="arrow"/>
+  <path d="M754 256 H814" class="arrow"/>
+  <path d="M798 238 L822 256 L798 274" class="arrow"/>
+
+  <g transform="translate(160 430)">
+    <rect class="card" x="0" y="0" width="880" height="112" rx="26"/>
+    <rect x="0" y="0" width="8" height="112" rx="4" fill="#16a34a"/>
+    <text x="30" y="44" class="code">mutableStateOf(value, policy = structuralEqualityPolicy())</text>
+    <text x="30" y="82" class="small">같은 값으로 판단되면 새 value를 넣어도 Compose 입장에서는 변경이 아닐 수 있습니다.</text>
+  </g>
+</svg>

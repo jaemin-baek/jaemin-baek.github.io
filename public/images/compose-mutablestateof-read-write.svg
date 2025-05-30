@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">MutableState 읽기와 쓰기 흐름</title>
+  <desc id="desc">MutableState value를 읽은 Composable이 기록되고 value가 바뀌면 읽은 곳이 다시 실행되는 흐름을 설명하는 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4eeff"/>
+      <stop offset="100%" stop-color="#ded1ff"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff8ec"/>
+      <stop offset="100%" stop-color="#bdf0d5"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e7f0ff"/>
+      <stop offset="100%" stop-color="#cfe0ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 19px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1055" cy="95" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="120" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">핵심은 value를 “누가 읽었는지”와 “언제 바뀌었는지”입니다</text>
+  <text x="62" y="110" class="subtitle">Compose는 State read를 기록하고, write가 발생하면 해당 reader를 다시 실행할 수 있게 표시합니다</text>
+
+  <g transform="translate(60 190)">
+    <rect x="0" y="0" width="204" height="132" rx="28" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">1. State 생성</text>
+    <text x="30" y="92" class="text">MutableState(0)</text>
+  </g>
+
+  <g transform="translate(330 190)">
+    <rect x="0" y="0" width="210" height="132" rx="28" fill="url(#purple)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">2. value 읽기</text>
+    <text x="30" y="92" class="text">Text가 count 읽음</text>
+  </g>
+
+  <g transform="translate(610 190)">
+    <rect x="0" y="0" width="220" height="132" rx="28" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">3. value 쓰기</text>
+    <text x="30" y="92" class="text">count = 1</text>
+  </g>
+
+  <g transform="translate(900 190)">
+    <rect x="0" y="0" width="236" height="132" rx="28" fill="url(#blue)" stroke="#4b7bd8" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="52" class="label">4. 다시 실행</text>
+    <text x="30" y="92" class="text">읽은 UI만 최신화</text>
+  </g>
+
+  <path d="M274 256 H320" class="arrow"/>
+  <path d="M304 238 L328 256 L304 274" class="arrow"/>
+  <path d="M550 256 H600" class="arrow"/>
+  <path d="M584 238 L608 256 L584 274" class="arrow"/>
+  <path d="M840 256 H890" class="arrow"/>
+  <path d="M874 238 L898 256 L874 274" class="arrow"/>
+
+  <g transform="translate(170 420)">
+    <rect class="card" x="0" y="0" width="860" height="116" rx="26"/>
+    <rect x="0" y="0" width="8" height="116" rx="4" fill="#7c5cff"/>
+    <text x="30" y="44" class="code">Text("${count.value}")  // read</text>
+    <text x="30" y="82" class="code">count.value = count.value + 1  // write -> schedule recomposition</text>
+  </g>
+</svg>
