@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">copy로 새 State 만들기</title>
+  <desc id="desc">Kotlin data class copy가 기존 State를 고치는 것이 아니라 새 State를 만드는 과정을 PPT 스타일로 보여주는 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff8ec"/>
+      <stop offset="100%" stop-color="#bdf0d5"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4eeff"/>
+      <stop offset="100%" stop-color="#ded1ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 21px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 21px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1045" cy="96" r="90" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="130" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">copy는 기존 State를 고치는 게 아니라 새 State를 만듭니다</text>
+  <text x="62" y="110" class="subtitle">그래서 “이전 값”과 “새 값”의 차이가 코드에서 선명하게 남습니다</text>
+
+  <g transform="translate(74 166)">
+    <rect x="0" y="0" width="306" height="188" rx="28" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="36" y="54" class="label">이전 State</text>
+    <line x1="36" y1="76" x2="270" y2="76" stroke="#2f9461" stroke-width="3" stroke-linecap="round"/>
+    <text x="40" y="122" class="text">count = 0</text>
+    <text x="40" y="162" class="text">lastIntent = 아직 없음</text>
+  </g>
+
+  <g transform="translate(468 184)">
+    <rect x="0" y="0" width="270" height="152" rx="28" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="38" y="56" class="label">state.copy(...)</text>
+    <text x="38" y="100" class="text">count만 1로 변경</text>
+    <text x="38" y="132" class="small">나머지는 기존 값 이어받기</text>
+  </g>
+
+  <g transform="translate(824 166)">
+    <rect x="0" y="0" width="322" height="188" rx="28" fill="url(#purple)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="38" y="54" class="label">새 State</text>
+    <line x1="38" y1="76" x2="284" y2="76" stroke="#7c5cff" stroke-width="3" stroke-linecap="round"/>
+    <text x="42" y="122" class="text">count = 1</text>
+    <text x="42" y="162" class="text">lastIntent = IncreaseClicked</text>
+  </g>
+
+  <path d="M390 260 H458" class="arrow"/>
+  <path d="M442 242 L466 260 L442 278" class="arrow"/>
+  <path d="M748 260 H814" class="arrow"/>
+  <path d="M798 242 L822 260 L798 278" class="arrow"/>
+
+  <g transform="translate(160 430)">
+    <rect class="card" x="0" y="0" width="880" height="112" rx="26"/>
+    <rect x="0" y="0" width="8" height="112" rx="4" fill="#d19400"/>
+    <text x="30" y="44" class="code">state.copy(count = nextCount, lastIntent = "IncreaseClicked")</text>
+    <text x="30" y="82" class="small">MVI에서는 상태 변경 위치가 reduce 안에 모여 있어 흐름을 추적하기 쉽습니다.</text>
+  </g>
+</svg>

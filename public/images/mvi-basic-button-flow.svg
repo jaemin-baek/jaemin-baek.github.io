@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">버튼 클릭에서 State 변경까지 흐름</title>
+  <desc id="desc">+1 버튼 클릭이 Intent, send, reduce를 거쳐 새 State로 바뀌는 과정을 PPT 스타일로 보여주는 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4eeff"/>
+      <stop offset="100%" stop-color="#ded1ff"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d9"/>
+      <stop offset="100%" stop-color="#ffe7a6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff8ec"/>
+      <stop offset="100%" stop-color="#bdf0d5"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="135%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 39px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 27px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 21px; font-weight: 800; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 21px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1030" cy="94" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="115" cy="510" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="72" class="title">+1 버튼을 누르면 코드가 이렇게 움직입니다</text>
+  <text x="62" y="110" class="subtitle">UI는 상태를 직접 바꾸지 않고, “무슨 일이 일어났는지”만 Intent로 보냅니다</text>
+
+  <g transform="translate(70 160)">
+    <rect x="0" y="0" width="210" height="278" rx="36" fill="#1f2430" filter="url(#shadow)"/>
+    <rect x="22" y="32" width="166" height="212" rx="24" fill="#ffffff"/>
+    <text x="48" y="78" class="text">Counter</text>
+    <rect x="54" y="108" width="102" height="70" rx="16" fill="#f5f7fb" stroke="#d7dde8" stroke-width="3"/>
+    <text x="94" y="153" class="label">0</text>
+    <rect x="62" y="194" width="84" height="42" rx="18" fill="#7c5cff"/>
+    <text x="84" y="223" class="text" fill="#ffffff">+1</text>
+  </g>
+
+  <g transform="translate(360 190)">
+    <rect x="0" y="0" width="235" height="128" rx="26" fill="url(#purple)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="50" class="label">Intent</text>
+    <text x="30" y="90" class="text">IncreaseClicked</text>
+  </g>
+
+  <g transform="translate(680 190)">
+    <rect x="0" y="0" width="220" height="128" rx="26" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="34" y="50" class="label">send()</text>
+    <text x="34" y="90" class="text">reduce 호출</text>
+  </g>
+
+  <g transform="translate(980 190)">
+    <rect x="0" y="0" width="170" height="128" rx="26" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="30" y="50" class="label">State</text>
+    <text x="30" y="90" class="text">count = 1</text>
+  </g>
+
+  <path d="M288 274 H350" class="arrow"/>
+  <path d="M334 256 L358 274 L334 292" class="arrow"/>
+  <path d="M604 254 H670" class="arrow"/>
+  <path d="M654 236 L678 254 L654 272" class="arrow"/>
+  <path d="M908 254 H970" class="arrow"/>
+  <path d="M954 236 L978 254 L954 272" class="arrow"/>
+
+  <g transform="translate(330 420)">
+    <rect class="card" x="0" y="0" width="810" height="116" rx="26"/>
+    <rect x="0" y="0" width="8" height="116" rx="4" fill="#7c5cff"/>
+    <text x="30" y="45" class="code">Button(onClick = { onIntent(CounterIntent.IncreaseClicked) })</text>
+    <text x="30" y="84" class="small">버튼은 count++ 하지 않고 “IncreaseClicked가 발생했다”는 사실만 전달합니다.</text>
+  </g>
+</svg>

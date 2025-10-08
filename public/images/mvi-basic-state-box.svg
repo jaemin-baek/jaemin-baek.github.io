@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">remember와 mutableStateOf가 State를 보관하는 구조</title>
+  <desc id="desc">Compose에서 remember, mutableStateOf, by가 각각 어떤 역할을 하는지 PPT 스타일로 설명하는 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef5ff"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff8ec"/>
+      <stop offset="100%" stop-color="#bdf0d5"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f2ecff"/>
+      <stop offset="100%" stop-color="#ddd1ff"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff5d8"/>
+      <stop offset="100%" stop-color="#ffe6a3"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#102033" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 38px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .label { font-family: Arial, sans-serif; font-size: 26px; font-weight: 900; fill: #121826; letter-spacing: 0; }
+      .text { font-family: Arial, sans-serif; font-size: 21px; font-weight: 700; fill: #354052; letter-spacing: 0; }
+      .small { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #667085; letter-spacing: 0; }
+      .code { font-family: Menlo, Consolas, monospace; font-size: 23px; font-weight: 800; fill: #172033; }
+      .code-small { font-family: Menlo, Consolas, monospace; font-size: 19px; font-weight: 800; fill: #172033; }
+      .card { fill: #ffffff; stroke: #d9e2f1; stroke-width: 2; filter: url(#shadow); }
+      .line { fill: none; stroke: #1f2937; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <circle cx="1070" cy="92" r="92" fill="#7c5cff" opacity="0.08"/>
+  <circle cx="120" cy="520" r="110" fill="#18a058" opacity="0.08"/>
+
+  <text x="60" y="70" class="title">이 한 줄은 State를 담는 상자를 만듭니다</text>
+  <text x="62" y="108" class="subtitle">처음에는 세 단어만 분리해서 보면 됩니다: remember, mutableStateOf, by</text>
+
+  <g transform="translate(64 158)">
+    <rect class="card" x="0" y="0" width="565" height="170" rx="28"/>
+    <rect x="0" y="0" width="565" height="12" rx="6" fill="#7c5cff"/>
+    <text x="36" y="58" class="code">var state by remember {</text>
+    <text x="70" y="102" class="code">mutableStateOf(CounterState())</text>
+    <text x="36" y="146" class="code">}</text>
+  </g>
+
+  <g transform="translate(730 146)">
+    <rect x="0" y="0" width="360" height="198" rx="30" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="38" y="54" class="label">CounterState</text>
+    <line x1="38" y1="76" x2="322" y2="76" stroke="#2f9461" stroke-width="3" stroke-linecap="round"/>
+    <text x="44" y="122" class="text">count = 0</text>
+    <text x="44" y="162" class="text">lastIntent = 아직 없음</text>
+  </g>
+
+  <path d="M642 244 C676 244 692 230 718 218" class="line"/>
+  <path d="M704 197 L728 214 L708 236" class="line"/>
+
+  <g transform="translate(80 408)">
+    <rect x="0" y="0" width="300" height="120" rx="26" fill="url(#purple)" stroke="#7c5cff" stroke-width="3" filter="url(#shadow)"/>
+    <text x="32" y="48" class="label">remember</text>
+    <text x="32" y="84" class="small">화면이 다시 그려져도 값 기억</text>
+  </g>
+
+  <g transform="translate(450 408)">
+    <rect x="0" y="0" width="320" height="120" rx="26" fill="url(#yellow)" stroke="#d19400" stroke-width="3" filter="url(#shadow)"/>
+    <text x="32" y="48" class="label">mutableStateOf</text>
+    <text x="32" y="84" class="small">값이 바뀌면 Compose에 알림</text>
+  </g>
+
+  <g transform="translate(840 408)">
+    <rect x="0" y="0" width="260" height="120" rx="26" fill="url(#green)" stroke="#2f9461" stroke-width="3" filter="url(#shadow)"/>
+    <text x="32" y="48" class="label">by</text>
+    <text x="32" y="84" class="small">state.value 접근을 짧게 숨김</text>
+  </g>
+</svg>
