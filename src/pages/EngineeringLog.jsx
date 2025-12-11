@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import blogPosts from '../data/blog_posts.json';
 
 const EngineeringLog = () => {
@@ -24,11 +26,18 @@ const EngineeringLog = () => {
         if (currentPage > 1) setCurrentPage(prev => prev - 1);
     };
 
+    // Scroll to top when opening a post
+    useEffect(() => {
+        if (selectedPost) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [selectedPost]);
+
     return (
         <section id="log" className="py-24 min-h-screen border-t border-white/5 relative z-20">
-            <div className="container mx-auto px-6 max-w-3xl bg-[#030303] rounded-2xl p-8 md:p-12 shadow-2xl border border-white/5">
+            <div className={`container mx-auto px-6 ${selectedPost ? 'max-w-5xl' : 'max-w-3xl'} bg-[#030303] rounded-2xl p-8 md:p-12 shadow-2xl border border-white/5 transition-all duration-500`}>
 
-                {/* Header / Back Button */}
+                {/* Header / Back Button (Standard) */}
                 <div className="mb-12">
                     {selectedPost ? (
                         <button
@@ -54,7 +63,7 @@ const EngineeringLog = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="prose prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-white prose-a:text-tech-blue hover:prose-a:text-white prose-code:text-tech-blue prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10 break-keep"
+                            className="prose prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-white prose-a:text-tech-blue hover:prose-a:text-white prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-white/10 break-keep"
                         >
                             <div className="flex items-center gap-3 mb-6 not-prose">
                                 <span className="text-sm font-mono text-gray-500">{selectedPost.date}</span>
@@ -62,7 +71,7 @@ const EngineeringLog = () => {
                                     {selectedPost.tag}
                                 </span>
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-bold text-white mb-8 leading-tight">
+                            <h1 className="text-3xl md:text-5xl font-bold text-white mb-8 leading-tight">
                                 {selectedPost.title}
                             </h1>
                             <ReactMarkdown
@@ -70,16 +79,22 @@ const EngineeringLog = () => {
                                 components={{
                                     code({ node, inline, className, children, ...props }) {
                                         const match = /language-(\w+)/.exec(className || '')
-                                        // Detect inline vs block: rely on 'inline' prop, but fallback to content check if undefined
-                                        // If no newline and no language class, treat as inline to prevent breaking
                                         const isInline = inline || (!match && String(children).indexOf('\n') === -1);
 
-                                        return !isInline ? (
-                                            <code className={`${className} block bg-white/5 p-4 rounded-lg my-4 text-sm font-mono overflow-x-auto`} {...props}>
-                                                {children}
-                                            </code>
+                                        return !isInline && match ? (
+                                            <SyntaxHighlighter
+                                                {...props}
+                                                style={atomDark}
+                                                language={match[1]}
+                                                PreTag="div"
+                                                className="rounded-lg shadow-lg border border-white/5 my-6 !bg-[#0d1117]"
+                                                showLineNumbers={true}
+                                                wrapLines={true}
+                                            >
+                                                {String(children).replace(/\n$/, '')}
+                                            </SyntaxHighlighter>
                                         ) : (
-                                            <code className="bg-white/10 px-1.5 py-0.5 rounded text-sm text-tech-blue font-mono" {...props}>
+                                            <code className={`${isInline ? "bg-white/10 px-1.5 py-0.5 rounded text-sm text-tech-blue font-mono" : "block bg-white/5 p-4 rounded-lg my-4 text-sm font-mono overflow-x-auto"}`} {...props}>
                                                 {children}
                                             </code>
                                         )
@@ -100,6 +115,18 @@ const EngineeringLog = () => {
                             >
                                 {selectedPost.content}
                             </ReactMarkdown>
+
+                            {/* Floating Back Button (Bottom Right) */}
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setSelectedPost(null)}
+                                className="fixed bottom-8 right-8 z-50 bg-tech-blue text-white p-4 rounded-full shadow-2xl shadow-tech-blue/30 hover:bg-white hover:text-black transition-colors"
+                            >
+                                <X size={24} />
+                            </motion.button>
                         </motion.article>
                     ) : (
                         // List View
