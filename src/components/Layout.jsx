@@ -8,6 +8,8 @@ const NavLink = ({ href, children }) => (
     </a>
 );
 
+import AuroraBackground from './AuroraBackground';
+
 const Layout = ({ children }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,7 +23,8 @@ const Layout = ({ children }) => {
     }, []);
 
     return (
-        <div className="min-h-screen text-star-white font-sans selection:bg-white selection:text-black">
+        <div className="min-h-screen text-star-white font-sans selection:bg-white selection:text-black relative">
+            <AuroraBackground />
 
             <header className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-space-black/80 backdrop-blur-md border-white/5 py-4' : 'bg-transparent border-transparent py-6'}`}>
                 <div className="container mx-auto px-6 flex justify-between items-center">
@@ -61,7 +64,7 @@ const Layout = ({ children }) => {
                 {children}
             </main>
 
-            <footer className="py-12 text-center text-gray-500 text-sm tracking-widest">
+            <footer className="py-12 text-center text-gray-500 text-sm tracking-widest relative z-10">
                 <p>&copy; {new Date().getFullYear()} SOFTWARE ENGINEER. ALL RIGHTS RESERVED.</p>
             </footer>
         </div>
