@@ -28,10 +28,10 @@ const Layout = ({ children }) => {
 
             <header className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${isScrolled ? 'bg-space-black/80 backdrop-blur-md border-white/5 py-4' : 'bg-transparent border-transparent py-6'}`}>
                 <div className="container mx-auto px-6 flex justify-between items-center">
-                    <div className="text-xl font-bold tracking-tight cursor-pointer flex items-center gap-2">
+                    <a href="/" className="text-xl font-bold tracking-tight cursor-pointer flex items-center gap-2 hover:opacity-80 transition-opacity">
                         <span className="w-2 h-2 bg-tech-blue rounded-full"></span>
                         PORTFOLIO
-                    </div>
+                    </a>
 
                     <nav className="hidden md:flex space-x-8">
                         <NavLink href="#hero">Overview</NavLink>
