@@ -4,58 +4,67 @@ import { motion } from 'framer-motion';
 
 const AuroraBackground = () => {
     return (
-        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10" style={{ background: '#050505' }}>
-            {/* Primary Fast Moving Blob - Left */}
-            <motion.div
-                animate={{
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 45, -45, 0],
-                    x: [0, 50, -25, 0],
-                    y: [0, -25, 25, 0],
-                    opacity: [0.4, 0.6, 0.4],
-                }}
-                transition={{
-                    duration: 8,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-                className="absolute top-[-5%] left-[5%] w-[40vw] h-[40vw] bg-nebula-purple/30 rounded-full blur-[60px] mix-blend-screen"
-            />
+        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[#020202]">
+            {/* 
+               The "Curtain" Effect:
+               We use elongated, highly blurred shapes that are rotated and skewed.
+               By animating 'x' and 'skew', we simulate the waving motion of an aurora curtain.
+            */}
 
-            {/* Secondary Fast Moving Blob - Right (Added for balance) */}
-            <motion.div
-                animate={{
-                    scale: [1.1, 1, 1.2],
-                    rotate: [0, -30, 30, 0],
-                    x: [0, -50, 25, 0],
-                    y: [0, 25, -25, 0],
-                    opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{
-                    duration: 10,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1
-                }}
-                className="absolute top-[15%] right-[5%] w-[35vw] h-[35vw] bg-tech-blue/30 rounded-full blur-[70px] mix-blend-screen"
-            />
+            {/* Base Gradient - Deep Atmospheric Glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#0a0a0a] via-[#050505] to-[#0b0b15] opacity-80" />
 
-            {/* Bottom/Center Wanderer - Faster */}
-            <motion.div
-                animate={{
-                    scale: [1, 1.3, 1],
-                    x: [-50, 50, -50],
-                    y: [-25, 25, -25],
-                    opacity: [0.2, 0.4, 0.2],
-                }}
-                transition={{
-                    duration: 12,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 2
-                }}
-                className="absolute bottom-[-10%] left-[30%] w-[45vw] h-[40vw] bg-emerald-500/10 rounded-full blur-[80px] mix-blend-screen"
-            />
+            <div className="absolute inset-0 opacity-40 mix-blend-color-dodge">
+                {/* Wave 1: Primary Green/Emerald Curtain */}
+                <motion.div
+                    animate={{
+                        x: ["-10%", "10%", "-10%"],
+                        skewX: [0, 10, 0],
+                        opacity: [0.3, 0.6, 0.3],
+                    }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    className="absolute top-[-20%] left-[-20%] w-[140vw] h-[80vh] bg-emerald-500/20 blur-[80px] rounded-[100%] origin-bottom transform -rotate-12"
+                />
+
+                {/* Wave 2: Deep Purple/Blue Curtain (Offset) */}
+                <motion.div
+                    animate={{
+                        x: ["10%", "-10%", "10%"],
+                        skewX: [0, -15, 0],
+                        opacity: [0.2, 0.5, 0.2],
+                    }}
+                    transition={{
+                        duration: 25,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 2
+                    }}
+                    className="absolute top-[-10%] right-[-20%] w-[120vw] h-[90vh] bg-indigo-600/20 blur-[100px] rounded-[100%] origin-bottom transform rotate-12"
+                />
+
+                {/* Wave 3: Bright Cyan/White Accent (The "Ribbon") */}
+                <motion.div
+                    animate={{
+                        x: ["-5%", "5%", "-5%"],
+                        scaleY: [1, 1.2, 1],
+                        opacity: [0.1, 0.3, 0.1],
+                    }}
+                    transition={{
+                        duration: 15,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 5
+                    }}
+                    className="absolute top-[20%] left-[10%] w-[100vw] h-[40vh] bg-cyan-400/10 blur-[60px] rounded-[50%] transform -rotate-6 mix-blend-screen"
+                />
+            </div>
+
+            {/* Subtle Overlay Texture (Optional noise for realism if needed, sticking to smooth for now) */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
         </div>
     );
 };
