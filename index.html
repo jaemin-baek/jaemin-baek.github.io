@@ -14,29 +14,7 @@
 </head>
 
 <body>
-  <div id="root">
-    <div
-      style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #050505; color: #fff; flex-direction: column;">
-      <h1 style="margin-bottom: 20px;">Loading Portfolio...</h1>
-      <div id="error-message" style="color: #ff4444; font-family: monospace; max-width: 80%; word-break: break-all;">
-      </div>
-    </div>
-  </div>
-  <script>
-    window.addEventListener('error', function (event) {
-      var container = document.getElementById('error-message');
-      if (event.target && (event.target.tagName === 'SCRIPT' || event.target.tagName === 'LINK')) {
-        container.innerHTML += '<p>Resource Error (404): ' + (event.target.src || event.target.href) + '</p>';
-      } else {
-        container.innerHTML += '<p>Error: ' + event.message + '</p>';
-      }
-    }, true); // Capture phase to catch resource errors
-
-    window.addEventListener('unhandledrejection', function (event) {
-      var container = document.getElementById('error-message');
-      container.innerHTML += '<p>Promise Error: ' + event.reason + '</p>';
-    });
-  </script>
+  <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
