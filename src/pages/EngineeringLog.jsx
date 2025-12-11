@@ -78,6 +78,9 @@ const EngineeringLog = () => {
                                                 {children}
                                             </code>
                                         )
+                                    },
+                                    strong({ node, children, ...props }) {
+                                        return <strong className="font-bold text-white" {...props}>{children}</strong>
                                     }
                                 }}
                             >
