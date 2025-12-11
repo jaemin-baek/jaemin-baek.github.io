@@ -84,6 +84,15 @@ const EngineeringLog = () => {
                                             </code>
                                         )
                                     },
+                                    img({ node, ...props }) {
+                                        return (
+                                            <img
+                                                {...props}
+                                                className="rounded-lg shadow-lg my-8 opacity-90 transition-all duration-300 hover:opacity-100"
+                                                style={{ filter: "invert(0.92) hue-rotate(180deg) contrast(1.1)" }}
+                                            />
+                                        )
+                                    },
                                     strong({ node, children, ...props }) {
                                         return <strong className="font-bold text-white" {...props}>{children}</strong>
                                     }
