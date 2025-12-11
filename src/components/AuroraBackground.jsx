@@ -13,52 +13,57 @@ const AuroraBackground = () => {
             {/* Base Gradient - Deep Atmospheric Glow */}
             <div className="absolute inset-0 bg-gradient-to-tr from-[#0a0a0a] via-[#050505] to-[#0b0b15] opacity-60" />
 
-            <div className="absolute inset-0 opacity-100 mix-blend-screen">
-                {/* Wave 1: Primary Green/Emerald Curtain */}
+            <div className="absolute inset-0 opacity-100 mix-blend-screen overflow-hidden">
+                {/* Wave 1: Primary Green/Emerald - Faster, Smaller, drifting */}
                 <motion.div
                     animate={{
-                        x: ["-10%", "10%", "-10%"],
-                        skewX: [0, 10, 0],
-                        opacity: [0.4, 0.7, 0.4],
+                        x: ["-20%", "40%", "-20%"],
+                        y: ["0%", "10%", "0%"],
+                        skewX: [0, 20, 0],
+                        opacity: [0, 0.8, 0], // Fades in and out for "random appearance" feel
+                        scale: [1, 1.2, 1],
                     }}
                     transition={{
-                        duration: 20,
+                        duration: 10, // Faster (~2x speed)
                         repeat: Infinity,
                         ease: "easeInOut"
                     }}
-                    className="absolute top-[-20%] left-[-20%] w-[140vw] h-[80vh] bg-emerald-500/30 blur-[80px] rounded-[100%] origin-bottom transform -rotate-12"
+                    className="absolute top-[10%] left-[-10%] w-[60vw] h-[40vh] bg-emerald-500/30 blur-[60px] rounded-[100%] transform -rotate-12"
                 />
 
-                {/* Wave 2: Deep Purple/Blue Curtain (Offset) */}
+                {/* Wave 2: Deep Purple/Blue - Faster offset */}
                 <motion.div
                     animate={{
-                        x: ["10%", "-10%", "10%"],
-                        skewX: [0, -15, 0],
-                        opacity: [0.3, 0.6, 0.3],
+                        x: ["20%", "-40%", "20%"],
+                        y: ["10%", "-10%", "10%"],
+                        skewX: [0, -25, 0],
+                        opacity: [0, 0.7, 0],
+                        scale: [1, 1.3, 1],
                     }}
                     transition={{
-                        duration: 25,
+                        duration: 12, // Faster
                         repeat: Infinity,
                         ease: "easeInOut",
                         delay: 2
                     }}
-                    className="absolute top-[-10%] right-[-20%] w-[120vw] h-[90vh] bg-indigo-500/30 blur-[100px] rounded-[100%] origin-bottom transform rotate-12"
+                    className="absolute top-[30%] right-[-10%] w-[50vw] h-[50vh] bg-indigo-500/30 blur-[80px] rounded-[100%] transform rotate-12"
                 />
 
-                {/* Wave 3: Bright Cyan/White Accent (The "Ribbon") */}
+                {/* Wave 3: Bright Cyan/White Accent - The "Flash" */}
                 <motion.div
                     animate={{
-                        x: ["-5%", "5%", "-5%"],
-                        scaleY: [1, 1.2, 1],
-                        opacity: [0.2, 0.5, 0.2],
+                        x: ["0%", "50%", "0%"],
+                        y: ["-10%", "20%", "-10%"],
+                        rotation: [0, 10, 0],
+                        opacity: [0, 0.6, 0],
                     }}
                     transition={{
-                        duration: 15,
+                        duration: 8, // Fastest
                         repeat: Infinity,
                         ease: "easeInOut",
-                        delay: 5
+                        delay: 4
                     }}
-                    className="absolute top-[20%] left-[10%] w-[100vw] h-[40vh] bg-cyan-400/20 blur-[60px] rounded-[50%] transform -rotate-6 mix-blend-screen"
+                    className="absolute bottom-[10%] left-[20%] w-[40vw] h-[30vh] bg-cyan-400/20 blur-[50px] rounded-[50%] transform -rotate-6"
                 />
             </div>
 
