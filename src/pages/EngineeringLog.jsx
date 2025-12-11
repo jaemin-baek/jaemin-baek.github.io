@@ -54,7 +54,7 @@ const EngineeringLog = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="prose prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-white prose-a:text-tech-blue hover:prose-a:text-white prose-code:text-tech-blue prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10"
+                            className="prose prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-white prose-a:text-tech-blue hover:prose-a:text-white prose-code:text-tech-blue prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10 break-keep"
                         >
                             <div className="flex items-center gap-3 mb-6 not-prose">
                                 <span className="text-sm font-mono text-gray-500">{selectedPost.date}</span>
