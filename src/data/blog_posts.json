@@ -1,0 +1,58 @@
+[
+    {
+        "id": 8,
+        "title": "WebGL 2.0: Moving beyond the fixed function pipeline",
+        "content": "With WebGL 2.0 now widely supported, we can leverage Transform Feedback and 3D Textures on the web. This article explores a particle system implementation that runs entirely on the GPU...",
+        "tag": "Graphics",
+        "date": "2024-08-15"
+    },
+    {
+        "id": 7,
+        "title": "React Server Components: A Skeptic's Guide",
+        "content": "The shift to server-side rendering is cyclical. However, RSCs offer a unique value prop for reducing bundle size. Here is my analysis after porting a large dashboard to Next.js 14...",
+        "tag": "Frontend",
+        "date": "2024-07-22"
+    },
+    {
+        "id": 6,
+        "title": "Designing for Offline-First with CRDTs",
+        "content": "Conflict-free Replicated Data Types are magical but complex. I break down how we used Yjs to build a collaborative text editor that works flawlessly in subway tunnels...",
+        "tag": "Architecture",
+        "date": "2024-06-10"
+    },
+    {
+        "id": 5,
+        "title": "The Art of Code Review",
+        "content": "Code reviews are not just about finding bugs; they are a knowledge transfer mechanism. I share my checklist for reviewing PRs that focuses on readability and maintainability over nitpicks...",
+        "tag": "Leadership",
+        "date": "2024-05-05"
+    },
+    {
+        "id": 1,
+        "title": "TheCost of Abstraction: optimizing Vulkan Render Passes",
+        "content": "While high-level graphics APIs offer convenience, they often hide the cost of pipeline state changes. In this deep dive, I explore how manual descriptor set management and push constants reduced draw call overhead by 40% in our custom game engine...",
+        "tag": "Graphics",
+        "date": "2024-12-10"
+    },
+    {
+        "id": 2,
+        "title": "Scaling Mobile Architectures: Feature-First vs Layer-First",
+        "content": "As mobile teams grow beyond 20 engineers, the traditional MVC/MVVM layer-based folder structure starts to crumble. We transitioned to a feature-based module federation approach, allowing independent builds and 50% faster CI times...",
+        "tag": "Architecture",
+        "date": "2024-11-28"
+    },
+    {
+        "id": 3,
+        "title": "Zero-Allocation Parsing in Real-time Audio Processing",
+        "content": "Garbage Collection pauses are the enemy of low-latency audio. By utilizing flat buffers and stack allocation tactics in our DSP chain, we eliminated audio glitches on low-end Android devices...",
+        "tag": "Performance",
+        "date": "2024-11-15"
+    },
+    {
+        "id": 4,
+        "title": "Mentoring Senior Engineers: From Code to Context",
+        "content": "Moving from Senior to Staff Engineer requires a shift from 'how' to 'why'. This post outlines my framework for mentoring high-performers, focusing on system design, trade-off analysis, and cross-team influence...",
+        "tag": "Leadership",
+        "date": "2024-10-30"
+    }
+]
