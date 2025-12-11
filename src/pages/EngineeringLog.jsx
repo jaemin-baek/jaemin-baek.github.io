@@ -115,7 +115,12 @@ const EngineeringLog = () => {
                                                 allowedElements={['p', 'strong', 'em', 'code', 'span']}
                                                 unwrapDisallowed={true}
                                                 components={{
-                                                    p: ({ node, ...props }) => <p className="mb-1 inline" {...props} />
+                                                    p: ({ node, ...props }) => <span className="mb-1 inline" {...props} />,
+                                                    code: ({ node, inline, className, children, ...props }) => (
+                                                        <code className="bg-white/10 px-1 py-0.5 rounded text-xs text-tech-blue font-mono inline whitespace-nowrap" {...props}>
+                                                            {children}
+                                                        </code>
+                                                    )
                                                 }}
                                             >
                                                 {log.content}
