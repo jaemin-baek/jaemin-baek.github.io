@@ -30,9 +30,9 @@ const Contact = () => {
                 </div>
 
                 <div className="flex gap-8 justify-center mt-12 text-gray-500">
-                    <a href="#" className="hover:text-white hover:scale-110 transition-all duration-300"><Github className="w-6 h-6" /></a>
-                    <a href="#" className="hover:text-white hover:scale-110 transition-all duration-300"><Linkedin className="w-6 h-6" /></a>
-                    <a href="#" className="hover:text-white hover:scale-110 transition-all duration-300"><Mail className="w-6 h-6" /></a>
+                    <a href="#" className="hover:text-white transition-colors duration-300"><Github className="w-6 h-6" /></a>
+                    <a href="#" className="hover:text-white transition-colors duration-300"><Linkedin className="w-6 h-6" /></a>
+                    <a href="#" className="hover:text-white transition-colors duration-300"><Mail className="w-6 h-6" /></a>
                 </div>
             </motion.div>
         </section>
