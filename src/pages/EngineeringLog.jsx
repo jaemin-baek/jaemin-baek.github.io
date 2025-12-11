@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import blogPosts from '../data/blog_posts.json';
 
 const EngineeringLog = () => {
@@ -84,7 +84,7 @@ const EngineeringLog = () => {
                                                 return !isInline && match ? (
                                                     <SyntaxHighlighter
                                                         {...props}
-                                                        style={vscDarkPlus}
+                                                        style={dracula}
                                                         language={match[1]}
                                                         PreTag="div"
                                                         // Removed border from here
