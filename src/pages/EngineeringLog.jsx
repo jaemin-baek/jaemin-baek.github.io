@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import blogPosts from '../data/blog_posts.json';
 
 const EngineeringLog = () => {
@@ -52,9 +54,9 @@ const EngineeringLog = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="prose prose-invert max-w-none"
+                            className="prose prose-invert max-w-none prose-p:text-gray-300 prose-headings:text-white prose-a:text-tech-blue hover:prose-a:text-white prose-code:text-tech-blue prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10"
                         >
-                            <div className="flex items-center gap-3 mb-6">
+                            <div className="flex items-center gap-3 mb-6 not-prose">
                                 <span className="text-sm font-mono text-gray-500">{selectedPost.date}</span>
                                 <span className="text-xs uppercase tracking-wide text-tech-blue/80 px-2 py-0.5 rounded border border-tech-blue/20 bg-tech-blue/5">
                                     {selectedPost.tag}
@@ -63,9 +65,24 @@ const EngineeringLog = () => {
                             <h1 className="text-3xl md:text-4xl font-bold text-white mb-8 leading-tight">
                                 {selectedPost.title}
                             </h1>
-                            <div className="text-gray-300 font-light leading-loose text-lg whitespace-pre-line">
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                    code({ node, inline, className, children, ...props }) {
+                                        return !inline ? (
+                                            <code className={`${className} block bg-white/5 p-4 rounded-lg my-4 text-sm font-mono overflow-x-auto`} {...props}>
+                                                {children}
+                                            </code>
+                                        ) : (
+                                            <code className="bg-white/10 px-1.5 py-0.5 rounded text-sm text-tech-blue font-mono" {...props}>
+                                                {children}
+                                            </code>
+                                        )
+                                    }
+                                }}
+                            >
                                 {selectedPost.content}
-                            </div>
+                            </ReactMarkdown>
                         </motion.article>
                     ) : (
                         // List View
