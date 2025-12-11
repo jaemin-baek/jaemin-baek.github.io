@@ -1,4 +1,3 @@
-```javascript
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -52,20 +51,20 @@ const EngineeringLog = () => {
                             key={log.id}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className={`group relative pl - 6 border - l border - white / 10 transition - all duration - 300 ${ selectedPost?.id === log.id ? 'border-tech-blue' : 'hover:border-tech-blue/50' } `}
+                            className={`group relative pl-6 border-l border-white/10 transition-all duration-300 ${selectedPost?.id === log.id ? 'border-tech-blue' : 'hover:border-tech-blue/50'}`}
                         >
                             {/* Summary / Header Area - Click to Expand */}
-                            <div 
+                            <div
                                 onClick={() => togglePost(log)}
                                 className="cursor-pointer py-2"
                             >
                                 <div className="flex items-baseline justify-between mb-2">
                                     <div className="flex items-center gap-3">
-                                        <span className={`text - xs font - mono transition - colors ${ selectedPost?.id === log.id ? 'text-tech-blue' : 'text-gray-500' } `}>{log.date}</span>
+                                        <span className={`text-xs font-mono transition-colors ${selectedPost?.id === log.id ? 'text-tech-blue' : 'text-gray-500'}`}>{log.date}</span>
                                         <span className="text-[10px] uppercase tracking-wide text-tech-blue/80 px-1.5 py-0.5 rounded border border-tech-blue/20 bg-tech-blue/5">{log.tag}</span>
                                     </div>
                                 </div>
-                                <h3 className={`text - xl font - bold mb - 2 transition - colors ${ selectedPost?.id === log.id ? 'text-white' : 'text-gray-200 group-hover:text-white' } `}>
+                                <h3 className={`text-xl font-bold mb-2 transition-colors ${selectedPost?.id === log.id ? 'text-white' : 'text-gray-200 group-hover:text-white'}`}>
                                     {log.title}
                                 </h3>
                                 {!selectedPost || selectedPost.id !== log.id ? (
@@ -104,7 +103,7 @@ const EngineeringLog = () => {
                                                     code({ node, inline, className, children, ...props }) {
                                                         const match = /language-(\w+)/.exec(className || '')
                                                         const isInline = inline || (!match && String(children).indexOf('\n') === -1);
-                                                        
+
                                                         return !isInline && match ? (
                                                             <SyntaxHighlighter
                                                                 {...props}
@@ -118,15 +117,15 @@ const EngineeringLog = () => {
                                                                 {String(children).replace(/\n$/, '')}
                                                             </SyntaxHighlighter>
                                                         ) : (
-                                                            <code className={`${ isInline ? "bg-white/10 px-1.5 py-0.5 rounded text-sm text-tech-blue font-mono" : "block bg-white/5 p-4 rounded-lg my-4 text-sm font-mono overflow-x-auto" } `} {...props}>
+                                                            <code className={`${isInline ? "bg-white/10 px-1.5 py-0.5 rounded text-sm text-tech-blue font-mono" : "block bg-white/5 p-4 rounded-lg my-4 text-sm font-mono overflow-x-auto"} `} {...props}>
                                                                 {children}
                                                             </code>
                                                         )
                                                     },
                                                     img({ node, ...props }) {
                                                         return (
-                                                            <img 
-                                                                {...props} 
+                                                            <img
+                                                                {...props}
                                                                 className="rounded-lg shadow-lg my-8 opacity-90 transition-all duration-300 hover:opacity-100"
                                                                 style={{ filter: "invert(0.92) hue-rotate(180deg) contrast(1.1)" }}
                                                             />
@@ -175,4 +174,3 @@ const EngineeringLog = () => {
 };
 
 export default EngineeringLog;
-```
