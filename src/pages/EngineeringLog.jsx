@@ -110,9 +110,17 @@ const EngineeringLog = () => {
                                         <h3 className="text-xl font-bold text-gray-200 group-hover:text-white mb-2 transition-colors">
                                             {log.title}
                                         </h3>
-                                        <p className="text-gray-400 font-light text-sm line-clamp-3 leading-relaxed">
-                                            {log.content}
-                                        </p>
+                                        <div className="text-gray-400 font-light text-sm line-clamp-3 leading-relaxed">
+                                            <ReactMarkdown
+                                                allowedElements={['p', 'strong', 'em', 'code', 'span']}
+                                                unwrapDisallowed={true}
+                                                components={{
+                                                    p: ({ node, ...props }) => <p className="mb-1 inline" {...props} />
+                                                }}
+                                            >
+                                                {log.content}
+                                            </ReactMarkdown>
+                                        </div>
                                     </motion.article>
                                 ))}
                             </div>
