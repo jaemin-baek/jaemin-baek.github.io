@@ -32,8 +32,7 @@ const Layout = ({ children }) => {
 
                     <nav className="hidden md:flex space-x-8">
                         <NavLink href="#hero">Overview</NavLink>
-                        <NavLink href="#about">Experience</NavLink>
-                        <NavLink href="#projects">Case Studies</NavLink>
+                        <NavLink href="#engineering-log">Engineering Log</NavLink>
                         <NavLink href="#contact">Contact</NavLink>
                     </nav>
 
@@ -51,9 +50,8 @@ const Layout = ({ children }) => {
                         exit={{ opacity: 0, y: -20 }}
                         className="fixed inset-0 bg-space-black z-40 flex flex-col items-center justify-center space-y-8 md:hidden"
                     >
-                        <NavLink href="#hero" onClick={() => setIsMobileMenuOpen(false)}>Start</NavLink>
-                        <NavLink href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</NavLink>
-                        <NavLink href="#projects" onClick={() => setIsMobileMenuOpen(false)}>Work</NavLink>
+                        <NavLink href="#hero" onClick={() => setIsMobileMenuOpen(false)}>Overview</NavLink>
+                        <NavLink href="#engineering-log" onClick={() => setIsMobileMenuOpen(false)}>Engineering Log</NavLink>
                         <NavLink href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</NavLink>
                     </motion.div>
                 )}
@@ -64,7 +62,7 @@ const Layout = ({ children }) => {
             </main>
 
             <footer className="py-12 text-center text-gray-500 text-sm tracking-widest">
-                <p>&copy; {new Date().getFullYear()} ENGINEER & ARTIST. ALL RIGHTS RESERVED.</p>
+                <p>&copy; {new Date().getFullYear()} SOFTWARE ENGINEER. ALL RIGHTS RESERVED.</p>
             </footer>
         </div>
     );
