@@ -10,6 +10,17 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
+                    <div className="mb-8">
+                        <div className="w-32 h-32 md:w-40 md:h-40 mx-auto relative group">
+                            <div className="absolute inset-0 rounded-full bg-tech-blue/20 blur-xl group-hover:blur-2xl transition-all duration-500 opacity-0 group-hover:opacity-100"></div>
+                            <img
+                                src="./profile.jpg"
+                                alt="Jaemin Baek"
+                                className="w-full h-full object-cover rounded-full border-2 border-white/10 shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                    </div>
+
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-tech-blue mb-8 hover:bg-white/10 transition-colors cursor-default">
                         <span className="w-1.5 h-1.5 bg-tech-blue rounded-full animate-pulse"></span>
                         Available for new opportunities
