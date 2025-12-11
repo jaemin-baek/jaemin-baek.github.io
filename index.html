@@ -23,11 +23,15 @@
     </div>
   </div>
   <script>
-    window.onerror = function (msg, url, lineNo, columnNo, error) {
+    window.addEventListener('error', function (event) {
       var container = document.getElementById('error-message');
-      container.innerHTML += '<p>Error: ' + msg + '<br>Line: ' + lineNo + '</p>';
-      return false;
-    };
+      if (event.target && (event.target.tagName === 'SCRIPT' || event.target.tagName === 'LINK')) {
+        container.innerHTML += '<p>Resource Error (404): ' + (event.target.src || event.target.href) + '</p>';
+      } else {
+        container.innerHTML += '<p>Error: ' + event.message + '</p>';
+      }
+    }, true); // Capture phase to catch resource errors
+
     window.addEventListener('unhandledrejection', function (event) {
       var container = document.getElementById('error-message');
       container.innerHTML += '<p>Promise Error: ' + event.reason + '</p>';
