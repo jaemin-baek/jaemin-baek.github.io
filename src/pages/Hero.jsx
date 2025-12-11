@@ -27,7 +27,7 @@ const Hero = () => {
                     </div>
 
                     <h1 className="text-5xl md:text-6xl font-bold mb-8 tracking-tighter leading-tight text-white">
-                        Engineering <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">Excellence.</span>
+                        Engineering <span className="bg-gradient-to-r from-[#00dc82] to-[#36E4DA] bg-clip-text text-transparent">Excellence.</span>
                     </h1>
 
                     <p className="text-lg text-gray-400 font-light leading-relaxed mb-6">
