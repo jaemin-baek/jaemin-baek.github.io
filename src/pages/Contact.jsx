@@ -24,15 +24,15 @@ const Contact = () => {
                 </p>
 
                 <div className="flex justify-center mb-16">
-                    <a href="mailto:contact@example.com" className="inline-block px-8 py-3 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
+                    <a href="mailto:system.out.jason@gmail.com" className="inline-block px-8 py-3 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
                         Contact Me
                     </a>
                 </div>
 
                 <div className="flex gap-8 justify-center mt-12 text-gray-500">
-                    <a href="#" className="hover:text-white transition-colors duration-300"><Github className="w-6 h-6" /></a>
-                    <a href="#" className="hover:text-white transition-colors duration-300"><Linkedin className="w-6 h-6" /></a>
-                    <a href="#" className="hover:text-white transition-colors duration-300"><Mail className="w-6 h-6" /></a>
+                    <a href="https://github.com/jaemin-baek" className="hover:text-white transition-colors duration-300"><Github className="w-6 h-6" /></a>
+                    <a href="https://www.linkedin.com/in/jaemin-baek-35a679338/" className="hover:text-white transition-colors duration-300"><Linkedin className="w-6 h-6" /></a>
+                    <a href="mailto:system.out.jason@gmail.com" className="hover:text-white transition-colors duration-300"><Mail className="w-6 h-6" /></a>
                 </div>
             </motion.div>
         </section>
