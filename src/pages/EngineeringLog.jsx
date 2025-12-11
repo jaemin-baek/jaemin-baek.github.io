@@ -25,7 +25,7 @@ const EngineeringLog = () => {
     };
 
     return (
-        <section id="log" className="py-24 min-h-screen border-t border-white/5">
+        <section id="log" className="py-24 min-h-screen border-t border-white/5 bg-[#050505] relative z-20">
             <div className="container mx-auto px-6 max-w-3xl">
 
                 {/* Header / Back Button */}
