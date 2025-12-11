@@ -16,10 +16,23 @@
 <body>
   <div id="root">
     <div
-      style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #050505; color: #fff;">
-      Loading Portfolio...
+      style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #050505; color: #fff; flex-direction: column;">
+      <h1 style="margin-bottom: 20px;">Loading Portfolio...</h1>
+      <div id="error-message" style="color: #ff4444; font-family: monospace; max-width: 80%; word-break: break-all;">
+      </div>
     </div>
   </div>
+  <script>
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      var container = document.getElementById('error-message');
+      container.innerHTML += '<p>Error: ' + msg + '<br>Line: ' + lineNo + '</p>';
+      return false;
+    };
+    window.addEventListener('unhandledrejection', function (event) {
+      var container = document.getElementById('error-message');
+      container.innerHTML += '<p>Promise Error: ' + event.reason + '</p>';
+    });
+  </script>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
