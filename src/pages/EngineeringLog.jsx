@@ -69,7 +69,12 @@ const EngineeringLog = () => {
                                 remarkPlugins={[remarkGfm]}
                                 components={{
                                     code({ node, inline, className, children, ...props }) {
-                                        return !inline ? (
+                                        const match = /language-(\w+)/.exec(className || '')
+                                        // Detect inline vs block: rely on 'inline' prop, but fallback to content check if undefined
+                                        // If no newline and no language class, treat as inline to prevent breaking
+                                        const isInline = inline || (!match && String(children).indexOf('\n') === -1);
+
+                                        return !isInline ? (
                                             <code className={`${className} block bg-white/5 p-4 rounded-lg my-4 text-sm font-mono overflow-x-auto`} {...props}>
                                                 {children}
                                             </code>
