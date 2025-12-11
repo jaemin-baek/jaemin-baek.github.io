@@ -13,10 +13,14 @@ const EngineeringLog = () => {
     const postsPerPage = 5;
 
     // Pagination Logic
+    // Sort posts by date descending
+    const sortedPosts = [...blogPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Pagination Logic
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
-    const totalPages = Math.ceil(blogPosts.length / postsPerPage);
+    const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
