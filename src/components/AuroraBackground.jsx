@@ -24,7 +24,7 @@ const AuroraBackground = () => {
     )`;
 
     return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10" style={{ background: '#050505' }}>
+        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10" style={{ background: '#050505' }}>
             {/* Mouse follower subtle glow layer */}
             <motion.div
                 className="absolute inset-0 opacity-100 mix-blend-screen"
@@ -34,10 +34,10 @@ const AuroraBackground = () => {
             {/* Primary Fast Moving Blob - Left */}
             <motion.div
                 animate={{
-                    scale: [1, 1.4, 1],
+                    scale: [1, 1.2, 1],
                     rotate: [0, 45, -45, 0],
-                    x: [0, 100, -50, 0],
-                    y: [0, -50, 50, 0],
+                    x: [0, 50, -25, 0],
+                    y: [0, -25, 25, 0],
                     opacity: [0.4, 0.6, 0.4],
                 }}
                 transition={{
@@ -45,7 +45,7 @@ const AuroraBackground = () => {
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
-                className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-nebula-purple/30 rounded-full blur-[80px] mix-blend-screen"
+                className="absolute top-[-5%] left-[5%] w-[40vw] h-[40vw] bg-nebula-purple/30 rounded-full blur-[60px] mix-blend-screen"
                 style={{
                     x: useMotionTemplate`calc(${mouseX}px / 20)`,
                     y: useMotionTemplate`calc(${mouseY}px / 20)`
@@ -55,10 +55,10 @@ const AuroraBackground = () => {
             {/* Secondary Fast Moving Blob - Right (Added for balance) */}
             <motion.div
                 animate={{
-                    scale: [1.2, 1, 1.3],
+                    scale: [1.1, 1, 1.2],
                     rotate: [0, -30, 30, 0],
-                    x: [0, -100, 50, 0],
-                    y: [0, 50, -50, 0],
+                    x: [0, -50, 25, 0],
+                    y: [0, 25, -25, 0],
                     opacity: [0.3, 0.5, 0.3],
                 }}
                 transition={{
@@ -67,7 +67,7 @@ const AuroraBackground = () => {
                     ease: "easeInOut",
                     delay: 1
                 }}
-                className="absolute top-[10%] right-[-10%] w-[50vw] h-[50vw] bg-tech-blue/30 rounded-full blur-[90px] mix-blend-screen"
+                className="absolute top-[15%] right-[5%] w-[35vw] h-[35vw] bg-tech-blue/30 rounded-full blur-[70px] mix-blend-screen"
                 style={{
                     x: useMotionTemplate`calc(${mouseX}px / -25)`,
                     y: useMotionTemplate`calc(${mouseY}px / -25)`
@@ -77,9 +77,9 @@ const AuroraBackground = () => {
             {/* Bottom/Center Wanderer - Faster */}
             <motion.div
                 animate={{
-                    scale: [1, 1.5, 1],
-                    x: [-100, 100, -100],
-                    y: [-50, 50, -50],
+                    scale: [1, 1.3, 1],
+                    x: [-50, 50, -50],
+                    y: [-25, 25, -25],
                     opacity: [0.2, 0.4, 0.2],
                 }}
                 transition={{
@@ -88,7 +88,7 @@ const AuroraBackground = () => {
                     ease: "easeInOut",
                     delay: 2
                 }}
-                className="absolute bottom-[-20%] left-[20%] w-[70vw] h-[60vw] bg-emerald-500/10 rounded-full blur-[100px] mix-blend-screen"
+                className="absolute bottom-[-10%] left-[30%] w-[45vw] h-[40vw] bg-emerald-500/10 rounded-full blur-[80px] mix-blend-screen"
                 style={{
                     x: useMotionTemplate`calc(${mouseX}px / 15)`,
                     y: useMotionTemplate`calc(${mouseY}px / 15)`
