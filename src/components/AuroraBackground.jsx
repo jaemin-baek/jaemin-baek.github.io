@@ -9,7 +9,7 @@ const AuroraBackground = () => {
                 animate={{
                     scale: [1, 1.2, 1],
                     rotate: [0, 90, 0],
-                    opacity: [0.3, 0.5, 0.3],
+                    opacity: [0.2, 0.4, 0.2],
                 }}
                 transition={{
                     duration: 15,
@@ -24,7 +24,7 @@ const AuroraBackground = () => {
                 animate={{
                     scale: [1, 1.3, 1],
                     x: [0, 100, 0],
-                    opacity: [0.2, 0.4, 0.2],
+                    opacity: [0.15, 0.3, 0.15],
                 }}
                 transition={{
                     duration: 18,
@@ -41,7 +41,7 @@ const AuroraBackground = () => {
                     scale: [1, 1.1, 1],
                     x: [-50, 50, -50],
                     y: [-50, 50, -50],
-                    opacity: [0.1, 0.3, 0.1],
+                    opacity: [0.05, 0.15, 0.05],
                 }}
                 transition={{
                     duration: 20,

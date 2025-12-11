@@ -23,13 +23,9 @@ const Contact = () => {
                     Ready to discuss your next high-impact engineering challenge.
                 </p>
 
-                <div className="flex justify-center mb-16 relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-tech-blue to-nebula-purple rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                    <a href="mailto:contact@example.com" className="relative px-8 py-3 bg-black border border-white/10 rounded-lg leading-none flex items-center divide-x divide-gray-600">
-                        <span className="flex items-center space-x-5 text-gray-100 group-hover:text-white transition-colors duration-200">
-                            <span className="pr-1 text-sm font-light tracking-wide">Ready to collaborate?</span>
-                            <span className="pl-6 font-bold tracking-widest uppercase">Contact Me</span>
-                        </span>
+                <div className="flex justify-center mb-16">
+                    <a href="mailto:contact@example.com" className="inline-block px-8 py-3 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
+                        Contact Me
                     </a>
                 </div>
 
