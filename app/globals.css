@@ -791,14 +791,6 @@ hr {
   margin-bottom: 0;
 }
 
-.about-updated {
-  display: block;
-  margin-top: 0.85rem;
-  color: var(--text-tertiary);
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-}
-
 .about-hero-figure {
   margin: 2.25rem 0 0;
   overflow: hidden;
