@@ -1,66 +1,62 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from 'next/link';
+import { getAllPosts, getGraphData } from '@/lib/posts';
+import KnowledgeGraph from '@/components/KnowledgeGraph';
 
-export default function Home() {
+export default function HomePage() {
+  const posts = getAllPosts();
+  const recentPosts = posts.slice(0, 5);
+  const graphData = getGraphData();
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="page-container">
+      <section className="hero-section fade-in">
+        <h1>Jaemin Baek</h1>
+        <p className="hero-description">
+          소프트웨어 엔지니어 · 생각을 글로, 글을 코드로 연결합니다.
+          <br />
+          옵시디언으로 쓰고 GitHub Pages로 발행하는 디지털 가든입니다.
+        </p>
+      </section>
+
+      <section className="home-recent-posts fade-in">
+        <h2 className="section-title">Recent Posts</h2>
+        <ul className="post-list">
+          {recentPosts.map((post) => (
+            <li key={post.slug}>
+              <Link href={`/blog/${post.slug}`} className="post-list-item post-list-link">
+                <span className="post-list-date">{formatDate(post.date)}</span>
+                <span className="post-list-category">{post.category}</span>
+                <span className="post-list-title">{post.title}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {graphData.nodes.length > 0 && (
+        <section className="home-graph-preview fade-in">
+          <h2 className="section-title">Knowledge Graph</h2>
+          <Link href="/graph" style={{ border: 'none' }}>
+            <div className="graph-preview-container">
+              <KnowledgeGraph data={graphData} mini={true} />
+              <div className="graph-preview-overlay">
+                <span>{graphData.nodes.length} notes · {graphData.links.length} connections</span>
+                <span className="explore-link">Explore →</span>
+              </div>
+            </div>
+          </Link>
+        </section>
+      )}
     </div>
   );
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
