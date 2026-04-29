@@ -27,7 +27,7 @@ function Header() {
     <header className="site-header">
       <div className="header-inner">
         <a href="/" className="site-logo">
-          JAEMIN\B
+          Jaemin Baek
         </a>
         <nav className="site-nav">
           <a href="/blog">Blog</a>

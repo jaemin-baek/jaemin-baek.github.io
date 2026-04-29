@@ -494,6 +494,67 @@ hr {
   border: none;
 }
 
+.post-list-empty {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text-tertiary);
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 2.5rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.pagination-btn.active {
+  color: var(--text-primary);
+  border-color: var(--border);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.pagination-btn:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-ellipsis {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  min-width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
 /* ===== BLOG POST ===== */
 .post-header {
   text-align: center;
