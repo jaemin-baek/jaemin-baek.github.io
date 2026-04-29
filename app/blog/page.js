@@ -2,8 +2,8 @@ import { getAllPosts } from '@/lib/posts';
 import BlogList from '@/components/BlogList';
 
 export const metadata = {
-    title: 'Blog — Jaemin Baek',
-    description: '포스트 목록 — Jaemin Baek의 블로그',
+    title: 'Blog — Digital Garden',
+    description: '포스트 목록 — Digital Garden',
 };
 
 export default function BlogPage() {

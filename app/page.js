@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <div className="page-container">
       <section className="hero-section fade-in">
-        <h1>Jaemin Baek</h1>
+        <h1>Digital Garden</h1>
         <p className="hero-description">
           소프트웨어 엔지니어 · 생각을 글로, 글을 코드로 연결합니다.
           <br />

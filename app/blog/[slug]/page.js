@@ -12,7 +12,7 @@ export async function generateMetadata({ params }) {
     if (!post) return { title: 'Not Found' };
 
     return {
-        title: `${post.title} — Jaemin Baek`,
+        title: `${post.title} — Digital Garden`,
         description: post.description || '',
     };
 }

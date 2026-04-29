@@ -2,7 +2,7 @@ import { getGraphData } from '@/lib/posts';
 import KnowledgeGraph from '@/components/KnowledgeGraph';
 
 export const metadata = {
-    title: 'Knowledge Graph — Jaemin Baek',
+    title: 'Knowledge Graph — Digital Garden',
     description: '글 간의 연결을 시각적으로 탐색하는 인터랙티브 지식 그래프',
 };
 

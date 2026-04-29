@@ -1,10 +1,10 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Jaemin Baek',
+  title: 'Digital Garden',
   description: '개인 포트폴리오 겸 블로그 — 옵시디언으로 쓰고 GitHub Pages로 발행합니다.',
   openGraph: {
-    title: 'Jaemin Baek',
+    title: 'Digital Garden',
     description: '개인 포트폴리오 겸 블로그',
     type: 'website',
   },
@@ -27,7 +27,7 @@ function Header() {
     <header className="site-header">
       <div className="header-inner">
         <a href="/" className="site-logo">
-          Jaemin Baek
+          Digital Garden
         </a>
         <nav className="site-nav">
           <a href="/blog">Blog</a>
@@ -47,9 +47,9 @@ function Footer() {
       <div className="footer-inner">
         <div className="footer-grid">
           <div className="footer-brand">
-            <h3>Jaemin Baek</h3>
+            <h3>Digital Garden</h3>
             <p>
-              옵시디언으로 글을 쓰고, Anthropic 스타일의 GitHub Pages로 발행합니다.
+              옵시디언으로 글을 쓰고, 나만의 블로그로 펴냅니다.
               지식 그래프로 생각의 연결을 시각화합니다.
             </p>
           </div>

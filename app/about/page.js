@@ -1,5 +1,5 @@
 export const metadata = {
-    title: 'About — Jaemin Baek',
+    title: 'About — Digital Garden',
     description: 'Jaemin Baek 소개',
 };
 
