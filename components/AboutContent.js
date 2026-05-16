@@ -1,3 +1,28 @@
+const featuredAndroidProjects = [
+    {
+        title: 'WEMIX PLAY Android',
+        appName: 'WEMIX PLAY',
+        description:
+            '블록체인 게임 플랫폼 WEMIX PLAY의 Android 앱 개발에 참여했습니다. 지갑/서명, 인증, WebView, 딥링크처럼 신뢰와 연결성이 중요한 흐름을 Android 앱 안에서 안정적으로 다뤘습니다.',
+        role: 'Android Developer',
+        focus: 'Wallet, Auth, WebView, Deep Link, Security',
+        playUrl: 'https://play.google.com/store/apps/details?id=com.wemade.wemixplay',
+        iconUrl: '/images/wemix-play-icon.png',
+        qrUrl: '/images/qr-wemix-play-google-play.png',
+    },
+    {
+        title: 'KineMaster Android',
+        appName: 'KineMaster',
+        description:
+            '글로벌 모바일 영상 편집 앱 KineMaster의 Android 개발에 참여했습니다. 편집 UI, 미디어 처리, 성능 분석, Java 레거시에서 Kotlin/Jetpack 기반 구조로의 전환을 경험했습니다.',
+        role: 'Android Developer',
+        focus: 'Video Editing UI, Media, Performance, Legacy Migration',
+        playUrl: 'https://play.google.com/store/apps/details?id=com.nexstreaming.app.kinemasterfree',
+        iconUrl: '/images/kinemaster-icon.png',
+        qrUrl: '/images/qr-kinemaster-google-play.png',
+    },
+];
+
 export default function AboutContent() {
     return (
         <div className="content-narrow fade-in">
@@ -44,6 +69,68 @@ export default function AboutContent() {
                     복잡한 편집 타임라인, 그래픽스 기반 미리보기, 결제와 광고, 네트워크 캐싱, 성능 분석을 다뤘습니다.
                     Java 레거시 코드를 Kotlin과 Jetpack 기반 구조로 옮기고, CI/CD와 코드 리뷰 문화 개선에도 참여했습니다.
                 </p>
+
+                <section className="about-projects" aria-labelledby="featured-android-projects">
+                    <h2 id="featured-android-projects">대표 Android 프로젝트</h2>
+                    <div className="about-project-list">
+                        {featuredAndroidProjects.map((project) => (
+                            <article className="about-project-card" key={project.title}>
+                                <div className="about-project-main">
+                                    <img
+                                        src={project.iconUrl}
+                                        alt={`${project.appName} 앱 아이콘`}
+                                        className="about-project-icon"
+                                        width="64"
+                                        height="64"
+                                        loading="lazy"
+                                    />
+                                    <div className="about-project-body">
+                                        <p className="about-project-eyebrow">{project.appName}</p>
+                                        <h3>{project.title}</h3>
+                                        <p>{project.description}</p>
+                                        <dl className="about-project-meta">
+                                            <div>
+                                                <dt>Role</dt>
+                                                <dd>{project.role}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>Focus</dt>
+                                                <dd>{project.focus}</dd>
+                                            </div>
+                                        </dl>
+                                        <div className="about-project-actions">
+                                            <a
+                                                className="about-project-link"
+                                                href={project.playUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Google Play
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a
+                                    className="about-project-qr-link"
+                                    href={project.playUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={`${project.title} Google Play로 이동`}
+                                >
+                                    <img
+                                        src={project.qrUrl}
+                                        alt={`${project.title} Google Play QR 코드`}
+                                        className="about-project-qr"
+                                        width="96"
+                                        height="96"
+                                        loading="lazy"
+                                    />
+                                    <span>Scan</span>
+                                </a>
+                            </article>
+                        ))}
+                    </div>
+                </section>
 
                 <h2>주로 해온 일</h2>
                 <ul className="about-highlights">
