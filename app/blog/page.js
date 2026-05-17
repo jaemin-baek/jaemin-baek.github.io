@@ -1,5 +1,7 @@
-import { getAllPosts } from '@/lib/posts';
+import Link from 'next/link';
+import { getAllPosts, getGraphData } from '@/lib/posts';
 import BlogList from '@/components/BlogList';
+import KnowledgeGraph from '@/components/KnowledgeGraph';
 
 export const metadata = {
     title: 'Blog — Digital Garden',
@@ -14,6 +16,7 @@ export default function BlogPage() {
         category: p.category || '',
         thumbnail: p.thumbnail || '',
     }));
+    const graphData = getGraphData();
 
     return (
         <div className="page-container">
@@ -25,6 +28,21 @@ export default function BlogPage() {
             </div>
 
             <BlogList posts={posts} />
+
+            {graphData.nodes.length > 0 && (
+                <section className="home-graph-preview fade-in">
+                    <h2 className="section-title">Knowledge Graph</h2>
+                    <Link href="/graph" style={{ border: 'none' }}>
+                        <div className="graph-preview-container">
+                            <KnowledgeGraph data={graphData} mini={true} />
+                            <div className="graph-preview-overlay">
+                                <span>{graphData.nodes.length} notes · {graphData.links.length} connections</span>
+                                <span className="explore-link">Explore →</span>
+                            </div>
+                        </div>
+                    </Link>
+                </section>
+            )}
         </div>
     );
 }
