@@ -84,7 +84,7 @@ NavDisplay(
 
 공식 문서에서는 [Navigation 3 overview](https://developer.android.com/guide/navigation/navigation-3)와 [Get started](https://developer.android.com/guide/navigation/navigation-3/get-started)를 이 단계에서 보면 된다.
 
-## 2단계: 작은 샘플을 직접 눌러보기
+## 2단계: 간단한 샘플부터 만들어보기
 
 Navigation3는 글로만 읽으면 조금 추상적으로 느껴진다. 특히 "back stack을 직접 관리한다"는 말은 직접 `add`, `remove`, `clear`를 해보기 전까지 잘 와닿지 않는다.
 
