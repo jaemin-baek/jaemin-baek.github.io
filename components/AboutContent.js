@@ -56,7 +56,7 @@ export default function AboutContent() {
                         <span>동영상 편집 타임라인, 렌더링/프리뷰 파이프라인, 백그라운드 작업과 UI Thread를 고려한 상태 관리를 경험했습니다.</span>
                     </li>
                     <li>
-                        <strong>레거시를 오래 갈 수 있는 구조로 바꾸는 일</strong>
+                        <strong>레거시를 지속 가능한 구조로 개선하는 일</strong>
                         <span>MVC에서 MVP/MVVM으로의 전환, Java에서 Kotlin으로의 전환, 멀티 모듈 구조와 Gradle 빌드 개선을 수행했습니다.</span>
                     </li>
                 </ul>
