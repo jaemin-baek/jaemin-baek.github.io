@@ -1,7 +1,8 @@
 const featuredAndroidProjects = [
     {
-        title: 'WEMIX PLAY Android',
+        title: 'WEMIX PLAY',
         appName: 'WEMIX PLAY',
+        eyebrow: 'Wemade',
         description:
             '블록체인 게임 플랫폼 WEMIX PLAY의 Android 앱 개발에 참여했습니다. 지갑/서명, 인증, WebView, 딥링크처럼 신뢰와 연결성이 중요한 흐름을 Android 앱 안에서 안정적으로 다뤘습니다.',
         role: 'Android Developer',
@@ -13,8 +14,9 @@ const featuredAndroidProjects = [
         qrUrl: '/images/qr-wemix-play-google-play.png',
     },
     {
-        title: 'KineMaster Android',
+        title: 'KineMaster',
         appName: 'KineMaster',
+        eyebrow: 'Video Editing App',
         description:
             '글로벌 모바일 영상 편집 앱 KineMaster의 Android 개발에 참여했습니다. 편집 UI, 미디어 처리, 성능 분석, Java 레거시에서 Kotlin/Jetpack 기반 구조로의 전환을 경험했습니다.',
         role: 'Android Developer',
@@ -88,7 +90,7 @@ export default function AboutContent() {
                                         loading="lazy"
                                     />
                                     <div className="about-project-body">
-                                        <p className="about-project-eyebrow">{project.appName}</p>
+                                        <p className="about-project-eyebrow">{project.eyebrow}</p>
                                         <h3>{project.title}</h3>
                                         <p>{project.description}</p>
                                         <dl className="about-project-meta">
