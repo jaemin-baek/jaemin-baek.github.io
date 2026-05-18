@@ -61,17 +61,6 @@ export default function AboutContent() {
                     </li>
                 </ul>
 
-                <h2>이 블로그에 대해</h2>
-                <p>
-                    이 블로그는 일을 하며 배운 것을 동료에게 설명하듯 정리하는 공간입니다.
-                    Android, Kotlin, Jetpack Compose, Navigation, 앱 아키텍처, 상태 관리처럼
-                    실무에서 다시 꺼내 보게 되는 주제를 작게 쪼개어 기록합니다.
-                </p>
-                <p>
-                    옵시디언의 위키 링크(<code>[[link]]</code>)로 글 사이의 관계를 만들고,
-                    이를 지식 그래프로 시각화해 생각이 어떻게 연결되는지 볼 수 있게 했습니다.
-                </p>
-
                 <h2>기술 스택</h2>
                 <ul className="about-tags" aria-label="기술 키워드">
                     <li>Android</li>
@@ -87,6 +76,17 @@ export default function AboutContent() {
                     <li>SQLCipher</li>
                     <li>CI/CD</li>
                 </ul>
+
+                <h2>이 블로그에 대해</h2>
+                <p>
+                    이 블로그는 일을 하며 배운 것을 동료에게 설명하듯 정리하는 공간입니다.
+                    Android, Kotlin, Jetpack Compose, Navigation, 앱 아키텍처, 상태 관리처럼
+                    실무에서 다시 꺼내 보게 되는 주제를 작게 쪼개어 기록합니다.
+                </p>
+                <p>
+                    옵시디언의 위키 링크(<code>[[link]]</code>)로 글 사이의 관계를 만들고,
+                    이를 지식 그래프로 시각화해 생각이 어떻게 연결되는지 볼 수 있게 했습니다.
+                </p>
 
                 <h2>블로그 운영</h2>
                 <ul>
