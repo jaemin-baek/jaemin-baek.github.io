@@ -775,7 +775,7 @@ hr {
 
 /* ===== ABOUT PAGE ===== */
 .about-header {
-  padding: 6rem 0 3rem;
+  padding: 6rem 0 2.5rem;
 }
 
 .about-header h1 {
@@ -788,7 +788,56 @@ hr {
   font-size: 1.15rem;
   color: var(--text-secondary);
   line-height: 1.7;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
+}
+
+.about-hero-figure {
+  margin: 2.25rem 0 0;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+}
+
+.about-hero-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.about-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  list-style: none;
+  padding: 1rem 0;
+  margin: 0 0 3rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.about-summary li {
+  margin: 0;
+}
+
+.about-summary-value,
+.about-summary-label {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+.about-summary-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.about-summary-label {
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
 }
 
 .about-content {
@@ -802,6 +851,56 @@ hr {
 
 .about-content p {
   margin: 1.25rem 0;
+}
+
+.about-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.about-highlights li {
+  margin: 0;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.about-highlights li:last-child {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.about-highlights strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+}
+
+.about-highlights span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+}
+
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0;
+}
+
+.about-tags li {
+  margin: 0;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.34);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  line-height: 1.35;
 }
 
 .timeline {
@@ -880,6 +979,19 @@ hr {
   .blog-header h1,
   .about-header h1 {
     font-size: 2rem;
+  }
+
+  .about-header {
+    padding: 4rem 0 2rem;
+  }
+
+  .about-summary {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .about-summary li {
+    padding: 0.75rem 0;
   }
 
   .post-title {
