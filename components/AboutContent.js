@@ -8,6 +8,7 @@ export default function AboutContent() {
                     보안과 인증이 중요한 블록체인 지갑 플랫폼부터 글로벌 규모의 동영상 편집 앱까지,
                     사용자의 흐름과 앱 구조를 함께 설계하는 일을 해왔습니다.
                 </p>
+                <time className="about-updated" dateTime="2026-02-26">2026년 2월 26일 기준</time>
                 <figure className="about-hero-figure">
                     <img
                         src="/images/about-android-developer-cover.png"
@@ -67,6 +68,9 @@ export default function AboutContent() {
                     <li>Kotlin</li>
                     <li>Jetpack Compose</li>
                     <li>Navigation</li>
+                    <li>MVI</li>
+                    <li>MVVM</li>
+                    <li>Clean Architecture</li>
                     <li>Hilt</li>
                     <li>Coroutine</li>
                     <li>Room</li>
