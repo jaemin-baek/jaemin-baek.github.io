@@ -5,6 +5,7 @@ const featuredAndroidProjects = [
         description:
             '블록체인 게임 플랫폼 WEMIX PLAY의 Android 앱 개발에 참여했습니다. 지갑/서명, 인증, WebView, 딥링크처럼 신뢰와 연결성이 중요한 흐름을 Android 앱 안에서 안정적으로 다뤘습니다.',
         role: 'Android Developer',
+        architecture: 'MVI, Jetpack Compose',
         focus: 'Wallet, Auth, WebView, Deep Link, Security',
         playUrl: 'https://play.google.com/store/apps/details?id=com.wemade.wemixplay',
         iconUrl: '/images/wemix-play-icon.png',
@@ -16,6 +17,7 @@ const featuredAndroidProjects = [
         description:
             '글로벌 모바일 영상 편집 앱 KineMaster의 Android 개발에 참여했습니다. 편집 UI, 미디어 처리, 성능 분석, Java 레거시에서 Kotlin/Jetpack 기반 구조로의 전환을 경험했습니다.',
         role: 'Android Developer',
+        architecture: 'MVVM',
         focus: 'Video Editing UI, Media, Performance, Legacy Migration',
         playUrl: 'https://play.google.com/store/apps/details?id=com.nexstreaming.app.kinemasterfree',
         iconUrl: '/images/kinemaster-icon.png',
@@ -92,6 +94,10 @@ export default function AboutContent() {
                                             <div>
                                                 <dt>Role</dt>
                                                 <dd>{project.role}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>Architecture</dt>
+                                                <dd>{project.architecture}</dd>
                                             </div>
                                             <div>
                                                 <dt>Focus</dt>
