@@ -5,7 +5,7 @@ export default function AboutContent() {
                 <h1>About</h1>
                 <p className="about-intro">
                     안녕하세요, 백재민입니다. 11년 이상 Android 앱을 만들고 운영해온 모바일 개발자입니다.
-                    보안과 인증이 중요한 지갑 플랫폼부터 글로벌 규모의 동영상 편집 앱까지,
+                    보안과 인증이 중요한 블록체인 지갑 플랫폼부터 글로벌 규모의 동영상 편집 앱까지,
                     사용자의 흐름과 앱 구조를 함께 설계하는 일을 해왔습니다.
                 </p>
                 <figure className="about-hero-figure">
@@ -25,7 +25,7 @@ export default function AboutContent() {
                     </li>
                     <li>
                         <span className="about-summary-value">Security</span>
-                        <span className="about-summary-label">지갑, 인증, 민감 데이터 보호</span>
+                        <span className="about-summary-label">블록체인 지갑, 인증, 민감 데이터 보호</span>
                     </li>
                     <li>
                         <span className="about-summary-value">Scale</span>
@@ -49,7 +49,7 @@ export default function AboutContent() {
                 <ul className="about-highlights">
                     <li>
                         <strong>보안과 인증이 필요한 모바일 흐름</strong>
-                        <span>지갑 생성과 복구, 전자서명, 거래 승인, QR/딥링크/알림 처리처럼 사용자가 신뢰해야 하는 핵심 흐름을 설계하고 구현했습니다.</span>
+                        <span>블록체인 지갑 생성과 복구, 전자서명, 거래 승인, QR/딥링크/알림 처리처럼 사용자가 신뢰해야 하는 핵심 흐름을 설계하고 구현했습니다.</span>
                     </li>
                     <li>
                         <strong>복잡한 UI와 미디어 처리</strong>
