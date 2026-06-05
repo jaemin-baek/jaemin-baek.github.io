@@ -1,6 +1,6 @@
 ---
 title: "MVI 용어 지도: Intent, Event, Action은 같은 말일까?"
-date: "2026-03-18"
+date: "2026-06-05"
 category: "Android"
 group: "Android Basics"
 series: "Android Basics"
