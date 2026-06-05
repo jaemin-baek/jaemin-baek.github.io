@@ -73,25 +73,66 @@ Effect / UiEffect / SideEffect
 
 Android 공식 문서나 Compose 예제를 보면 보통 `Intent`보다 `event`, `UI event`, `UiState` 같은 표현이 더 자연스럽다.
 
-Compose에서는 화면을 이렇게 설계하라고 많이 설명한다.
+Compose에서는 화면을 이렇게 설계하라고 많이 설명한다. 여기서 아래와 위는 화면의 위아래가 아니라 **컴포저블 계층의 부모/자식 방향**이다.
 
 ```text
-State는 아래로 내려보내고,
-Event는 위로 올린다.
+부모 화면
+  -> 자식 컴포저블로 State를 내려보낸다
+
+자식 컴포저블
+  -> 부모 화면으로 Event를 올린다
 ```
 
-코드로 보면 이런 모양이다.
+예를 들어 `SearchRoute`가 ViewModel을 알고 있는 부모 화면이고, `SearchScreen`이 실제 UI를 그리는 자식 컴포저블이라고 해보자.
 
 ```kotlin
 @Composable
-fun SearchScreen(
-    state: SearchUiState,
-    onQueryChange: (String) -> Unit,
-    onSearch: () -> Unit,
+fun SearchRoute(viewModel: SearchViewModel) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    SearchScreen(
+        state = state,
+        onQueryChange = { query ->
+            viewModel.onEvent(SearchUiEvent.QueryChanged(query))
+        },
+        onSearch = {
+            viewModel.onEvent(SearchUiEvent.SearchSubmitted)
+        },
+    )
+}
+```
+
+여기서 `state`는 부모인 `SearchRoute`에서 자식인 `SearchScreen`으로 내려간다.
+
+```kotlin
+SearchScreen(
+    state = state,
+    ...
 )
 ```
 
-여기서 `onQueryChange`, `onSearch`는 UI event를 위로 올리는 callback이다.
+반대로 사용자가 검색어를 입력하거나 검색 버튼을 누르는 일은 자식인 `SearchScreen` 안에서 발생한다. 하지만 `SearchScreen`이 직접 ViewModel을 만지지 않고, callback으로 부모에게 알려준다.
+
+```kotlin
+onQueryChange = { query ->
+    viewModel.onEvent(SearchUiEvent.QueryChanged(query))
+}
+```
+
+이걸 "event를 위로 올린다"라고 말한다.
+
+정리하면 이런 흐름이다.
+
+```text
+ViewModel
+-> SearchRoute
+-> SearchScreen
+-> 사용자가 입력
+-> SearchRoute callback
+-> ViewModel.onEvent(...)
+```
+
+그래서 `onQueryChange`, `onSearch`는 단순한 함수 파라미터처럼 보이지만, 실제로는 UI event를 부모 쪽으로 올리는 통로다.
 
 ViewModel에서는 이렇게 받을 수 있다.
 
