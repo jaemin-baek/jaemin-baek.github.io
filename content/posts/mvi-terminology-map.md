@@ -83,6 +83,8 @@ Compose에서는 화면을 이렇게 설계하라고 많이 설명한다. 여기
   -> 부모 화면으로 Event를 올린다
 ```
 
+![Compose에서 State는 내려가고 Event는 올라가는 흐름](/images/compose-state-down-event-up.png)
+
 예를 들어 `SearchRoute`가 ViewModel을 알고 있는 부모 화면이고, `SearchScreen`이 실제 UI를 그리는 자식 컴포저블이라고 해보자.
 
 ```kotlin
