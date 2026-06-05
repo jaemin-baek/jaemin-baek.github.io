@@ -73,7 +73,7 @@ Effect / UiEffect / SideEffect
 
 Android 공식 문서나 Compose 예제를 보면 보통 `Intent`보다 `event`, `UI event`, `UiState` 같은 표현이 더 자연스럽다.
 
-Compose에서는 화면을 이렇게 설계하라고 많이 설명한다. 여기서 아래와 위는 화면의 위아래가 아니라 **컴포저블 계층의 부모/자식 방향**이다.
+Android Developers의 [Compose architecture 문서](https://developer.android.com/develop/ui/compose/architecture)에서는 단방향 데이터 흐름을 설명할 때 "state는 아래로 흐르고 event는 위로 흐른다"는 표현을 쓴다. 여기서 아래와 위는 화면의 위아래가 아니라 **컴포저블 계층의 부모/자식 방향**이다.
 
 ```text
 부모 화면
@@ -81,6 +81,31 @@ Compose에서는 화면을 이렇게 설계하라고 많이 설명한다. 여기
 
 자식 컴포저블
   -> 부모 화면으로 Event를 올린다
+```
+
+여기서 한 번 헷갈리는 지점이 있다. 앱 아키텍처 계층 그림에서는 보통 UI layer를 위에 그린다.
+
+```text
+UI layer
+Domain layer
+Data layer
+```
+
+이 관점에서는 "UI가 위"라고 생각하는 것이 자연스럽다. 하지만 `state down, event up`은 이 레이어 그림이 아니라, Compose에서 부모 컴포저블과 자식 컴포저블 사이의 데이터 흐름을 말한다.
+
+```text
+State holder / Parent / ViewModel 근처
+        -> state
+Child Composable / UI
+        -> event
+State holder / Parent / ViewModel 근처
+```
+
+그래서 더 풀어 쓰면 이렇게 이해하는 편이 덜 헷갈린다.
+
+```text
+State는 상태를 가진 쪽에서 화면을 그리는 쪽으로 전달된다.
+Event는 화면에서 발생해서 상태를 처리하는 쪽으로 전달된다.
 ```
 
 ![Compose에서 State는 내려가고 Event는 올라가는 흐름](/images/compose-state-down-event-up.png)
@@ -113,7 +138,9 @@ SearchScreen(
 )
 ```
 
-반대로 사용자가 검색어를 입력하거나 검색 버튼을 누르는 일은 자식인 `SearchScreen` 안에서 발생한다. 하지만 `SearchScreen`이 직접 ViewModel을 만지지 않고, callback으로 부모에게 알려준다.
+반대로 사용자가 검색어를 입력하거나 검색 버튼을 누르는 일은 자식인 `SearchScreen` 안에서 발생한다.
+
+여기서 중요한 점은 `viewModel.onEvent(...)`가 **SearchScreen 안에 있는 코드가 아니라는 것**이다. 이 람다는 부모인 `SearchRoute`에서 만들어져서 `SearchScreen`의 파라미터로 전달된다.
 
 ```kotlin
 onQueryChange = { query ->
@@ -121,7 +148,60 @@ onQueryChange = { query ->
 }
 ```
 
-이걸 "event를 위로 올린다"라고 말한다.
+`SearchScreen` 입장에서는 이 람다의 내부 구현을 모른다. 그냥 `onQueryChange`라는 함수를 받은 것이다.
+
+```kotlin
+@Composable
+fun SearchScreen(
+    state: SearchUiState,
+    onQueryChange: (String) -> Unit,
+    onSearch: () -> Unit,
+) {
+    SearchTextField(
+        value = state.query,
+        onValueChange = { query ->
+            onQueryChange(query)
+        },
+    )
+
+    SearchButton(
+        onClick = onSearch,
+    )
+}
+```
+
+이 `SearchScreen` 코드 안에는 `viewModel`이 없다. 자식 컴포저블은 "검색어가 바뀌었다"는 사실만 callback으로 알린다. 그 callback을 받은 부모가 ViewModel에 event를 전달한다.
+
+만약 `SearchScreen`이 직접 ViewModel을 만지는 구조라면 모양이 이렇게 된다.
+
+```kotlin
+@Composable
+fun SearchScreen(
+    viewModel: SearchViewModel,
+) {
+    SearchTextField(
+        value = viewModel.state.value.query,
+        onValueChange = { query ->
+            viewModel.onEvent(SearchUiEvent.QueryChanged(query))
+        },
+    )
+}
+```
+
+이 경우는 `SearchScreen`이 ViewModel을 직접 알고 있다. 반면 앞의 구조는 `SearchScreen`이 `state`와 callback만 알기 때문에 더 재사용하기 쉽고, Preview나 테스트에서도 다루기 쉽다.
+
+그래서 `event를 위로 올린다`는 말은 다음 뜻에 가깝다.
+
+```text
+SearchScreen이 ViewModel을 직접 호출한다
+```
+
+가 아니라,
+
+```text
+SearchScreen이 callback을 호출한다.
+그 callback을 부모가 받아 ViewModel에 전달한다.
+```
 
 정리하면 이런 흐름이다.
 
