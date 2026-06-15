@@ -7,6 +7,7 @@ series: "Compose State"
 hub: true
 tags: ["android", "jetpack-compose", "architecture", "ui-state", "stateflow"]
 description: "Android UI Layer 글에서 출발해, Jetpack Compose 화면을 안정적으로 유지하기 위한 UI State 모델링 원칙을 정리합니다."
+draft: true
 ---
 
 ![Android UI State Flow](/images/android-ui-state-flow-cover.png)
