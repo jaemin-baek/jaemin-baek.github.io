@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["ui-layer","state-holder","saved-state","compose"]
 description: "2023-12-19에 발행된 Android 개발 글을 바탕으로 State Holder와 저장 가능한 상태를 구분하기를 정리합니다."
+draft: true
 ---
 
 ![State Holder와 저장 가능한 상태를 구분하기](/images/ui-layer-state-holder-saving-state.svg)

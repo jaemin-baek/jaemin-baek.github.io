@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import { getAllPostSlugs, getPostWithHtml, getAllPosts } from '@/lib/posts';
+import { getPublicPostSlugs, getPostWithHtml, getAllPosts } from '@/lib/posts';
+
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-    const slugs = getAllPostSlugs();
+    const slugs = getPublicPostSlugs();
     return slugs.map((slug) => ({ slug }));
 }
 

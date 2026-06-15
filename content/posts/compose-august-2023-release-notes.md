@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["compose","release-notes","performance","android"]
 description: "2023-08-09에 발행된 Android 개발 글을 바탕으로 Compose 2023년 8월 릴리즈에서 챙길 것를 정리합니다."
+draft: true
 ---
 
 ![Compose 2023년 8월 릴리즈에서 챙길 것](/images/compose-august-2023-release-notes.svg)

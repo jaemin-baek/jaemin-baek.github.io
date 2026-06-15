@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["google-identity","credential-manager","migration","auth"]
 description: "2023-10-26에 발행된 Android 개발 글을 바탕으로 Google Identity Services에서 Credential Manager로 넘어가기를 정리합니다."
+draft: true
 ---
 
 ![Google Identity Services에서 Credential Manager로 넘어가기](/images/google-identity-credential-manager-migration.svg)

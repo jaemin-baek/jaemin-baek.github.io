@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["credential-manager","passkeys","authentication","android"]
 description: "2023-02-10에 발행된 Android 개발 글을 바탕으로 Credential Manager로 로그인 흐름을 단순하게 만들기를 정리합니다."
+draft: true
 ---
 
 ![Credential Manager로 로그인 흐름을 단순하게 만들기](/images/credential-manager-passkey-entry.svg)

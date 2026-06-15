@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["kotlin-multiplatform","architecture","android","ios"]
 description: "2023-10-06에 발행된 Android 개발 글을 바탕으로 실무 KMP에서 공유할 것과 남겨둘 것를 정리합니다."
+draft: true
 ---
 
 ![실무 KMP에서 공유할 것과 남겨둘 것](/images/kmp-real-world-boundaries.svg)

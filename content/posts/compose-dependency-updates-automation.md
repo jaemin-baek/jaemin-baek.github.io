@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["compose","dependency-management","gradle","automation"]
 description: "2023-03-10에 발행된 Android 개발 글을 바탕으로 Compose 프로젝트의 의존성 업데이트를 자동화하는 기준를 정리합니다."
+draft: true
 ---
 
 ![Compose 프로젝트의 의존성 업데이트를 자동화하는 기준](/images/compose-dependency-updates-automation.svg)

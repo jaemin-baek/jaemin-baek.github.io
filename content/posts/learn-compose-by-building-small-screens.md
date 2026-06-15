@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["jetpack-compose","learning","ui","android-basics"]
 description: "2023-02-27에 발행된 Android 개발 글을 바탕으로 Compose를 익힐 때 작은 화면부터 만들어야 하는 이유를 정리합니다."
+draft: true
 ---
 
 ![Compose를 익힐 때 작은 화면부터 만들어야 하는 이유](/images/learn-compose-by-building-small-screens.svg)

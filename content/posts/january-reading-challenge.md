@@ -7,6 +7,7 @@ series: "January Reading Challenge"
 hub: true
 tags: ["reading-challenge", "android", "january"]
 description: "2024년 1월 2일부터 1월 31일까지 읽고 정리한 Android 글 목록입니다."
+draft: true
 ---
 
 2024년 1월에는 Android와 Compose 글을 거의 하루에 하나씩 읽고 짧게 정리했다. 처음부터 큰 계획이 있었던 건 아니고, 읽은 내용을 그냥 흘려보내지 않으려고 하나씩 남긴 기록에 가깝다.

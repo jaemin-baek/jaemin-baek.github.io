@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["compose","design-system","case-study","ui"]
 description: "2023-04-06에 발행된 Android 개발 글을 바탕으로 Clue 사례로 보는 Compose와 디자인 시스템를 정리합니다."
+draft: true
 ---
 
 ![Clue 사례로 보는 Compose와 디자인 시스템](/images/clue-compose-design-system-case.svg)

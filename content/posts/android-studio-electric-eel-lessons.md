@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["android-studio","compose","emulator","developer-experience"]
 description: "2023-01-12에 발행된 Android 개발 글을 바탕으로 Android Studio Electric Eel에서 배운 개발 루프 줄이기를 정리합니다."
+draft: true
 ---
 
 ![Android Studio Electric Eel에서 배운 개발 루프 줄이기](/images/android-studio-electric-eel-lessons.svg)

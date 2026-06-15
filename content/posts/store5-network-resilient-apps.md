@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["kotlin","store5","offline-first","data-layer"]
 description: "2023-07-20에 발행된 Android 개발 글을 바탕으로 Store5로 생각해보는 네트워크에 강한 앱 구조를 정리합니다."
+draft: true
 ---
 
 ![Store5로 생각해보는 네트워크에 강한 앱 구조](/images/store5-network-resilient-apps.svg)

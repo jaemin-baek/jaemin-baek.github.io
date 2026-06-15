@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["compose","performance","recomposition","android"]
 description: "2023-08-01에 발행된 Android 개발 글을 바탕으로 Compose 성능을 볼 때 recomposition부터 확인하기를 정리합니다."
+draft: true
 ---
 
 ![Compose 성능을 볼 때 recomposition부터 확인하기](/images/compose-performance-recomposition-basics.svg)

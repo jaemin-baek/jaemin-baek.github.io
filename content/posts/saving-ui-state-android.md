@@ -6,6 +6,7 @@ group: "January Reading Challenge"
 series: "January Reading Challenge"
 tags: ["ui-state","savedstatehandle","process-death","android"]
 description: "2023-05-10에 발행된 Android 개발 글을 바탕으로 프로세스 종료까지 고려한 UI State 저장 전략를 정리합니다."
+draft: true
 ---
 
 ![프로세스 종료까지 고려한 UI State 저장 전략](/images/saving-ui-state-android.svg)
